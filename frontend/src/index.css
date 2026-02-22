@@ -50,3 +50,42 @@ body {
   cursor: pointer;
   font-size: 16px;
 }
+.page {
+  text-align: center;
+  margin-top: 100px;
+}
+.dashboard {
+  text-align: center;
+  margin-top: 80px;
+}
+
+.add-btn {
+  margin-top: 20px;
+  padding: 12px 22px;
+  border: none;
+  border-radius: 8px;
+  background: #22c55e;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.crop-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+.crop-card {
+  background: #020617;
+  border: 1px solid #1e293b;
+  padding: 20px;
+  border-radius: 12px;
+  width: 250px;
+  text-align: left;
+}
+
+.crop-card h3 {
+  margin-top: 0;
+}
