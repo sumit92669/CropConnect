@@ -488,3 +488,707 @@ body {
 .login-btn:active, .signup-btn:active {
   transform: scale(0.98);  /* Slight press effect */
 }
+
+/* CROPS - Updated for 3x2 grid */
+.crop-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);  /* 3 columns */
+  gap: 25px;
+  margin: 40px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.crop-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.crop-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.crop-item img {
+  width: 100%;
+  height: 200px;  /* Fixed height for consistency */
+  object-fit: cover;  /* Ensures image covers the area without distortion */
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.crop-item h3 {
+  margin: 10px 0 5px;
+  color: #166534;
+  font-size: 1.5rem;
+}
+
+.crop-item p {
+  color: #16a34a;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+/* CARD BUTTON */
+.crop-item button {
+  margin-top: auto;  /* Pushes button to bottom */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: #16a34a;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.3s;
+  width: fit-content;
+  align-self: center;
+}
+
+.crop-item button:hover {
+  background: #15803d;
+}
+
+/* Responsive for mobile */
+@media (max-width: 768px) {
+  .crop-showcase {
+    grid-template-columns: repeat(2, 1fr);  /* 2 columns on tablets */
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .crop-showcase {
+    grid-template-columns: 1fr;  /* 1 column on mobile */
+  }
+}/* CROPS - Updated for better spacing and smaller boxes */
+.crop-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(250px, 280px));  /* Fixed width columns */
+  gap: 30px;
+  justify-content: center;
+  margin: 40px auto;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.crop-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;  /* Center each card */
+}
+
+.crop-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  border-color: #16a34a;
+}
+
+.crop-item img {
+  width: 100%;
+  height: 160px;  /* Smaller fixed height */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+
+.crop-item h3 {
+  margin: 8px 0 5px;
+  color: #166534;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.crop-item p {
+  color: #16a34a;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 8px 0;
+  background: #f0fdf4;
+  padding: 5px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  align-self: center;
+}
+
+/* CARD BUTTON */
+.crop-item button {
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 25px;  /* Rounded buttons */
+  background: #16a34a;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  width: fit-content;
+  align-self: center;
+  font-size: 0.9rem;
+}
+
+.crop-item button:hover {
+  background: #15803d;
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(21, 128, 61, 0.3);
+}
+
+/* Responsive for tablets */
+@media (max-width: 900px) {
+  .crop-showcase {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+  .crop-showcase {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .crop-item {
+    max-width: 320px;
+  }
+}
+
+/* CROPS - With proper spacing and working images */
+.crop-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px 30px;  /* 40px row gap, 30px column gap */
+  margin: 50px auto;
+  max-width: 1100px;
+  padding: 0 30px;
+}
+
+.crop-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.crop-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 30px rgba(22, 163, 74, 0.1);
+  border-color: #16a34a;
+}
+
+.crop-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.crop-item h3 {
+  margin: 10px 0 5px;
+  color: #166534;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.crop-item p {
+  color: #16a34a;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 10px 0;
+  background: #f0fdf4;
+  padding: 6px 15px;
+  border-radius: 30px;
+  display: inline-block;
+  align-self: center;
+  border: 1px solid #bbf7d0;
+}
+
+/* CARD BUTTON */
+.crop-item button {
+  margin-top: 10px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 30px;
+  background: #16a34a;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  width: fit-content;
+  align-self: center;
+  font-size: 1rem;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);
+}
+
+.crop-item button:hover {
+  background: #15803d;
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(21, 128, 61, 0.3);
+}
+
+/* Responsive for tablets */
+@media (max-width: 900px) {
+  .crop-showcase {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px 25px;
+    padding: 0 20px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+  .crop-showcase {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 0 20px;
+    max-width: 400px;
+    margin: 30px auto;
+  }
+  
+  .crop-item {
+    max-width: 100%;
+  }
+  
+  .crop-item img {
+    height: 200px;
+  }
+}
+
+/* CROPS - Maximum spacing for a clean, airy look */
+.crop-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 60px 40px;  /* Large 60px vertical gap, 40px horizontal gap */
+  margin: 60px auto;
+  max-width: 1200px;
+  padding: 0 40px;
+}
+
+.crop-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 25px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.crop-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 35px rgba(22, 163, 74, 0.15);
+  border-color: #16a34a;
+}
+
+.crop-item img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 15px rgba(0,0,0,0.1);
+}
+
+.crop-item h3 {
+  margin: 10px 0 8px;
+  color: #166534;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
+.crop-item p {
+  color: #16a34a;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin: 15px 0;
+  background: #f0fdf4;
+  padding: 8px 20px;
+  border-radius: 40px;
+  display: inline-block;
+  align-self: center;
+  border: 1px solid #bbf7d0;
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.1);
+}
+
+/* CARD BUTTON */
+.crop-item button {
+  margin-top: 15px;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 40px;
+  background: #16a34a;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  width: fit-content;
+  align-self: center;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 15px rgba(22, 163, 74, 0.25);
+  border: 1px solid transparent;
+}
+
+.crop-item button:hover {
+  background: #15803d;
+  transform: scale(1.05);
+  box-shadow: 0 12px 25px rgba(21, 128, 61, 0.35);
+  border-color: #bbf7d0;
+}
+
+/* Add some breathing room between hero and crops */
+.hero {
+  text-align: center;
+  margin: 80px 0 40px;  /* Increased top margin, added bottom margin */
+}
+
+.hero h1 {
+  font-size: 42px;
+  color: #166534;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #64748b;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/* Responsive for tablets */
+@media (max-width: 900px) {
+  .crop-showcase {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px 30px;
+    padding: 0 30px;
+  }
+  
+  .hero {
+    margin: 60px 0 30px;
+  }
+  
+  .hero h1 {
+    font-size: 36px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+  .crop-showcase {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    padding: 0 25px;
+    max-width: 400px;
+    margin: 40px auto;
+  }
+  
+  .crop-item {
+    max-width: 100%;
+    padding: 20px 15px;
+  }
+  
+  .crop-item img {
+    height: 200px;
+  }
+  
+  .hero {
+    margin: 40px 0 20px;
+    padding: 0 20px;
+  }
+  
+  .hero h1 {
+    font-size: 30px;
+  }
+  
+  .buttons button {
+    margin: 10px;
+    padding: 10px 20px;
+  }
+}
+/* HERO - Adjusted spacing */
+.hero {
+  text-align: center;
+  margin: 60px 0 30px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  color: #166534;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #64748b;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/* CROPS - Smaller boxes with massive vertical spacing */
+.crop-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 240px);  /* Fixed width - smaller boxes */
+  gap: 80px 30px;  /* 80px vertical gap, 30px horizontal gap */
+  justify-content: center;
+  margin: 40px auto 80px;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.crop-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 15px 12px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 240px;  /* Fixed width */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+}
+
+.crop-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 30px rgba(22, 163, 74, 0.12);
+  border-color: #16a34a;
+}
+
+.crop-item img {
+  width: 100%;
+  height: 140px;  /* Smaller image height */
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+}
+
+.crop-item h3 {
+  margin: 5px 0 5px;
+  color: #166534;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.crop-item p {
+  color: #16a34a;
+  font-weight: 600;
+  font-size: 1rem;
+  margin: 8px 0;
+  background: #f0fdf4;
+  padding: 5px 12px;
+  border-radius: 30px;
+  display: inline-block;
+  align-self: center;
+  border: 1px solid #bbf7d0;
+}
+
+/* CARD BUTTON */
+.crop-item button {
+  margin-top: 8px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 30px;
+  background: #16a34a;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+  width: fit-content;
+  align-self: center;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.2);
+}
+
+.crop-item button:hover {
+  background: #15803d;
+  transform: scale(1.05);
+  box-shadow: 0 8px 18px rgba(21, 128, 61, 0.3);
+}
+
+/* Responsive for tablets */
+@media (max-width: 900px) {
+  .crop-showcase {
+    grid-template-columns: repeat(2, 240px);
+    gap: 70px 25px;
+  }
+  
+  .hero h1 {
+    font-size: 36px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 600px) {
+  .crop-showcase {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    justify-items: center;
+  }
+  
+  .crop-item {
+    width: 260px;  /* Slightly larger on mobile for better touch */
+  }
+  
+  .crop-item img {
+    height: 150px;
+  }
+  
+  .hero h1 {
+    font-size: 30px;
+  }
+}
+/* HERO - Adjusted spacing */
+.hero {
+  text-align: center;
+  margin: 60px 0 40px;
+}
+
+.hero h1 {
+  font-size: 42px;
+  color: #166534;
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #64748b;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/* CROPS - Equal spacing horizontally and vertically */
+.crop-showcase {
+  display: grid;
+  grid-template-columns: repeat(3, 260px);  /* Fixed width boxes */
+  gap: 80px;  /* Equal 80px gap both horizontally and vertically */
+  justify-content: center;
+  margin: 30px auto 80px;
+  max-width: 1300px;
+  padding: 0 30px;
+}
+
+.crop-item {
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 18px 15px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  width: 260px;  /* Fixed width */
+  box-shadow: 0 6px 14px rgba(0,0,0,0.04);
+}
+
+.crop-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 35px rgba(22, 163, 74, 0.15);
+  border-color: #16a34a;
+}
+
+.crop-item img {
+  width: 100%;
+  height: 160px;  /* Adjusted for your image proportions */
+  object-fit: cover;
+  border-radius: 14px;
+  margin-bottom: 15px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+
+.crop-item h3 {
+  margin: 8px 0 5px;
+  color: #166534;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.crop-item p {
+  color: #16a34a;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 10px 0;
+  background: #f0fdf4;
+  padding: 6px 16px;
+  border-radius: 40px;
+  display: inline-block;
+  align-self: center;
+  border: 1px solid #bbf7d0;
+}
+
+/* CARD BUTTON */
+.crop-item button {
+  margin-top: 10px;
+  padding: 10px 22px;
+  border: none;
+  border-radius: 40px;
+  background: #16a34a;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  width: fit-content;
+  align-self: center;
+  font-size: 0.95rem;
+  box-shadow: 0 6px 14px rgba(22, 163, 74, 0.25);
+}
+
+.crop-item button:hover {
+  background: #15803d;
+  transform: scale(1.05);
+  box-shadow: 0 10px 22px rgba(21, 128, 61, 0.35);
+}
+
+/* Responsive for tablets */
+@media (max-width: 1000px) {
+  .crop-showcase {
+    grid-template-columns: repeat(2, 260px);
+    gap: 70px;
+  }
+}
+
+/* Responsive for mobile */
+@media (max-width: 650px) {
+  .crop-showcase {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    justify-items: center;
+  }
+  
+  .crop-item {
+    width: 280px;
+  }
+  
+  .crop-item img {
+    height: 170px;
+  }
+  
+  .hero h1 {
+    font-size: 32px;
+  }
+}
