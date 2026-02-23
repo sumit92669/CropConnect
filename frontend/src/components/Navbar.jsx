@@ -1,8 +1,9 @@
 import { useState } from "react"
 
-function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode }) {
+function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm }) {
   const [language, setLanguage] = useState('english')
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
+  const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || '')
 
   const toggleLanguageDropdown = () => {
     setShowLanguageDropdown(!showLanguageDropdown)
@@ -12,6 +13,12 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode }) {
     setLanguage(lang)
     setShowLanguageDropdown(false)
     alert(`Language changed to ${lang === 'hindi' ? 'Hindi' : 'English'} (Demo)`)
+  }
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value
+    setLocalSearchTerm(value)
+    onSearch(value)  // ✅ Pass search term to parent
   }
 
   return (
@@ -31,16 +38,27 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode }) {
           type="text" 
           placeholder={language === 'hindi' ? "फसलें खोजें..." : "Search crops..."} 
           className={`search-bar ${darkMode ? 'search-bar-dark' : ''}`}
+          value={localSearchTerm}
+          onChange={handleSearchChange}  // ✅ Handle search
         />
         <span className="search-icon">🔍</span>
+        {localSearchTerm && (
+          <button 
+            className="clear-search"
+            onClick={() => {
+              setLocalSearchTerm('')
+              onSearch('')
+            }}
+          >
+            ✕
+          </button>
+        )}
       </div>
 
       <div className="nav-right">
-        {/* Dark Mode Toggle */}
         <button 
           className={`dark-mode-toggle ${darkMode ? 'dark' : ''}`}
           onClick={toggleDarkMode}
-          aria-label="Toggle dark mode"
         >
           <span className="toggle-icon">
             {darkMode ? '☀️' : '🌙'}
@@ -50,7 +68,6 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode }) {
           </span>
         </button>
 
-        {/* Language Dropdown */}
         <div className="language-selector">
           <button 
             className={`language-btn ${darkMode ? 'language-btn-dark' : ''}`}
@@ -81,7 +98,6 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode }) {
           )}
         </div>
 
-        {/* Auth Buttons */}
         <div className="nav-buttons">
           <button className={`login-btn ${darkMode ? 'login-btn-dark' : ''}`} onClick={onLoginClick}>
             {language === 'hindi' ? 'लॉगिन' : 'Login'}

@@ -7,10 +7,23 @@ import Signup from "./pages/Signup"
 
 function App() {
   const [role, setRole] = useState(null)
-  const [currentPage, setCurrentPage] = useState('home') // 'home', 'login', 'signup'
+  const [currentPage, setCurrentPage] = useState('home')
   const [darkMode, setDarkMode] = useState(false)
+  const [searchTerm, setSearchTerm] = useState('')  // ✅ New state
+  const [crops, setCrops] = useState([              // ✅ Move crops to state
+    { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" },
+    { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" },
+    { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg" },
+    { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://tse3.mm.bing.net/th/id/OIP.X-bhErQP9Jf_pSLBWIQ1jQHaE5?rs=1&pid=ImgDetMain&o=7&rm=3" },
+    { id: 5, name: "Soybean", price: 4200, unit: "Quintal", image: "https://img.freepik.com/premium-photo/soybean-field-beginning-planting-season_124507-221294.jpg?w=2000" },
+    { id: 6, name: "Millet", price: 2600, unit: "Quintal", image: "https://morningchores.com/wp-content/uploads/2022/04/millet-plants.jpg" }
+  ])
 
-  // Check localStorage for dark mode preference on load
+  // ✅ Filter crops based on search term
+  const filteredCrops = crops.filter(crop => 
+    crop.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   useEffect(() => {
     const savedMode = localStorage.getItem('darkMode')
     if (savedMode) {
@@ -18,14 +31,12 @@ function App() {
     }
   }, [])
 
-  // Apply dark mode class to body
   useEffect(() => {
     if (darkMode) {
       document.body.classList.add('dark-mode')
     } else {
       document.body.classList.remove('dark-mode')
     }
-    // Save preference to localStorage
     localStorage.setItem('darkMode', JSON.stringify(darkMode))
   }, [darkMode])
 
@@ -46,7 +57,10 @@ function App() {
     setRole(null)
   }
 
-  // Render different pages based on currentPage
+  const handleSearch = (term) => {  // ✅ New function
+    setSearchTerm(term)
+  }
+
   if (currentPage === 'login') {
     return <Login onBackToHome={handleBackToHome} darkMode={darkMode} />
   }
@@ -55,7 +69,6 @@ function App() {
     return <Signup onBackToHome={handleBackToHome} darkMode={darkMode} />
   }
 
-  // Original home page with role selection
   return (
     <div className={darkMode ? 'dark-mode' : ''}>
       <Navbar 
@@ -63,11 +76,12 @@ function App() {
         onSignupClick={handleSignupClick}
         darkMode={darkMode}
         toggleDarkMode={toggleDarkMode}
+        onSearch={handleSearch}  // ✅ Pass search function
+        searchTerm={searchTerm}
       />
 
       {!role && (
         <>
-          {/* Hero Section with Image and Text Overlay */}
           <div className="hero-section">
             <div className="hero-overlay"></div>
             <div className="hero-content">
@@ -102,48 +116,29 @@ function App() {
             </div>
           </div>
 
+          {/* ✅ Search results count */}
+          {searchTerm && (
+            <div className="search-results-info">
+              <p>{filteredCrops.length} crops found for "{searchTerm}"</p>
+            </div>
+          )}
+
           <div className="crop-showcase">
-            <div className="crop-item">
-              <img src="https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" alt="Wheat" />
-              <h3>Wheat</h3>
-              <p>₹2200 / Quintal</p>
-              <button>View Details</button>
-            </div>
-
-            <div className="crop-item">
-              <img src="https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" alt="Rice" />
-              <h3>Rice</h3>
-              <p>₹3100 / Quintal</p>
-              <button>View Details</button>
-            </div>
-
-            <div className="crop-item">
-              <img src="https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg" alt="Corn" />
-              <h3>Corn</h3>
-              <p>₹1800 / Quintal</p>
-              <button>View Details</button>
-            </div>
-
-            <div className="crop-item">
-              <img src="https://tse3.mm.bing.net/th/id/OIP.X-bhErQP9Jf_pSLBWIQ1jQHaE5?rs=1&pid=ImgDetMain&o=7&rm=3" alt="Barley" />
-              <h3>Barley</h3>
-              <p>₹1900 / Quintal</p>
-              <button>View Details</button>
-            </div>
-
-            <div className="crop-item">
-              <img src="https://img.freepik.com/premium-photo/soybean-field-beginning-planting-season_124507-221294.jpg?w=2000" alt="Soybean" />
-              <h3>Soybean</h3>
-              <p>₹4200 / Quintal</p>
-              <button>View Details</button>
-            </div>
-
-            <div className="crop-item">
-              <img src="https://morningchores.com/wp-content/uploads/2022/04/millet-plants.jpg" alt="Millet" />
-              <h3>Millet</h3>
-              <p>₹2600 / Quintal</p>
-              <button>View Details</button>
-            </div>
+            {filteredCrops.length > 0 ? (
+              filteredCrops.map(crop => (
+                <div className="crop-item" key={crop.id}>
+                  <img src={crop.image} alt={crop.name} />
+                  <h3>{crop.name}</h3>
+                  <p>₹{crop.price} / {crop.unit}</p>
+                  <button>View Details</button>
+                </div>
+              ))
+            ) : (
+              // ✅ Empty state
+              <div className="no-results">
+                <p>No crops found. Try searching for something else!</p>
+              </div>
+            )}
           </div>
         </>
       )}
