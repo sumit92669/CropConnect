@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function Signup({ onBackToHome }) {
+function Signup({ onBackToHome, darkMode }) {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -54,15 +54,15 @@ function Signup({ onBackToHome }) {
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card signup-card">
-        <button onClick={handleBackToHome} className="back-home-btn">
+    <div className={`auth-container ${darkMode ? 'auth-container-dark' : ''}`}>
+      <div className={`auth-card signup-card ${darkMode ? 'auth-card-dark' : ''}`}>
+        <button onClick={handleBackToHome} className={`back-home-btn ${darkMode ? 'back-home-btn-dark' : ''}`}>
           ← Back to Home
         </button>
 
         <div className="auth-header">
           <div className="auth-logo">🌾</div>
-          <h2>Join CropConnect</h2>
+          <h2 className={darkMode ? 'text-green' : ''}>Join CropConnect</h2>
           <p>Create your account and start connecting</p>
         </div>
 
@@ -79,6 +79,7 @@ function Signup({ onBackToHome }) {
                   placeholder="Enter your full name"
                   value={formData.fullName}
                   onChange={handleChange}
+                  className={darkMode ? 'input-dark' : ''}
                   required
                 />
               </div>
@@ -95,6 +96,7 @@ function Signup({ onBackToHome }) {
                   placeholder="+91 98765 43210"
                   value={formData.phone}
                   onChange={handleChange}
+                  className={darkMode ? 'input-dark' : ''}
                   required
                 />
               </div>
@@ -112,6 +114,7 @@ function Signup({ onBackToHome }) {
                 placeholder="you@example.com"
                 value={formData.email}
                 onChange={handleChange}
+                className={darkMode ? 'input-dark' : ''}
                 required
               />
             </div>
@@ -128,6 +131,7 @@ function Signup({ onBackToHome }) {
                 placeholder="e.g., Ludhiana, Punjab"
                 value={formData.location}
                 onChange={handleChange}
+                className={darkMode ? 'input-dark' : ''}
                 required
               />
             </div>
@@ -136,7 +140,7 @@ function Signup({ onBackToHome }) {
           <div className="form-group">
             <label>I am a:</label>
             <div className="role-selector">
-              <label className={`role-option ${formData.role === 'farmer' ? 'selected' : ''}`}>
+              <label className={`role-option ${formData.role === 'farmer' ? 'selected' : ''} ${darkMode ? 'role-option-dark' : ''}`}>
                 <input
                   type="radio"
                   name="role"
@@ -147,7 +151,7 @@ function Signup({ onBackToHome }) {
                 <span className="role-icon">👨‍🌾</span>
                 <span>Farmer</span>
               </label>
-              <label className={`role-option ${formData.role === 'buyer' ? 'selected' : ''}`}>
+              <label className={`role-option ${formData.role === 'buyer' ? 'selected' : ''} ${darkMode ? 'role-option-dark' : ''}`}>
                 <input
                   type="radio"
                   name="role"
@@ -173,6 +177,7 @@ function Signup({ onBackToHome }) {
                   placeholder="Min. 8 characters"
                   value={formData.password}
                   onChange={handleChange}
+                  className={darkMode ? 'input-dark' : ''}
                   required
                 />
               </div>
@@ -189,7 +194,7 @@ function Signup({ onBackToHome }) {
                   placeholder="Re-enter password"
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className={!passwordMatch && formData.confirmPassword ? 'error' : ''}
+                  className={`${!passwordMatch && formData.confirmPassword ? 'error' : ''} ${darkMode ? 'input-dark' : ''}`}
                   required
                 />
               </div>
@@ -208,7 +213,7 @@ function Signup({ onBackToHome }) {
                 onChange={handleChange}
                 required
               />
-              <span>I agree to the <a href="#" onClick={(e) => e.preventDefault()}>Terms of Service</a> and <a href="#" onClick={(e) => e.preventDefault()}>Privacy Policy</a></span>
+              <span>I agree to the <a href="#" className={darkMode ? 'terms-link-dark' : ''} onClick={(e) => e.preventDefault()}>Terms of Service</a> and <a href="#" className={darkMode ? 'terms-link-dark' : ''} onClick={(e) => e.preventDefault()}>Privacy Policy</a></span>
             </label>
           </div>
 
@@ -222,7 +227,7 @@ function Signup({ onBackToHome }) {
         </form>
 
         <div className="auth-footer">
-          <p>Already have an account? <a href="#" onClick={(e) => {
+          <p>Already have an account? <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
             e.preventDefault()
             window.location.href = "/login"
           }}>Login</a></p>
