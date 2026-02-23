@@ -55,16 +55,12 @@ A fair and direct negotiation ecosystem.
 
 ---
 
-## 🗄️ Backend Overview
+## 🗄️ Backend Architecture
 
-Lightweight REST API built with Express & SQLite.
-
-### API Endpoints
-GET /api/crops
-GET /api/crops/:id
-POST /api/crops
-POST /api/offers
-PUT /api/offers/:id
+- ✔ Custom Backend Routes  
+- ✔ Self-Hosted Server Endpoints  
+- ✔ Internal Data Exchange  
+- ✔ Database Communication Layer  
 
 
 ---
