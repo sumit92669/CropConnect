@@ -4,13 +4,14 @@ import Farmer from "./pages/Farmer"
 import Buyer from "./pages/Buyer"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
+import Footer from "./components/Footer"  // ✅ Add this import
 
 function App() {
   const [role, setRole] = useState(null)
   const [currentPage, setCurrentPage] = useState('home')
   const [darkMode, setDarkMode] = useState(false)
-  const [searchTerm, setSearchTerm] = useState('')  // ✅ New state
-  const [crops, setCrops] = useState([              // ✅ Move crops to state
+  const [searchTerm, setSearchTerm] = useState('')
+  const [crops, setCrops] = useState([
     { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" },
     { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" },
     { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg" },
@@ -19,7 +20,6 @@ function App() {
     { id: 6, name: "Millet", price: 2600, unit: "Quintal", image: "https://morningchores.com/wp-content/uploads/2022/04/millet-plants.jpg" }
   ])
 
-  // ✅ Filter crops based on search term
   const filteredCrops = crops.filter(crop => 
     crop.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
@@ -57,7 +57,7 @@ function App() {
     setRole(null)
   }
 
-  const handleSearch = (term) => {  // ✅ New function
+  const handleSearch = (term) => {
     setSearchTerm(term)
   }
 
@@ -76,7 +76,7 @@ function App() {
         onSignupClick={handleSignupClick}
         darkMode={darkMode}
         toggleDarkMode={toggleDarkMode}
-        onSearch={handleSearch}  // ✅ Pass search function
+        onSearch={handleSearch}
         searchTerm={searchTerm}
       />
 
@@ -116,7 +116,6 @@ function App() {
             </div>
           </div>
 
-          {/* ✅ Search results count */}
           {searchTerm && (
             <div className="search-results-info">
               <p>{filteredCrops.length} crops found for "{searchTerm}"</p>
@@ -134,7 +133,6 @@ function App() {
                 </div>
               ))
             ) : (
-              // ✅ Empty state
               <div className="no-results">
                 <p>No crops found. Try searching for something else!</p>
               </div>
@@ -145,6 +143,9 @@ function App() {
 
       {role === "farmer" && <Farmer darkMode={darkMode} />}
       {role === "buyer" && <Buyer darkMode={darkMode} />}
+
+      {/* ✅ Footer - Always show at bottom */}
+      <Footer />
     </div>
   )
 }
