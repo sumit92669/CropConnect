@@ -1,7 +1,9 @@
 {
-  "dependencies": {
-    "leaflet": "^1.9.4",
-    "react-hot-toast": "^2.6.0",
-    "react-leaflet": "^4.2.1"
+  "name": "cropconnect",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "cd frontend && npm run dev",
+    "backend": "cd backend && npm run dev",
+    "dev:all": "concurrently \"npm run backend\" \"npm run dev\""
   }
 }

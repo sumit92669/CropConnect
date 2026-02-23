@@ -4,7 +4,9 @@ import FilterBar from "../components/FilterBar"
 import CropDetailModal from "../components/CropDetailModal"
 import OfferModal from "../components/OfferModal"
 import FarmerMap from "../components/FarmerMap"
-import { cropsData, categories } from "../data/cropsData"
+// import { cropsData, categories } from "../data/cropsData"  // Comment karo - ab backend se ayega
+
+const API_URL = 'http://localhost:5001/api'; // Backend URL
 
 function Buyer({ darkMode }) {
   const [allCrops, setAllCrops] = useState([])
@@ -16,103 +18,152 @@ function Buyer({ darkMode }) {
   const [myOffers, setMyOffers] = useState([])
   const [viewMode, setViewMode] = useState('grid')
   const [selectedCategory, setSelectedCategory] = useState('all')
+  const [error, setError] = useState(null)
 
-  // Load crops data
+  // Fetch crops from backend
   useEffect(() => {
-    setAllCrops(cropsData)
-    setFilteredCrops(cropsData)
-    setLoading(false)
-  }, [])
+    const fetchCrops = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/crops`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch crops');
+        }
+        
+        const data = await response.json();
+        console.log('Crops fetched:', data);
+        
+        setAllCrops(data);
+        setFilteredCrops(data);
+        setError(null);
+      } catch (error) {
+        console.error('Error fetching crops:', error);
+        setError('Failed to load crops. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCrops();
+  }, []);
+
+  // Categories from the data (unique categories)
+  const categories = [
+    { id: "all", name: "All Crops", icon: "🌾" },
+    ...Array.from(new Set(allCrops.map(c => c.category || 'grains'))).map(cat => {
+      const icons = {
+        grains: "🌾",
+        pulses: "🌱", 
+        vegetables: "🥬",
+        fruits: "🍎"
+      };
+      return {
+        id: cat,
+        name: cat.charAt(0).toUpperCase() + cat.slice(1),
+        icon: icons[cat] || "🌾"
+      };
+    })
+  ];
 
   const handleFilterChange = (filters) => {
-    let filtered = [...allCrops]
+    let filtered = [...allCrops];
 
-    // Apply price filter
     if (filters.minPrice) {
-      filtered = filtered.filter(c => c.price >= parseInt(filters.minPrice))
+      filtered = filtered.filter(c => c.price >= parseInt(filters.minPrice));
     }
     if (filters.maxPrice) {
-      filtered = filtered.filter(c => c.price <= parseInt(filters.maxPrice))
+      filtered = filtered.filter(c => c.price <= parseInt(filters.maxPrice));
     }
-
-    // Apply location filter
     if (filters.location) {
       filtered = filtered.filter(c => 
         c.location?.toLowerCase().includes(filters.location.toLowerCase())
-      )
+      );
     }
 
     // Apply category filter
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(c => c.category === selectedCategory)
+      filtered = filtered.filter(c => c.category === selectedCategory);
     }
 
     // Apply sorting
     switch (filters.sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price)
-        break
+        filtered.sort((a, b) => a.price - b.price);
+        break;
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price)
-        break
+        filtered.sort((a, b) => b.price - a.price);
+        break;
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name))
-        break
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+        break;
       default:
-        // 'newest' - keep as is
-        break
+        break;
     }
 
-    setFilteredCrops(filtered)
-  }
+    setFilteredCrops(filtered);
+  };
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category)
+    setSelectedCategory(category);
     
-    let filtered = [...allCrops]
-    
+    let filtered = [...allCrops];
     if (category !== 'all') {
-      filtered = filtered.filter(c => c.category === category)
+      filtered = filtered.filter(c => c.category === category);
     }
-    
-    setFilteredCrops(filtered)
-  }
+    setFilteredCrops(filtered);
+  };
 
   const handleViewDetails = (crop) => {
-    setSelectedCrop(crop)
-    setShowDetailModal(true)
-  }
+    setSelectedCrop(crop);
+    setShowDetailModal(true);
+  };
 
   const handleMakeOffer = (crop) => {
-    setSelectedCrop(crop)
-    setShowDetailModal(false)
-    setShowOfferModal(true)
-  }
+    setSelectedCrop(crop);
+    setShowDetailModal(false);
+    setShowOfferModal(true);
+  };
 
-  const handleSubmitOffer = (offer) => {
-    setMyOffers([...myOffers, offer])
-    alert(`✅ Offer sent for ${offer.cropName}!`)
-    console.log("Offer submitted:", offer)
-  }
+  const handleSubmitOffer = async (offer) => {
+    try {
+      // Backend API call for offers (will implement later)
+      console.log('Offer submitted:', offer);
+      setMyOffers([...myOffers, { ...offer, status: 'pending' }]);
+      alert(`✅ Offer sent for ${offer.cropName}!`);
+    } catch (error) {
+      console.error('Error submitting offer:', error);
+      alert('Failed to submit offer. Please try again.');
+    }
+  };
 
   const handleMarkerClick = (farmer) => {
-    // Find the full crop data for this farmer
-    const crop = allCrops.find(c => c.farmer === farmer.name)
+    const crop = allCrops.find(c => c.farmer === farmer.name);
     if (crop) {
-      setSelectedCrop(crop)
-      setShowDetailModal(true)
+      setSelectedCrop(crop);
+      setShowDetailModal(true);
     }
-  }
+  };
 
   // Prepare farmers data for map
   const farmersForMap = filteredCrops.map(crop => ({
     name: crop.farmer,
     crop: crop.name,
     price: crop.price,
-    unit: crop.unit,
+    unit: crop.unit || 'quintal',
     location: crop.location,
-    coordinates: crop.coordinates
-  }))
+    coordinates: crop.coordinates || { lat: 28.6139, lng: 77.2090 } // Default Delhi
+  }));
+
+  if (error) {
+    return (
+      <div className="error-state">
+        <h3>❌ Error</h3>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
 
   return (
     <div className="buyer-marketplace">
@@ -123,19 +174,13 @@ function Buyer({ darkMode }) {
 
       {/* Category Filter */}
       <div className="category-filter">
-        <button 
-          className={`category-btn ${selectedCategory === 'all' ? 'active' : ''}`}
-          onClick={() => handleCategoryChange('all')}
-        >
-          All Crops ({allCrops.length})
-        </button>
         {categories.map(cat => (
           <button
             key={cat.id}
             className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
             onClick={() => handleCategoryChange(cat.id)}
           >
-            {cat.icon} {cat.name} ({allCrops.filter(c => c.category === cat.id).length})
+            {cat.icon} {cat.name} {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
           </button>
         ))}
       </div>
@@ -177,7 +222,7 @@ function Buyer({ darkMode }) {
       {loading ? (
         <div className="loading-state">
           <div className="loader"></div>
-          <p>Loading available crops...</p>
+          <p>Loading crops from database...</p>
         </div>
       ) : (
         <>
@@ -239,7 +284,7 @@ function Buyer({ darkMode }) {
         darkMode={darkMode}
       />
     </div>
-  )
+  );
 }
 
-export default Buyer
+export default Buyer;
