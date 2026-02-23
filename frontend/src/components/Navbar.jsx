@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function Navbar({ onLoginClick, onSignupClick }) {
+function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode }) {
   const [language, setLanguage] = useState('english')
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
 
@@ -11,12 +11,11 @@ function Navbar({ onLoginClick, onSignupClick }) {
   const changeLanguage = (lang) => {
     setLanguage(lang)
     setShowLanguageDropdown(false)
-    // Yeh alert sirf demo ke liye hai - actual translation logic baad mein ayega
     alert(`Language changed to ${lang === 'hindi' ? 'Hindi' : 'English'} (Demo)`)
   }
 
   return (
-    <nav className="navbar">
+    <nav className={`navbar ${darkMode ? 'navbar-dark' : ''}`}>
       <div className="nav-left">
         <div 
           className="logo"
@@ -31,16 +30,30 @@ function Navbar({ onLoginClick, onSignupClick }) {
         <input 
           type="text" 
           placeholder={language === 'hindi' ? "फसलें खोजें..." : "Search crops..."} 
-          className="search-bar"
+          className={`search-bar ${darkMode ? 'search-bar-dark' : ''}`}
         />
         <span className="search-icon">🔍</span>
       </div>
 
       <div className="nav-right">
+        {/* Dark Mode Toggle */}
+        <button 
+          className={`dark-mode-toggle ${darkMode ? 'dark' : ''}`}
+          onClick={toggleDarkMode}
+          aria-label="Toggle dark mode"
+        >
+          <span className="toggle-icon">
+            {darkMode ? '☀️' : '🌙'}
+          </span>
+          <span className="toggle-text">
+            {darkMode ? 'Light' : 'Dark'}
+          </span>
+        </button>
+
         {/* Language Dropdown */}
         <div className="language-selector">
           <button 
-            className="language-btn"
+            className={`language-btn ${darkMode ? 'language-btn-dark' : ''}`}
             onClick={toggleLanguageDropdown}
           >
             <span className="language-icon">🌐</span>
@@ -51,15 +64,15 @@ function Navbar({ onLoginClick, onSignupClick }) {
           </button>
           
           {showLanguageDropdown && (
-            <div className="language-dropdown">
+            <div className={`language-dropdown ${darkMode ? 'language-dropdown-dark' : ''}`}>
               <button 
-                className={`language-option ${language === 'english' ? 'active' : ''}`}
+                className={`language-option ${language === 'english' ? 'active' : ''} ${darkMode ? 'language-option-dark' : ''}`}
                 onClick={() => changeLanguage('english')}
               >
                 <span>🇬🇧</span> English
               </button>
               <button 
-                className={`language-option ${language === 'hindi' ? 'active' : ''}`}
+                className={`language-option ${language === 'hindi' ? 'active' : ''} ${darkMode ? 'language-option-dark' : ''}`}
                 onClick={() => changeLanguage('hindi')}
               >
                 <span>🇮🇳</span> हिंदी
@@ -70,10 +83,10 @@ function Navbar({ onLoginClick, onSignupClick }) {
 
         {/* Auth Buttons */}
         <div className="nav-buttons">
-          <button className="login-btn" onClick={onLoginClick}>
+          <button className={`login-btn ${darkMode ? 'login-btn-dark' : ''}`} onClick={onLoginClick}>
             {language === 'hindi' ? 'लॉगिन' : 'Login'}
           </button>
-          <button className="signup-btn" onClick={onSignupClick}>
+          <button className={`signup-btn ${darkMode ? 'signup-btn-dark' : ''}`} onClick={onSignupClick}>
             {language === 'hindi' ? 'साइन अप' : 'Sign Up'}
           </button>
         </div>

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Navbar from "./components/Navbar"
 import Farmer from "./pages/Farmer"
 import Buyer from "./pages/Buyer"
@@ -8,6 +8,30 @@ import Signup from "./pages/Signup"
 function App() {
   const [role, setRole] = useState(null)
   const [currentPage, setCurrentPage] = useState('home') // 'home', 'login', 'signup'
+  const [darkMode, setDarkMode] = useState(false)
+
+  // Check localStorage for dark mode preference on load
+  useEffect(() => {
+    const savedMode = localStorage.getItem('darkMode')
+    if (savedMode) {
+      setDarkMode(JSON.parse(savedMode))
+    }
+  }, [])
+
+  // Apply dark mode class to body
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode')
+    } else {
+      document.body.classList.remove('dark-mode')
+    }
+    // Save preference to localStorage
+    localStorage.setItem('darkMode', JSON.stringify(darkMode))
+  }, [darkMode])
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
 
   const handleLoginClick = () => {
     setCurrentPage('login')
@@ -24,35 +48,57 @@ function App() {
 
   // Render different pages based on currentPage
   if (currentPage === 'login') {
-    return <Login onBackToHome={handleBackToHome} />
+    return <Login onBackToHome={handleBackToHome} darkMode={darkMode} />
   }
 
   if (currentPage === 'signup') {
-    return <Signup onBackToHome={handleBackToHome} />
+    return <Signup onBackToHome={handleBackToHome} darkMode={darkMode} />
   }
 
   // Original home page with role selection
   return (
-    <div>
+    <div className={darkMode ? 'dark-mode' : ''}>
       <Navbar 
         onLoginClick={handleLoginClick} 
-        onSignupClick={handleSignupClick} 
+        onSignupClick={handleSignupClick}
+        darkMode={darkMode}
+        toggleDarkMode={toggleDarkMode}
       />
 
       {!role && (
         <>
-          <div className="hero">
-            <h1>Fair & Direct Crop Marketplace</h1>
-            <p>Connecting Farmers with NGOs & Bulk Buyers</p>
-
-            <div className="buttons">
-              <button onClick={() => setRole("farmer")}>
-                I am a Farmer
-              </button>
-
-              <button onClick={() => setRole("buyer")}>
-                I am a Buyer
-              </button>
+          {/* Hero Section with Image and Text Overlay */}
+          <div className="hero-section">
+            <div className="hero-overlay"></div>
+            <div className="hero-content">
+              <h1 className="hero-title">Fair & Direct Crop Marketplace</h1>
+              <p className="hero-subtitle">Connecting Farmers with NGOs & Bulk Buyers</p>
+              
+              <div className="hero-buttons">
+                <button className="hero-btn farmer-btn" onClick={() => setRole("farmer")}>
+                  <span className="btn-icon">👨‍🌾</span>
+                  I am a Farmer
+                </button>
+                <button className="hero-btn buyer-btn" onClick={() => setRole("buyer")}>
+                  <span className="btn-icon">🏢</span>
+                  I am a Buyer
+                </button>
+              </div>
+              
+              <div className="hero-stats">
+                <div className="stat-item">
+                  <span className="stat-number">10,000+</span>
+                  <span className="stat-label">Farmers</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-number">500+</span>
+                  <span className="stat-label">Buyers</span>
+                </div>
+                <div className="stat-item">
+                  <span className="stat-number">50+</span>
+                  <span className="stat-label">Crops</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -102,8 +148,8 @@ function App() {
         </>
       )}
 
-      {role === "farmer" && <Farmer />}
-      {role === "buyer" && <Buyer />}
+      {role === "farmer" && <Farmer darkMode={darkMode} />}
+      {role === "buyer" && <Buyer darkMode={darkMode} />}
     </div>
   )
 }
