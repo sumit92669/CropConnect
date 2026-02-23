@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function Login({ onBackToHome }) {
+function Login({ onBackToHome, darkMode }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,15 +30,15 @@ function Login({ onBackToHome }) {
   }
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        <button onClick={handleBackToHome} className="back-home-btn">
+    <div className={`auth-container ${darkMode ? 'auth-container-dark' : ''}`}>
+      <div className={`auth-card ${darkMode ? 'auth-card-dark' : ''}`}>
+        <button onClick={handleBackToHome} className={`back-home-btn ${darkMode ? 'back-home-btn-dark' : ''}`}>
           ← Back to Home
         </button>
 
         <div className="auth-header">
           <div className="auth-logo">🌾</div>
-          <h2>Welcome Back!</h2>
+          <h2 className={darkMode ? 'text-green' : ''}>Welcome Back!</h2>
           <p>Login to your CropConnect account</p>
         </div>
 
@@ -54,6 +54,7 @@ function Login({ onBackToHome }) {
                 placeholder="farmer@example.com"
                 value={formData.email}
                 onChange={handleChange}
+                className={darkMode ? 'input-dark' : ''}
                 required
               />
             </div>
@@ -70,6 +71,7 @@ function Login({ onBackToHome }) {
                 placeholder="••••••••"
                 value={formData.password}
                 onChange={handleChange}
+                className={darkMode ? 'input-dark' : ''}
                 required
               />
             </div>
@@ -85,20 +87,20 @@ function Login({ onBackToHome }) {
               />
               <span>Remember me</span>
             </label>
-            <a href="#" className="forgot-link" onClick={(e) => e.preventDefault()}>Forgot Password?</a>
+            <a href="#" className={`forgot-link ${darkMode ? 'forgot-link-dark' : ''}`} onClick={(e) => e.preventDefault()}>Forgot Password?</a>
           </div>
 
           <button type="submit" className="auth-btn">Login</button>
         </form>
 
         <div className="auth-footer">
-          <p>Don't have an account? <a href="#" onClick={(e) => {
+          <p>Don't have an account? <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
             e.preventDefault()
             window.location.href = "/signup"
           }}>Sign Up</a></p>
         </div>
 
-        <div className="demo-credentials">
+        <div className={`demo-credentials ${darkMode ? 'demo-credentials-dark' : ''}`}>
           <p className="demo-title">Demo Credentials:</p>
           <p>Farmer: farmer@demo.com / farmer123</p>
           <p>Buyer: buyer@demo.com / buyer123</p>
