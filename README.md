@@ -1,59 +1,113 @@
-# CropConnect 🌾
+# 🌾 CropConnect  
+### Fair & Direct Crop Marketplace
 
-**CropConnect – Fair & Direct Crop Marketplace**
+CropConnect is an open-source platform connecting **farmers** directly with **NGOs & bulk buyers**.  
+It enables transparent price negotiation, reduces middlemen dependency, and helps minimize crop wastage.
 
-CropConnect is an open-source platform designed to connect farmers directly with NGOs and bulk buyers. The platform enables fair price negotiation, reduces dependency on intermediaries, and aims to minimize crop wastage.
+---
 
 ## 🚩 Problem
 
-Farmers often face unstable pricing, middlemen margins, and difficulties selling produce at profitable rates. Bulk buyers such as NGOs and community kitchens struggle with affordable and reliable sourcing.
+Farmers often face:
+
+- Unstable crop pricing  
+- Heavy intermediary margins  
+- Difficulty reaching bulk buyers  
+
+At the same time, NGOs struggle with affordable & reliable sourcing.
+
+---
 
 ## ✅ Solution
 
-CropConnect provides a transparent digital marketplace where:
+CropConnect provides a transparent digital marketplace:
 
-- Farmers list crops with quantity & pricing
-- Buyers browse available produce
-- Buyers submit offers
-- Farmers accept / reject / counter offers
+✔ Farmers list crops (price & quantity)  
+✔ Buyers browse available produce  
+✔ Buyers submit offers  
+✔ Farmers accept / reject / counter  
+
+A fair and direct negotiation ecosystem.
+
+---
 
 ## ✨ Features (Hackathon MVP)
 
-- Farmer & Buyer Registration
-- Crop Listings
-- Offer & Bargaining System
-- Negotiation Workflow
+- 👨‍🌾 Farmer & Buyer Registration  
+- 🌾 Crop Listings  
+- 💰 Offer & Bargaining System  
+- 🤝 Negotiation Workflow  
+- 🗺️ OpenStreetMap Integration  
+- 🌙 Dark Mode Support  
+- 📱 Fully Responsive UI  
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer      | Technology |
+|------------|------------|
+| Frontend   | React + Vite, CSS |
+| Backend    | Node.js + Express |
+| Database   | SQLite3 |
+| Maps       | OpenStreetMap + Leaflet |
+| Version Control | Git + GitHub |
+
+---
+
+## 🗄️ Backend Overview
+
+Lightweight REST API built with Express & SQLite.
+
+### API Endpoints
+GET /api/crops
+GET /api/crops/:id
+POST /api/crops
+POST /api/offers
+PUT /api/offers/:id
 
 
-## 🌍 OpenStreetMap Integration
+---
 
-CropConnect leverages OpenStreetMap (OSM) to introduce geospatial awareness into agricultural trade.
+## 📦 Installation
 
-This enables:
+### Prerequisites
 
-• 📍 Location-based crop discovery  
-• 🗺 Visual marketplace representation  
-• 🚜 Realistic farmer-buyer mapping  
-• 🌾 Improved logistics & coordination  
+- Node.js (v16+)
+- npm
 
-Using OSM ensures full FOSS compliance while providing powerful mapping capabilities without proprietary APIs.
+---
 
+### Clone Repository
 
-## 🌱 Impact
+``bash
+git clone https://github.com/sumit92669/CropConnect.git
+cd CropConnect
 
-- Better price discovery for farmers
-- Affordable procurement for NGOs
-- Reduced agricultural wastage
+Frontend Setup
+cd frontend
+npm install
+npm run dev
 
-## 🚀 Key Highlights
+Backend Setup
+cd backend
+npm install
+npm run dev
 
-✔ 🌍 OpenStreetMap (OSM) Integration for Location Intelligence  
-✔ 📍 Visual Crop Discovery via Interactive Maps  
-✔ 👨‍🌾 Farmer Dashboard for Crop Listings  
-✔ 🏢 Buyer Marketplace for Bulk Procurement  
-✔ 💰 Fair Price Negotiation Concept  
-✔ ♻️ Future Scope: Food Waste Reduction & Crop Donations
+---
 
-## 🔓 License
+## 🚀 Future Scope
 
-MIT License
+- 🔐 JWT Authentication  
+- 📊 Analytics Dashboard  
+- 🤖 Smart Price Suggestions  
+- 🚚 Logistics Integration  
+- 📱 Mobile App  
+- 📦 Bulk Order System  
+- ♻️ Food Waste Reduction Features  
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License**.
