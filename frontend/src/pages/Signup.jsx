@@ -10,48 +10,88 @@ function Signup({ onBackToHome, darkMode }) {
     role: "farmer",
     location: "",
     agreeTerms: false
-  })
+  });
 
-  const [passwordMatch, setPasswordMatch] = useState(true)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [passwordMatch, setPasswordMatch] = useState(true);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData(prev => {
       const newData = {
         ...prev,
         [name]: type === "checkbox" ? checked : value
-      }
+      };
       
-      // Check password match
       if (name === "password" || name === "confirmPassword") {
-        const pass = name === "password" ? value : prev.password
-        const confirm = name === "confirmPassword" ? value : prev.confirmPassword
-        setPasswordMatch(pass === confirm)
+        const pass = name === "password" ? value : prev.password;
+        const confirm = name === "confirmPassword" ? value : prev.confirmPassword;
+        setPasswordMatch(pass === confirm);
       }
       
-      return newData
-    })
-  }
+      return newData;
+    });
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     
     if (!passwordMatch) {
-      alert("Passwords don't match!")
-      return
+      setError("Passwords don't match!");
+      return;
     }
 
-    console.log("Signup attempt:", formData)
-    alert(`Signup successful! (Demo) Welcome ${formData.fullName}`)
-  }
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:5001/api/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          password: formData.password,
+          role: formData.role,
+          location: formData.location
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Signup failed');
+      }
+
+      // Save token
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      alert(`✅ Welcome to CropConnect, ${data.user.fullName}!`);
+      
+      // Redirect based on role
+      if (data.user.role === 'farmer') {
+        window.location.href = '/?role=farmer';
+      } else {
+        window.location.href = '/?role=buyer';
+      }
+
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBackToHome = () => {
     if (onBackToHome) {
-      onBackToHome()
+      onBackToHome();
     } else {
-      window.location.href = "/"
+      window.location.href = "/";
     }
-  }
+  };
 
   return (
     <div className={`auth-container ${darkMode ? 'auth-container-dark' : ''}`}>
@@ -65,6 +105,8 @@ function Signup({ onBackToHome, darkMode }) {
           <h2 className={darkMode ? 'text-green' : ''}>Join CropConnect</h2>
           <p>Create your account and start connecting</p>
         </div>
+
+        {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-row">
@@ -220,21 +262,21 @@ function Signup({ onBackToHome, darkMode }) {
           <button 
             type="submit" 
             className="auth-btn"
-            disabled={!formData.agreeTerms}
+            disabled={!formData.agreeTerms || loading}
           >
-            Create Account
+            {loading ? 'Creating Account...' : 'Create Account'}
           </button>
         </form>
 
         <div className="auth-footer">
           <p>Already have an account? <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
-            e.preventDefault()
-            window.location.href = "/login"
+            e.preventDefault();
+            window.location.href = "/login";
           }}>Login</a></p>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Signup
+export default Signup;

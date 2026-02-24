@@ -1,33 +1,70 @@
 import { useState } from "react"
 
-function Login({ onBackToHome, darkMode }) {
+function Login({ onBackToHome, darkMode, onLogin }) {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
     rememberMe: false
-  })
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value
-    }))
-  }
+    }));
+  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log("Login attempt:", formData)
-    alert("Login successful! (Demo)")
-  }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:5001/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Save token
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      alert(`✅ Welcome back, ${data.user.fullName}!`);
+      
+      // Redirect based on role
+      if (data.user.role === 'farmer') {
+        window.location.href = '/?role=farmer';
+      } else {
+        window.location.href = '/?role=buyer';
+      }
+
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBackToHome = () => {
     if (onBackToHome) {
-      onBackToHome()
+      onBackToHome();
     } else {
-      window.location.href = "/"
+      window.location.href = "/";
     }
-  }
+  };
 
   return (
     <div className={`auth-container ${darkMode ? 'auth-container-dark' : ''}`}>
@@ -41,6 +78,8 @@ function Login({ onBackToHome, darkMode }) {
           <h2 className={darkMode ? 'text-green' : ''}>Welcome Back!</h2>
           <p>Login to your CropConnect account</p>
         </div>
+
+        {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
@@ -90,13 +129,15 @@ function Login({ onBackToHome, darkMode }) {
             <a href="#" className={`forgot-link ${darkMode ? 'forgot-link-dark' : ''}`} onClick={(e) => e.preventDefault()}>Forgot Password?</a>
           </div>
 
-          <button type="submit" className="auth-btn">Login</button>
+          <button type="submit" className="auth-btn" disabled={loading}>
+            {loading ? 'Logging in...' : 'Login'}
+          </button>
         </form>
 
         <div className="auth-footer">
           <p>Don't have an account? <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
-            e.preventDefault()
-            window.location.href = "/signup"
+            e.preventDefault();
+            window.location.href = "/signup";
           }}>Sign Up</a></p>
         </div>
 
@@ -107,7 +148,7 @@ function Login({ onBackToHome, darkMode }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;
