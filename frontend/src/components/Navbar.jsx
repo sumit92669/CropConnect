@@ -18,17 +18,39 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
   const handleSearchChange = (e) => {
     const value = e.target.value
     setLocalSearchTerm(value)
-    onSearch(value)  // ✅ Pass search term to parent
+    onSearch(value)
   }
 
   return (
     <nav className={`navbar ${darkMode ? 'navbar-dark' : ''}`}>
       <div className="nav-left">
-        <div 
-          className="logo"
-          onClick={() => window.location.reload()}
-        >
-          <span className="logo-icon">🌾</span>
+        <div className="logo" onClick={() => window.location.reload()}>
+          {/* 🌾 Beautiful CropConnect Logo */}
+          <span className="logo-icon">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              {/* Background Circle */}
+              <circle cx="18" cy="18" r="16" fill="#16A34A" />
+              
+              {/* Wheat Stalk */}
+              <path d="M18 8V24" stroke="#FBBF24" strokeWidth="3" strokeLinecap="round" />
+              
+              {/* Wheat Grains */}
+              <circle cx="18" cy="8" r="3" fill="#FBBF24" />
+              <circle cx="12" cy="12" r="2.5" fill="#FBBF24" />
+              <circle cx="24" cy="12" r="2.5" fill="#FBBF24" />
+              <circle cx="15" cy="18" r="2.5" fill="#FBBF24" />
+              <circle cx="21" cy="18" r="2.5" fill="#FBBF24" />
+              
+              {/* Leaves */}
+              <path d="M10 10L6 6M26 10L30 6" stroke="#FBBF24" strokeWidth="2" strokeLinecap="round" />
+              
+              {/* Farmer Hat (optional) */}
+              <path d="M18 4L22 6L18 8L14 6L18 4Z" fill="#8B5A2B" />
+              
+              {/* White Inner Glow */}
+              <circle cx="18" cy="18" r="14" stroke="white" strokeWidth="1.5" fill="none" opacity="0.3" />
+            </svg>
+          </span>
           <span className="logo-text">CropConnect</span>
         </div>
       </div>
@@ -39,7 +61,7 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
           placeholder={language === 'hindi' ? "फसलें खोजें..." : "Search crops..."} 
           className={`search-bar ${darkMode ? 'search-bar-dark' : ''}`}
           value={localSearchTerm}
-          onChange={handleSearchChange}  // ✅ Handle search
+          onChange={handleSearchChange}
         />
         <span className="search-icon">🔍</span>
         {localSearchTerm && (
