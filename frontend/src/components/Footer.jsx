@@ -7,37 +7,60 @@ function Footer({ darkMode }) {
 
   return (
     <footer className={`footer ${darkMode ? 'footer-dark' : ''}`}>
-      <div className="footer-content">
-        {/* About Section */}
-        <div className="footer-section">
-          <h3 className="footer-title">
-            <span className="footer-icon">🌾</span> CropConnect
-          </h3>
-          <p className="footer-about">
+      <div className="footer-gradient"></div>
+      <div className="footer-container">
+        
+        {/* Brand Section */}
+        <div className="footer-brand">
+          <div className="footer-logo">
+            <span className="logo-icon">🌾</span>
+            <span className="logo-text">CropConnect</span>
+          </div>
+          <p className="brand-description">
             {t('footerAbout')}
           </p>
-          <div className="footer-stats-mini">
-            <span>👨‍🌾 {t('farmers')}: 10,000+</span>
-            <span>🏢 {t('buyers')}: 500+</span>
+          <div className="brand-stats">
+            <div className="stat-item">
+              <span className="stat-number">10k+</span>
+              <span className="stat-label">{t('farmers')}</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">500+</span>
+              <span className="stat-label">{t('buyers')}</span>
+            </div>
+            <div className="stat-item">
+              <span className="stat-number">28+</span>
+              <span className="stat-label">{t('crops')}</span>
+            </div>
           </div>
         </div>
 
-        {/* Quick Links */}
-        <div className="footer-section">
-          <h3 className="footer-title">{t('quickLinks')}</h3>
-          <ul className="footer-links">
-            <li><a href="/">{t('home')}</a></li>
-            <li><a href="/about">{t('aboutUs')}</a></li>
-            <li><a href="/how-it-works">{t('howItWorks')}</a></li>
-            <li><a href="/contact">{t('contact')}</a></li>
-            <li><a href="/faq">{t('faq')}</a></li>
-          </ul>
+        {/* Quick Links - 2 Column Layout */}
+        <div className="footer-links-grid">
+          <div className="links-column">
+            <h4 className="links-title">{t('quickLinks')}</h4>
+            <ul className="links-list">
+              <li><a href="/">{t('home')}</a></li>
+              <li><a href="/about">{t('aboutUs')}</a></li>
+              <li><a href="/how-it-works">{t('howItWorks')}</a></li>
+              <li><a href="/contact">{t('contact')}</a></li>
+            </ul>
+          </div>
+          <div className="links-column">
+            <h4 className="links-title">{t('support')}</h4>
+            <ul className="links-list">
+              <li><a href="/faq">{t('faq')}</a></li>
+              <li><a href="/privacy">{t('privacyPolicy')}</a></li>
+              <li><a href="/terms">{t('termsOfService')}</a></li>
+              <li><a href="/sitemap">{t('sitemap')}</a></li>
+            </ul>
+          </div>
         </div>
 
-        {/* Contact Info */}
-        <div className="footer-section">
-          <h3 className="footer-title">{t('contactUs')}</h3>
-          <ul className="footer-contact">
+        {/* Contact & Social */}
+        <div className="footer-contact-section">
+          <h4 className="links-title">{t('contactUs')}</h4>
+          <ul className="contact-list">
             <li>
               <span className="contact-icon">📍</span>
               <span>{t('address')}</span>
@@ -55,40 +78,63 @@ function Footer({ darkMode }) {
               <span>{t('workingHours')}</span>
             </li>
           </ul>
+          
+          {/* Social Links */}
+          <div className="social-wrapper">
+            <h4 className="social-title">{t('followUs')}</h4>
+            <div className="social-grid">
+              <a href="#" className="social-icon" aria-label="Facebook">
+                <span className="social-emoji">📘</span>
+              </a>
+              <a href="#" className="social-icon" aria-label="Twitter">
+                <span className="social-emoji">🐦</span>
+              </a>
+              <a href="#" className="social-icon" aria-label="Instagram">
+                <span className="social-emoji">📷</span>
+              </a>
+              <a href="#" className="social-icon" aria-label="LinkedIn">
+                <span className="social-emoji">🔗</span>
+              </a>
+              <a href="#" className="social-icon" aria-label="YouTube">
+                <span className="social-emoji">▶️</span>
+              </a>
+            </div>
+          </div>
         </div>
 
-        {/* Newsletter */}
-        <div className="footer-section">
-          <h3 className="footer-title">{t('stayUpdated')}</h3>
-          <p className="newsletter-text">
-            {t('newsletterText')}
-          </p>
-          <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-            <input 
-              type="email" 
-              placeholder={t('emailPlaceholder')} 
-              className={`newsletter-input ${darkMode ? 'input-dark' : ''}`}
-            />
-            <button type="submit" className="newsletter-btn">
-              {t('subscribe')}
-            </button>
+        {/* Newsletter - Compact */}
+        <div className="footer-newsletter">
+          <h4 className="links-title">{t('stayUpdated')}</h4>
+          <p className="newsletter-text">{t('newsletterText')}</p>
+          <form className="newsletter-form-compact" onSubmit={(e) => e.preventDefault()}>
+            <div className="input-wrapper">
+              <input 
+                type="email" 
+                placeholder={t('emailPlaceholder')} 
+                className={`newsletter-input ${darkMode ? 'input-dark' : ''}`}
+              />
+              <button type="submit" className="newsletter-btn">
+                <span className="btn-text">{t('subscribe')}</span>
+                <span className="btn-icon">→</span>
+              </button>
+            </div>
           </form>
-          <div className="social-links">
-            <a href="#" className="social-link" aria-label="Facebook">📘</a>
-            <a href="#" className="social-link" aria-label="Twitter">🐦</a>
-            <a href="#" className="social-link" aria-label="Instagram">📷</a>
-            <a href="#" className="social-link" aria-label="LinkedIn">🔗</a>
-          </div>
         </div>
       </div>
 
       {/* Bottom Bar */}
       <div className="footer-bottom">
-        <p>© {currentYear} CropConnect. {t('allRightsReserved')}</p>
-        <div className="footer-bottom-links">
-          <a href="/privacy">{t('privacyPolicy')}</a>
-          <a href="/terms">{t('termsOfService')}</a>
-          <a href="/sitemap">{t('sitemap')}</a>
+        <div className="bottom-container">
+          <p className="copyright">
+            © {currentYear} CropConnect. {t('allRightsReserved')}
+          </p>
+          <div className="bottom-links">
+            <a href="/privacy">{t('privacyPolicy')}</a>
+            <span className="separator">•</span>
+            <a href="/terms">{t('termsOfService')}</a>
+            <span className="separator">•</span>
+            <a href="/sitemap">{t('sitemap')}</a>
+          </div>
         </div>
       </div>
     </footer>
