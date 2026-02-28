@@ -3,7 +3,7 @@ import CropCard from "../components/CropCard"
 import FilterBar from "../components/FilterBar"
 import CropDetailModal from "../components/CropDetailModal"
 import OfferModal from "../components/OfferModal"
-import FarmerMap from "../components/FarmerMap"
+import MapView from "../components/MapView"  // ✅ Changed to MapView
 
 const API_URL = 'http://localhost:5001/api';
 
@@ -124,27 +124,6 @@ function Buyer({ darkMode }) {
     }
   };
 
-  const handleMarkerClick = (farmer) => {
-    const crop = allCrops.find(c => c.farmer === farmer.name);
-    if (crop) {
-      setSelectedCrop(crop);
-      setShowDetailModal(true);
-    }
-  };
-
-  // Prepare farmers data for map with coordinates
-  const farmersForMap = filteredCrops.map(crop => ({
-    name: crop.farmer,
-    crop: crop.name,
-    price: crop.price,
-    unit: crop.unit || 'quintal',
-    location: crop.location,
-    coordinates: { 
-      lat: crop.lat || 28.6139, 
-      lng: crop.lng || 77.2090 
-    }
-  }));
-
   if (error) {
     return (
       <div className="error-state">
@@ -239,15 +218,14 @@ function Buyer({ darkMode }) {
               </div>
             ) : (
               <div className="map-view-section">
-                <FarmerMap 
-                  farmers={farmersForMap}
+                <MapView 
+                  crops={filteredCrops}
                   darkMode={darkMode}
-                  onMarkerClick={handleMarkerClick}
                 />
                 <div className="map-legend">
                   <div className="legend-item">
                     <span className="legend-dot green"></span>
-                    <span>Farmer with crops</span>
+                    <span>Farmer locations ({filteredCrops.length} crops)</span>
                   </div>
                   <p className="map-hint">👆 Click on markers to view crop details</p>
                 </div>
