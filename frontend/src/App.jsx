@@ -5,14 +5,14 @@ import Buyer from "./pages/Buyer"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Footer from "./components/Footer"
-import { useLanguage } from "./LanguageContext"  // ✅ Add this import
+import { useLanguage } from "./LanguageContext"
 
 function App() {
   const [role, setRole] = useState(null)
   const [currentPage, setCurrentPage] = useState('home')
   const [darkMode, setDarkMode] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-  const { t } = useLanguage()  // ✅ Add this hook
+  const { t } = useLanguage()
   const [crops, setCrops] = useState([
     { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" },
     { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" },
@@ -87,32 +87,32 @@ function App() {
           <div className="hero-section">
             <div className="hero-overlay"></div>
             <div className="hero-content">
-              <h1 className="hero-title">{t('heroTitle')}</h1>  {/* ✅ Translated */}
-              <p className="hero-subtitle">{t('heroSubtitle')}</p>  {/* ✅ Translated */}
+              <h1 className="hero-title">{t('heroTitle')}</h1>
+              <p className="hero-subtitle">{t('heroSubtitle')}</p>
               
               <div className="hero-buttons">
                 <button className="hero-btn farmer-btn" onClick={() => setRole("farmer")}>
                   <span className="btn-icon">👨‍🌾</span>
-                  {t('farmerBtn')}  {/* ✅ Translated */}
+                  {t('farmerBtn')}
                 </button>
                 <button className="hero-btn buyer-btn" onClick={() => setRole("buyer")}>
                   <span className="btn-icon">🏢</span>
-                  {t('buyerBtn')}  {/* ✅ Translated */}
+                  {t('buyerBtn')}
                 </button>
               </div>
               
               <div className="hero-stats">
                 <div className="stat-item">
-                  <span className="stat-number">10,000+</span>
-                  <span className="stat-label">{t('farmers')}</span>  {/* ✅ Translated */}
+                  <span className="stat-number">1,247</span>
+                  <span className="stat-label">{t('farmers')}</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-number">500+</span>
-                  <span className="stat-label">{t('buyers')}</span>  {/* ✅ Translated */}
+                  <span className="stat-number">89</span>
+                  <span className="stat-label">{t('buyers')}</span>
                 </div>
                 <div className="stat-item">
-                  <span className="stat-number">50+</span>
-                  <span className="stat-label">{t('crops')}</span>  {/* ✅ Translated */}
+                  <span className="stat-number">28</span>
+                  <span className="stat-label">{t('crops')}</span>
                 </div>
               </div>
             </div>
@@ -120,7 +120,7 @@ function App() {
 
           {searchTerm && (
             <div className="search-results-info">
-              <p>{filteredCrops.length} {t('crops').toLowerCase()} {t('foundFor')} "{searchTerm}"</p>  {/* ✅ Translated */}
+              <p>{filteredCrops.length} {t('crops').toLowerCase()} {t('foundFor')} "{searchTerm}"</p>
             </div>
           )}
 
@@ -131,12 +131,12 @@ function App() {
                   <img src={crop.image} alt={crop.name} />
                   <h3>{crop.name}</h3>
                   <p>₹{crop.price} / {crop.unit}</p>
-                  <button>{t('viewDetails')}</button>  {/* ✅ Translated */}
+                  <button>{t('viewDetails')}</button>
                 </div>
               ))
             ) : (
               <div className="no-results">
-                <p>{t('noCrops')} {t('trySearching')}</p>  {/* ✅ Translated */}
+                <p>{t('noCrops')} {t('trySearching')}</p>
               </div>
             )}
           </div>

@@ -197,7 +197,6 @@ const translations = {
     subscribe: "Subscribe",
     allRightsReserved: "All rights reserved.",
     sitemap: "Sitemap",
-    // New Footer Keys
     support: "Support",
     followUs: "Follow Us"
   },
@@ -399,7 +398,6 @@ const translations = {
     subscribe: "सदस्यता लें",
     allRightsReserved: "सर्वाधिकार सुरक्षित।",
     sitemap: "साइटमैप",
-    // New Footer Keys
     support: "सहायता",
     followUs: "हमें फॉलो करें"
   },
@@ -601,7 +599,6 @@ const translations = {
     subscribe: "ਸਬਸਕ੍ਰਾਈਬ ਕਰੋ",
     allRightsReserved: "ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।",
     sitemap: "ਸਾਈਟਮੈਪ",
-    // New Footer Keys
     support: "ਸਹਾਇਤਾ",
     followUs: "ਸਾਡਾ ਪਾਲਣ ਕਰੋ"
   }
