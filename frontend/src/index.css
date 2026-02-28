@@ -4534,4 +4534,241 @@ body.dark-mode .stats-grid .stat-value {
 
 body.dark-mode .stats-grid .stat-label {
   color: #94a3b8;
+}/* ===== GLOBAL PAGE LOADING ANIMATIONS ===== */
+
+/* Page Container Animation */
+.app-container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.app-container.page-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Page Content Animation */
+.animate-page {
+  animation: pageSlideUp 0.8s ease-out forwards;
+}
+
+@keyframes pageSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade Animation */
+.animate-fade {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Grid Items Animation */
+.animate-grid {
+  animation: gridFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes gridFadeIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Card Animation - Staggered */
+.animate-card {
+  animation: cardPopIn 0.5s ease-out forwards;
+  opacity: 0;
+  transform: scale(0.9);
+}
+
+@keyframes cardPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== NAVBAR ANIMATION ===== */
+.navbar {
+  animation: slideDown 0.6s ease-out forwards;
+  transform: translateY(-100%);
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* ===== FOOTER ANIMATION ===== */
+.footer {
+  animation: slideUp 0.8s ease-out 0.3s forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== MODAL ANIMATIONS ===== */
+.modal-overlay {
+  animation: overlayFade 0.3s ease-out forwards;
+}
+
+@keyframes overlayFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+.modal-content {
+  animation: modalPop 0.4s ease-out forwards;
+  transform: scale(0.8);
+  opacity: 0;
+}
+
+@keyframes modalPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ===== BUTTON HOVER ANIMATIONS ===== */
+.hero-btn, .category-btn, .toggle-btn, .auth-btn, .add-crop-btn {
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.hero-btn:hover, .category-btn:hover, .toggle-btn:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 10px 25px rgba(22, 163, 74, 0.3);
+}
+
+.hero-btn:active, .category-btn:active, .toggle-btn:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* ===== CARD HOVER ANIMATIONS ===== */
+.crop-item, .crop-card, .stat-card-large, .crop-card-modern {
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.crop-item:hover, .crop-card:hover, .crop-card-modern:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 30px rgba(22, 163, 74, 0.15);
+}
+
+/* ===== LOADING ANIMATION ===== */
+.loader {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-state {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ===== STATS COUNTER ANIMATION ===== */
+.stat-number {
+  animation: countUp 1s ease-out forwards;
+  display: inline-block;
+}
+
+@keyframes countUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== PAGE TRANSITION ANIMATIONS ===== */
+.page-enter {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.page-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-exit-active {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+/* ===== DARK MODE TRANSITION ===== */
+body, .navbar, .footer, .crop-item, .crop-card, .modal-content {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* ===== RESPONSIVE ANIMATIONS - DISABLE ON MOBILE FOR PERFORMANCE ===== */
+@media (max-width: 768px) {
+  .animate-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .hero-btn:hover, .category-btn:hover, .toggle-btn:hover {
+    transform: none;
+  }
+  
+  .crop-item:hover, .crop-card:hover {
+    transform: none;
+  }
 }

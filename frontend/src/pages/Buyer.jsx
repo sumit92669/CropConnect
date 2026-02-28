@@ -21,110 +21,133 @@ function Buyer({ darkMode, onBackToHome }) {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    const fetchCrops = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`${API_URL}/crops`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch crops');
-        }
-        
-        const data = await response.json();
-        console.log('Crops fetched:', data.length);
-        
-        setAllCrops(data);
-        setFilteredCrops(data);
-        setSelectedCategory('all');
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching crops:', error);
-        setError(t('error'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCrops();
-  }, []);
-
+  // Categories
   const categories = [
     { id: "all", name: t('allCrops'), icon: "🌾" },
     { id: "grains", name: t('grains'), icon: "🌾" },
     { id: "pulses", name: t('pulses'), icon: "🌱" },
     { id: "vegetables", name: t('vegetables'), icon: "🥬" },
     { id: "fruits", name: t('fruits'), icon: "🍎" }
-  ];
+  ]
+
+  // Fetch crops from backend
+  useEffect(() => {
+    const fetchCrops = async () => {
+      try {
+        setLoading(true)
+        const response = await fetch(`${API_URL}/crops`)
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch crops')
+        }
+
+        const data = await response.json()
+        console.log('Crops fetched:', data.length)
+
+        setAllCrops(data)
+        setFilteredCrops(data)
+        setSelectedCategory('all')
+        setError(null)
+      } catch (error) {
+        console.error('Error fetching crops:', error)
+        setError(t('error'))
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCrops()
+  }, [])
 
   const handleFilterChange = (filters) => {
-    let filtered = [...allCrops];
+    let filtered = [...allCrops]
 
     if (filters.minPrice) {
-      filtered = filtered.filter(c => c.price >= parseInt(filters.minPrice));
+      filtered = filtered.filter(c => c.price >= parseInt(filters.minPrice))
     }
     if (filters.maxPrice) {
-      filtered = filtered.filter(c => c.price <= parseInt(filters.maxPrice));
+      filtered = filtered.filter(c => c.price <= parseInt(filters.maxPrice))
     }
     if (filters.location) {
       filtered = filtered.filter(c => 
         c.location?.toLowerCase().includes(filters.location.toLowerCase())
-      );
+      )
     }
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(c => c.category === selectedCategory);
+      filtered = filtered.filter(c => c.category === selectedCategory)
     }
 
     switch (filters.sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
+        filtered.sort((a, b) => a.price - b.price)
+        break
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
+        filtered.sort((a, b) => b.price - a.price)
+        break
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
+        filtered.sort((a, b) => a.name.localeCompare(b.name))
+        break
       default:
-        break;
+        break
     }
 
-    setFilteredCrops(filtered);
-  };
+    setFilteredCrops(filtered)
+  }
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category)
     
     if (category === 'all') {
-      setFilteredCrops(allCrops);
+      setFilteredCrops(allCrops)
     } else {
-      const filtered = allCrops.filter(c => c.category === category);
-      setFilteredCrops(filtered);
+      const filtered = allCrops.filter(c => c.category === category)
+      setFilteredCrops(filtered)
     }
-  };
+  }
 
   const handleViewDetails = (crop) => {
-    setSelectedCrop(crop);
-    setShowDetailModal(true);
-  };
+    setSelectedCrop(crop)
+    setShowDetailModal(true)
+  }
 
   const handleMakeOffer = (crop) => {
-    setSelectedCrop(crop);
-    setShowDetailModal(false);
-    setShowOfferModal(true);
-  };
+    setSelectedCrop(crop)
+    setShowDetailModal(false)
+    setShowOfferModal(true)
+  }
 
   const handleSubmitOffer = async (offer) => {
     try {
-      console.log('Offer submitted:', offer);
-      setMyOffers([...myOffers, { ...offer, status: 'pending' }]);
-      alert(t('offerSent', { crop: offer.cropName }));
+      console.log('Offer submitted:', offer)
+      setMyOffers([...myOffers, { ...offer, status: 'pending' }])
+      alert(t('offerSent', { crop: offer.cropName }))
     } catch (error) {
-      console.error('Error submitting offer:', error);
-      alert(t('error'));
+      console.error('Error submitting offer:', error)
+      alert(t('error'))
     }
-  };
+  }
+
+  const handleMarkerClick = (farmer) => {
+    const crop = allCrops.find(c => c.farmer === farmer.name)
+    if (crop) {
+      setSelectedCrop(crop)
+      setShowDetailModal(true)
+    }
+  }
+
+  // Prepare farmers data for map
+  const farmersForMap = filteredCrops.map(crop => ({
+    name: crop.farmer,
+    crop: crop.name,
+    price: crop.price,
+    unit: crop.unit || 'quintal',
+    location: crop.location,
+    coordinates: { 
+      lat: crop.lat || 28.6139, 
+      lng: crop.lng || 77.2090 
+    }
+  }))
 
   if (error) {
     return (
@@ -133,11 +156,11 @@ function Buyer({ darkMode, onBackToHome }) {
         <p>{error}</p>
         <button onClick={() => window.location.reload()}>{t('retry')}</button>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="buyer-marketplace">
+    <div className="buyer-marketplace animate-page">
       {/* Back Button */}
       <div className="page-header">
         <button className="back-button" onClick={onBackToHome}>
@@ -146,6 +169,7 @@ function Buyer({ darkMode, onBackToHome }) {
         </button>
       </div>
 
+      {/* Header */}
       <div className="marketplace-header">
         <h1>🏢 {t('buyerMarketplace')}</h1>
         <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>
@@ -180,6 +204,7 @@ function Buyer({ darkMode, onBackToHome }) {
         </button>
       </div>
 
+      {/* My Offers Summary */}
       {myOffers.length > 0 && (
         <div className="my-offers-summary">
           <h3>📦 {t('myOffers')} ({myOffers.length})</h3>
@@ -195,8 +220,17 @@ function Buyer({ darkMode, onBackToHome }) {
         </div>
       )}
 
+      {/* Filter Bar */}
       <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} />
 
+      {/* Results Info */}
+      {!loading && (
+        <div className="results-info">
+          <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
+        </div>
+      )}
+
+      {/* Loading State */}
       {loading ? (
         <div className="loading-state">
           <div className="loader"></div>
@@ -204,10 +238,7 @@ function Buyer({ darkMode, onBackToHome }) {
         </div>
       ) : (
         <>
-          <div className="results-info">
-            <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
-          </div>
-
+          {/* No Results */}
           {filteredCrops.length === 0 ? (
             <div className="no-results-marketplace">
               <span className="no-results-icon">🌾</span>
@@ -215,9 +246,10 @@ function Buyer({ darkMode, onBackToHome }) {
               <p>{t('adjustFilters')}</p>
             </div>
           ) : (
+            /* Grid View */
             viewMode === 'grid' ? (
               <div className="crops-grid">
-                {filteredCrops.map(crop => (
+                {filteredCrops.map((crop, index) => (
                   <CropCard 
                     key={crop.id} 
                     crop={crop} 
@@ -227,6 +259,7 @@ function Buyer({ darkMode, onBackToHome }) {
                 ))}
               </div>
             ) : (
+              /* Map View */
               <div className="map-view-section">
                 <MapView 
                   crops={filteredCrops}
@@ -245,6 +278,7 @@ function Buyer({ darkMode, onBackToHome }) {
         </>
       )}
 
+      {/* Modals */}
       <CropDetailModal
         crop={selectedCrop}
         isOpen={showDetailModal}
@@ -261,7 +295,7 @@ function Buyer({ darkMode, onBackToHome }) {
         darkMode={darkMode}
       />
     </div>
-  );
+  )
 }
 
-export default Buyer;
+export default Buyer

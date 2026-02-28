@@ -13,20 +13,18 @@ function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const { t } = useLanguage()
+  const [pageLoaded, setPageLoaded] = useState(false)
   const [crops, setCrops] = useState([
     { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" },
     { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" },
     { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg" },
-    { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://tse3.mm.bing.net/th/id/OIP.X-bhErQP9Jf_pSLBWIQ1jQHaE5?rs=1&pid=ImgDetMain&o=7&rm=3" },
-    { id: 5, name: "Soybean", price: 4200, unit: "Quintal", image: "https://img.freepik.com/premium-photo/soybean-field-beginning-planting-season_124507-221294.jpg?w=2000" },
-    { id: 6, name: "Millet", price: 2600, unit: "Quintal", image: "https://morningchores.com/wp-content/uploads/2022/04/millet-plants.jpg" }
+    { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://www.farmatma.in/wp-content/uploads/2019/05/barley-crop.jpg" },
+    { id: 5, name: "Soybean", price: 4200, unit: "Quintal", image: "https://images.pexels.com/photos/3843088/pexels-photo-3843088.jpeg" },
+    { id: 6, name: "Millet", price: 2600, unit: "Quintal", image: "https://images.pexels.com/photos/718742/pexels-photo-718742.jpeg" }
   ])
 
-  const filteredCrops = crops.filter(crop => 
-    crop.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
   useEffect(() => {
+    setPageLoaded(true)
     const savedMode = localStorage.getItem('darkMode')
     if (savedMode) {
       setDarkMode(JSON.parse(savedMode))
@@ -63,6 +61,10 @@ function App() {
     setSearchTerm(term)
   }
 
+  const filteredCrops = crops.filter(crop => 
+    crop.name.toLowerCase().includes(searchTerm.toLowerCase())
+  )
+
   if (currentPage === 'login') {
     return <Login onBackToHome={handleBackToHome} darkMode={darkMode} />
   }
@@ -72,7 +74,7 @@ function App() {
   }
 
   return (
-    <div className={darkMode ? 'dark-mode' : ''}>
+    <div className={`app-container ${pageLoaded ? 'page-loaded' : ''} ${darkMode ? 'dark-mode' : ''}`}>
       <Navbar 
         onLoginClick={handleLoginClick} 
         onSignupClick={handleSignupClick}
@@ -83,14 +85,14 @@ function App() {
       />
 
       {!role && (
-        <>
+        <div className="page-content animate-page">
           <div className="hero-section">
             <div className="hero-overlay"></div>
             <div className="hero-content">
-              <h1 className="hero-title">{t('heroTitle')}</h1>
-              <p className="hero-subtitle">{t('heroSubtitle')}</p>
+              <h1 className="hero-title animate-title">{t('heroTitle')}</h1>
+              <p className="hero-subtitle animate-subtitle">{t('heroSubtitle')}</p>
               
-              <div className="hero-buttons">
+              <div className="hero-buttons animate-buttons">
                 <button className="hero-btn farmer-btn" onClick={() => setRole("farmer")}>
                   <span className="btn-icon">👨‍🌾</span>
                   {t('farmerBtn')}
@@ -101,7 +103,7 @@ function App() {
                 </button>
               </div>
               
-              <div className="hero-stats">
+              <div className="hero-stats animate-stats">
                 <div className="stat-item">
                   <span className="stat-number">1,247</span>
                   <span className="stat-label">{t('farmers')}</span>
@@ -119,15 +121,15 @@ function App() {
           </div>
 
           {searchTerm && (
-            <div className="search-results-info">
+            <div className="search-results-info animate-fade">
               <p>{filteredCrops.length} {t('crops').toLowerCase()} {t('foundFor')} "{searchTerm}"</p>
             </div>
           )}
 
-          <div className="crop-showcase">
+          <div className="crop-showcase animate-grid">
             {filteredCrops.length > 0 ? (
-              filteredCrops.map(crop => (
-                <div className="crop-item" key={crop.id}>
+              filteredCrops.map((crop, index) => (
+                <div className="crop-item animate-card" key={crop.id} style={{ animationDelay: `${index * 0.1}s` }}>
                   <img src={crop.image} alt={crop.name} />
                   <h3>{crop.name}</h3>
                   <p>₹{crop.price} / {crop.unit}</p>
@@ -135,12 +137,12 @@ function App() {
                 </div>
               ))
             ) : (
-              <div className="no-results">
+              <div className="no-results animate-fade">
                 <p>{t('noCrops')} {t('trySearching')}</p>
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
 
       {role === "farmer" && <Farmer darkMode={darkMode} onBackToHome={handleBackToHome} />}
