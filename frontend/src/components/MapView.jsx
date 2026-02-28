@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
 import { useEffect, useState } from "react"
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
+import { useLanguage } from "../LanguageContext"
 
 // Fix for default markers
 delete L.Icon.Default.prototype._getIconUrl
@@ -22,14 +23,14 @@ const farmerIcon = new L.Icon({
 })
 
 function MapView({ crops = [], darkMode = false }) {
-  const [mapCenter, setMapCenter] = useState([28.6139, 77.2090]) // Default Delhi
+  const { t } = useLanguage()
+  const [mapCenter, setMapCenter] = useState([28.6139, 77.2090])
   const [farmers, setFarmers] = useState([])
 
   useEffect(() => {
-    // Convert crops to farmer markers
     if (crops && crops.length > 0) {
       const farmerMarkers = crops.map(crop => ({
-        name: crop.farmer || 'Farmer',
+        name: crop.farmer || t('farmer'),
         crop: crop.name,
         price: crop.price,
         unit: crop.unit || 'quintal',
@@ -41,7 +42,6 @@ function MapView({ crops = [], darkMode = false }) {
       }))
       setFarmers(farmerMarkers)
       
-      // Center map on first crop if available
       if (crops[0].lat && crops[0].lng) {
         setMapCenter([crops[0].lat, crops[0].lng])
       }

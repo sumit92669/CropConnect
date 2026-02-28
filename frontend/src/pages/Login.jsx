@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { useLanguage } from "../LanguageContext"
 
 function Login({ onBackToHome, darkMode, onLogin }) {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -35,16 +37,14 @@ function Login({ onBackToHome, darkMode, onLogin }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || t('loginFailed'));
       }
 
-      // Save token
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      alert(`✅ Welcome back, ${data.user.fullName}!`);
+      alert(t('welcomeBack', { name: data.user.fullName }));
       
-      // Redirect based on role
       if (data.user.role === 'farmer') {
         window.location.href = '/?role=farmer';
       } else {
@@ -70,20 +70,20 @@ function Login({ onBackToHome, darkMode, onLogin }) {
     <div className={`auth-container ${darkMode ? 'auth-container-dark' : ''}`}>
       <div className={`auth-card ${darkMode ? 'auth-card-dark' : ''}`}>
         <button onClick={handleBackToHome} className={`back-home-btn ${darkMode ? 'back-home-btn-dark' : ''}`}>
-          ← Back to Home
+          ← {t('backToHome')}
         </button>
 
         <div className="auth-header">
           <div className="auth-logo">🌾</div>
-          <h2 className={darkMode ? 'text-green' : ''}>Welcome Back!</h2>
-          <p>Login to your CropConnect account</p>
+          <h2 className={darkMode ? 'text-green' : ''}>{t('welcomeBack')}</h2>
+          <p>{t('loginSubtitle')}</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
 
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">{t('email')}</label>
             <div className="input-icon">
               <span className="icon">📧</span>
               <input
@@ -100,7 +100,7 @@ function Login({ onBackToHome, darkMode, onLogin }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">{t('password')}</label>
             <div className="input-icon">
               <span className="icon">🔒</span>
               <input
@@ -124,27 +124,27 @@ function Login({ onBackToHome, darkMode, onLogin }) {
                 checked={formData.rememberMe}
                 onChange={handleChange}
               />
-              <span>Remember me</span>
+              <span>{t('rememberMe')}</span>
             </label>
-            <a href="#" className={`forgot-link ${darkMode ? 'forgot-link-dark' : ''}`} onClick={(e) => e.preventDefault()}>Forgot Password?</a>
+            <a href="#" className={`forgot-link ${darkMode ? 'forgot-link-dark' : ''}`} onClick={(e) => e.preventDefault()}>{t('forgotPassword')}</a>
           </div>
 
           <button type="submit" className="auth-btn" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? t('loading') : t('login')}
           </button>
         </form>
 
         <div className="auth-footer">
-          <p>Don't have an account? <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
+          <p>{t('noAccount')} <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
             e.preventDefault();
             window.location.href = "/signup";
-          }}>Sign Up</a></p>
+          }}>{t('signUp')}</a></p>
         </div>
 
         <div className={`demo-credentials ${darkMode ? 'demo-credentials-dark' : ''}`}>
-          <p className="demo-title">Demo Credentials:</p>
-          <p>Farmer: farmer@demo.com / farmer123</p>
-          <p>Buyer: buyer@demo.com / buyer123</p>
+          <p className="demo-title">{t('demoCredentials')}</p>
+          <p>{t('farmer')}: farmer@demo.com / farmer123</p>
+          <p>{t('buyer')}: buyer@demo.com / buyer123</p>
         </div>
       </div>
     </div>

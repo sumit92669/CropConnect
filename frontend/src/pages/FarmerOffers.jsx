@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { useLanguage } from "../LanguageContext"
 
 function FarmerOffers({ darkMode }) {
+  const { t } = useLanguage()
   const [offers, setOffers] = useState([
     {
       id: 1,
@@ -32,45 +34,45 @@ function FarmerOffers({ darkMode }) {
     setOffers(offers.map(o => 
       o.id === offerId ? {...o, status: 'accepted'} : o
     ))
-    alert("Offer accepted! Buyer will be notified.")
+    alert(t('offerAccepted'))
   }
 
   const handleReject = (offerId) => {
     setOffers(offers.map(o => 
       o.id === offerId ? {...o, status: 'rejected'} : o
     ))
-    alert("Offer rejected.")
+    alert(t('offerRejected'))
   }
 
   const handleCounter = (offerId) => {
-    const newPrice = prompt("Enter your counter price:")
+    const newPrice = prompt(t('enterCounterPrice'))
     if (newPrice) {
       setOffers(offers.map(o => 
         o.id === offerId ? {...o, status: 'countered', counterPrice: parseInt(newPrice)} : o
       ))
-      alert(`Counter offer of ₹${newPrice} sent!`)
+      alert(t('counterSent', { price: newPrice }))
     }
   }
 
   return (
     <div className="farmer-offers">
       <div className="offers-header">
-        <h1>💰 Offers Received</h1>
-        <p>Review and respond to buyer offers</p>
+        <h1>💰 {t('offersReceived')}</h1>
+        <p>{t('reviewOffers')}</p>
       </div>
 
       <div className="offers-stats">
         <div className="stat-card">
           <span className="stat-value">{offers.length}</span>
-          <span className="stat-label">Total Offers</span>
+          <span className="stat-label">{t('totalOffers')}</span>
         </div>
         <div className="stat-card">
           <span className="stat-value">{offers.filter(o => o.status === 'pending').length}</span>
-          <span className="stat-label">Pending</span>
+          <span className="stat-label">{t('pending')}</span>
         </div>
         <div className="stat-card">
           <span className="stat-value">{offers.filter(o => o.status === 'accepted').length}</span>
-          <span className="stat-label">Accepted</span>
+          <span className="stat-label">{t('accepted')}</span>
         </div>
       </div>
 
@@ -78,8 +80,8 @@ function FarmerOffers({ darkMode }) {
         {offers.length === 0 ? (
           <div className="no-offers">
             <span className="no-offers-icon">💰</span>
-            <h3>No offers yet</h3>
-            <p>When buyers make offers, they'll appear here</p>
+            <h3>{t('noOffersYet')}</h3>
+            <p>{t('noOffersMessage')}</p>
           </div>
         ) : (
           offers.map(offer => (
@@ -90,27 +92,27 @@ function FarmerOffers({ darkMode }) {
                   <p className="buyer-name">{offer.buyerName}</p>
                 </div>
                 <span className={`status-badge ${offer.status}`}>
-                  {offer.status}
+                  {t(offer.status)}
                 </span>
               </div>
 
               <div className="offer-details">
                 <div className="detail-row">
-                  <span>Offered Price:</span>
+                  <span>{t('offeredPrice')}:</span>
                   <strong className="offered-price">₹{offer.offeredPrice}</strong>
-                  <span className="listed-price">(Listed: ₹{offer.listedPrice})</span>
+                  <span className="listed-price">({t('listed')}: ₹{offer.listedPrice})</span>
                 </div>
                 <div className="detail-row">
-                  <span>Quantity:</span>
+                  <span>{t('quantity')}:</span>
                   <strong>{offer.quantity} {offer.unit}</strong>
                 </div>
                 <div className="detail-row">
-                  <span>Date:</span>
+                  <span>{t('date')}:</span>
                   <span>{offer.date}</span>
                 </div>
                 {offer.message && (
                   <div className="offer-message">
-                    <span>Message:</span>
+                    <span>{t('message')}:</span>
                     <p>"{offer.message}"</p>
                   </div>
                 )}
@@ -122,27 +124,27 @@ function FarmerOffers({ darkMode }) {
                     className="accept-btn"
                     onClick={() => handleAccept(offer.id)}
                   >
-                    ✓ Accept
+                    ✓ {t('accept')}
                   </button>
                   <button 
                     className="counter-btn"
                     onClick={() => handleCounter(offer.id)}
                   >
-                    ↺ Counter
+                    ↺ {t('counter')}
                   </button>
                   <button 
                     className="reject-btn"
                     onClick={() => handleReject(offer.id)}
                   >
-                    ✕ Reject
+                    ✕ {t('reject')}
                   </button>
                 </div>
               )}
 
               {offer.status === 'countered' && (
                 <div className="counter-info">
-                  <p>Your counter offer: <strong>₹{offer.counterPrice}</strong></p>
-                  <p className="waiting-text">Waiting for buyer response...</p>
+                  <p>{t('yourCounter')}: <strong>₹{offer.counterPrice}</strong></p>
+                  <p className="waiting-text">{t('waitingForBuyer')}</p>
                 </div>
               )}
             </div>

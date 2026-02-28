@@ -1,4 +1,8 @@
+import { useLanguage } from "../LanguageContext"
+
 function CropCard({ crop, onViewDetails, darkMode }) {
+  const { t } = useLanguage()
+
   return (
     <div className={`crop-card ${darkMode ? 'crop-card-dark' : ''}`}>
       <div className="crop-image">
@@ -13,8 +17,8 @@ function CropCard({ crop, onViewDetails, darkMode }) {
       
       <div className="crop-info">
         <h3>{crop.name}</h3>
-        <p className="crop-farmer">👨‍🌾 {crop.farmer || 'Local Farmer'}</p>
-        <p className="crop-location">📍 {crop.location || 'Location not specified'}</p>
+        <p className="crop-farmer">👨‍🌾 {crop.farmer || t('localFarmer')}</p>
+        <p className="crop-location">📍 {crop.location || t('locationNotSpecified')}</p>
         
         <div className="crop-price-section">
           <span className="crop-price">₹{crop.price}</span>
@@ -25,11 +29,11 @@ function CropCard({ crop, onViewDetails, darkMode }) {
           className="view-details-btn"
           onClick={() => onViewDetails(crop)}
         >
-          View Details
+          {t('viewDetails')}
         </button>
       </div>
     </div>
   )
 }
 
-export default CropCard  // ✅ THIS LINE IS MUST
+export default CropCard

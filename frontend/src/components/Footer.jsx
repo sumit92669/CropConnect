@@ -1,6 +1,8 @@
 import React from 'react'
+import { useLanguage } from "../LanguageContext"
 
 function Footer({ darkMode }) {
+  const { t } = useLanguage()
   const currentYear = new Date().getFullYear()
 
   return (
@@ -12,34 +14,33 @@ function Footer({ darkMode }) {
             <span className="footer-icon">🌾</span> CropConnect
           </h3>
           <p className="footer-about">
-            Connecting farmers directly with NGOs and bulk buyers. 
-            Fair prices, no middlemen, better future for agriculture.
+            {t('footerAbout')}
           </p>
           <div className="footer-stats-mini">
-            <span>👨‍🌾 10,000+ Farmers</span>
-            <span>🏢 500+ Buyers</span>
+            <span>👨‍🌾 {t('farmers')}: 10,000+</span>
+            <span>🏢 {t('buyers')}: 500+</span>
           </div>
         </div>
 
         {/* Quick Links */}
         <div className="footer-section">
-          <h3 className="footer-title">Quick Links</h3>
+          <h3 className="footer-title">{t('quickLinks')}</h3>
           <ul className="footer-links">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About Us</a></li>
-            <li><a href="/how-it-works">How It Works</a></li>
-            <li><a href="/contact">Contact</a></li>
-            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/">{t('home')}</a></li>
+            <li><a href="/about">{t('aboutUs')}</a></li>
+            <li><a href="/how-it-works">{t('howItWorks')}</a></li>
+            <li><a href="/contact">{t('contact')}</a></li>
+            <li><a href="/faq">{t('faq')}</a></li>
           </ul>
         </div>
 
         {/* Contact Info */}
         <div className="footer-section">
-          <h3 className="footer-title">Contact Us</h3>
+          <h3 className="footer-title">{t('contactUs')}</h3>
           <ul className="footer-contact">
             <li>
               <span className="contact-icon">📍</span>
-              <span>Delhi Technical Campus, Greater Nodia</span>
+              <span>{t('address')}</span>
             </li>
             <li>
               <span className="contact-icon">📞</span>
@@ -51,25 +52,25 @@ function Footer({ darkMode }) {
             </li>
             <li>
               <span className="contact-icon">⏰</span>
-              <span>Mon-Sat: 9AM - 6PM</span>
+              <span>{t('workingHours')}</span>
             </li>
           </ul>
         </div>
 
         {/* Newsletter */}
         <div className="footer-section">
-          <h3 className="footer-title">Stay Updated</h3>
+          <h3 className="footer-title">{t('stayUpdated')}</h3>
           <p className="newsletter-text">
-            Get latest crop prices and offers
+            {t('newsletterText')}
           </p>
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
             <input 
               type="email" 
-              placeholder="Your email address" 
+              placeholder={t('emailPlaceholder')} 
               className={`newsletter-input ${darkMode ? 'input-dark' : ''}`}
             />
             <button type="submit" className="newsletter-btn">
-              Subscribe
+              {t('subscribe')}
             </button>
           </form>
           <div className="social-links">
@@ -83,11 +84,11 @@ function Footer({ darkMode }) {
 
       {/* Bottom Bar */}
       <div className="footer-bottom">
-        <p>© {currentYear} CropConnect. All rights reserved.</p>
+        <p>© {currentYear} CropConnect. {t('allRightsReserved')}</p>
         <div className="footer-bottom-links">
-          <a href="/privacy">Privacy Policy</a>
-          <a href="/terms">Terms of Service</a>
-          <a href="/sitemap">Sitemap</a>
+          <a href="/privacy">{t('privacyPolicy')}</a>
+          <a href="/terms">{t('termsOfService')}</a>
+          <a href="/sitemap">{t('sitemap')}</a>
         </div>
       </div>
     </footer>

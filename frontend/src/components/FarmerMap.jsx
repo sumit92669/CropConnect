@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect, useState } from 'react'
+import { useLanguage } from "../LanguageContext"
 
 // Fix for default markers in React-Leaflet
 delete L.Icon.Default.prototype._getIconUrl
@@ -22,9 +23,9 @@ const farmerIcon = new L.Icon({
 })
 
 function FarmerMap({ farmers, darkMode, onMarkerClick }) {
-  const [mapCenter, setMapCenter] = useState([28.6139, 77.2090]) // Default: Delhi
+  const { t } = useLanguage()
+  const [mapCenter, setMapCenter] = useState([28.6139, 77.2090])
 
-  // If farmers exist, center map on first farmer
   useEffect(() => {
     if (farmers && farmers.length > 0 && farmers[0].coordinates) {
       setMapCenter([farmers[0].coordinates.lat, farmers[0].coordinates.lng])
@@ -66,7 +67,7 @@ function FarmerMap({ farmers, darkMode, onMarkerClick }) {
                     className="popup-btn"
                     onClick={() => onMarkerClick && onMarkerClick(farmer)}
                   >
-                    View Details
+                    {t('viewDetails')}
                   </button>
                 </div>
               </Popup>

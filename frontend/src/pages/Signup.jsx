@@ -1,6 +1,8 @@
 import { useState } from "react"
+import { useLanguage } from "../LanguageContext"
 
 function Signup({ onBackToHome, darkMode }) {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -38,7 +40,7 @@ function Signup({ onBackToHome, darkMode }) {
     e.preventDefault();
     
     if (!passwordMatch) {
-      setError("Passwords don't match!");
+      setError(t('passwordsDoNotMatch'));
       return;
     }
 
@@ -62,16 +64,14 @@ function Signup({ onBackToHome, darkMode }) {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Signup failed');
+        throw new Error(data.error || t('signupFailed'));
       }
 
-      // Save token
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
 
-      alert(`✅ Welcome to CropConnect, ${data.user.fullName}!`);
+      alert(t('welcome', { name: data.user.fullName }));
       
-      // Redirect based on role
       if (data.user.role === 'farmer') {
         window.location.href = '/?role=farmer';
       } else {
@@ -97,13 +97,13 @@ function Signup({ onBackToHome, darkMode }) {
     <div className={`auth-container ${darkMode ? 'auth-container-dark' : ''}`}>
       <div className={`auth-card signup-card ${darkMode ? 'auth-card-dark' : ''}`}>
         <button onClick={handleBackToHome} className={`back-home-btn ${darkMode ? 'back-home-btn-dark' : ''}`}>
-          ← Back to Home
+          ← {t('backToHome')}
         </button>
 
         <div className="auth-header">
           <div className="auth-logo">🌾</div>
-          <h2 className={darkMode ? 'text-green' : ''}>Join CropConnect</h2>
-          <p>Create your account and start connecting</p>
+          <h2 className={darkMode ? 'text-green' : ''}>{t('joinNow')}</h2>
+          <p>{t('signupSubtitle')}</p>
         </div>
 
         {error && <div className="error-message">{error}</div>}
@@ -111,14 +111,14 @@ function Signup({ onBackToHome, darkMode }) {
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="fullName">Full Name</label>
+              <label htmlFor="fullName">{t('fullName')}</label>
               <div className="input-icon">
                 <span className="icon">👤</span>
                 <input
                   type="text"
                   id="fullName"
                   name="fullName"
-                  placeholder="Enter your full name"
+                  placeholder={t('fullNamePlaceholder')}
                   value={formData.fullName}
                   onChange={handleChange}
                   className={darkMode ? 'input-dark' : ''}
@@ -128,7 +128,7 @@ function Signup({ onBackToHome, darkMode }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="phone">{t('phone')}</label>
               <div className="input-icon">
                 <span className="icon">📱</span>
                 <input
@@ -146,7 +146,7 @@ function Signup({ onBackToHome, darkMode }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email Address</label>
+            <label htmlFor="email">{t('email')}</label>
             <div className="input-icon">
               <span className="icon">📧</span>
               <input
@@ -163,14 +163,14 @@ function Signup({ onBackToHome, darkMode }) {
           </div>
 
           <div className="form-group">
-            <label htmlFor="location">Location (Village/City)</label>
+            <label htmlFor="location">{t('location')}</label>
             <div className="input-icon">
               <span className="icon">📍</span>
               <input
                 type="text"
                 id="location"
                 name="location"
-                placeholder="e.g., Ludhiana, Punjab"
+                placeholder={t('locationPlaceholder')}
                 value={formData.location}
                 onChange={handleChange}
                 className={darkMode ? 'input-dark' : ''}
@@ -180,7 +180,7 @@ function Signup({ onBackToHome, darkMode }) {
           </div>
 
           <div className="form-group">
-            <label>I am a:</label>
+            <label>{t('iAmA')}</label>
             <div className="role-selector">
               <label className={`role-option ${formData.role === 'farmer' ? 'selected' : ''} ${darkMode ? 'role-option-dark' : ''}`}>
                 <input
@@ -191,7 +191,7 @@ function Signup({ onBackToHome, darkMode }) {
                   onChange={handleChange}
                 />
                 <span className="role-icon">👨‍🌾</span>
-                <span>Farmer</span>
+                <span>{t('farmer')}</span>
               </label>
               <label className={`role-option ${formData.role === 'buyer' ? 'selected' : ''} ${darkMode ? 'role-option-dark' : ''}`}>
                 <input
@@ -202,21 +202,21 @@ function Signup({ onBackToHome, darkMode }) {
                   onChange={handleChange}
                 />
                 <span className="role-icon">🏢</span>
-                <span>Buyer</span>
+                <span>{t('buyer')}</span>
               </label>
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('password')}</label>
               <div className="input-icon">
                 <span className="icon">🔒</span>
                 <input
                   type="password"
                   id="password"
                   name="password"
-                  placeholder="Min. 8 characters"
+                  placeholder={t('passwordPlaceholder')}
                   value={formData.password}
                   onChange={handleChange}
                   className={darkMode ? 'input-dark' : ''}
@@ -226,14 +226,14 @@ function Signup({ onBackToHome, darkMode }) {
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword">Confirm Password</label>
+              <label htmlFor="confirmPassword">{t('confirmPassword')}</label>
               <div className="input-icon">
                 <span className="icon">✓</span>
                 <input
                   type="password"
                   id="confirmPassword"
                   name="confirmPassword"
-                  placeholder="Re-enter password"
+                  placeholder={t('confirmPasswordPlaceholder')}
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className={`${!passwordMatch && formData.confirmPassword ? 'error' : ''} ${darkMode ? 'input-dark' : ''}`}
@@ -241,7 +241,7 @@ function Signup({ onBackToHome, darkMode }) {
                 />
               </div>
               {!passwordMatch && formData.confirmPassword && (
-                <span className="error-message">Passwords don't match!</span>
+                <span className="error-message">{t('passwordsDoNotMatch')}</span>
               )}
             </div>
           </div>
@@ -255,7 +255,7 @@ function Signup({ onBackToHome, darkMode }) {
                 onChange={handleChange}
                 required
               />
-              <span>I agree to the <a href="#" className={darkMode ? 'terms-link-dark' : ''} onClick={(e) => e.preventDefault()}>Terms of Service</a> and <a href="#" className={darkMode ? 'terms-link-dark' : ''} onClick={(e) => e.preventDefault()}>Privacy Policy</a></span>
+              <span>{t('agreeTerms')} <a href="#" className={darkMode ? 'terms-link-dark' : ''} onClick={(e) => e.preventDefault()}>{t('termsOfService')}</a> {t('and')} <a href="#" className={darkMode ? 'terms-link-dark' : ''} onClick={(e) => e.preventDefault()}>{t('privacyPolicy')}</a></span>
             </label>
           </div>
 
@@ -264,15 +264,15 @@ function Signup({ onBackToHome, darkMode }) {
             className="auth-btn"
             disabled={!formData.agreeTerms || loading}
           >
-            {loading ? 'Creating Account...' : 'Create Account'}
+            {loading ? t('loading') : t('createAccount')}
           </button>
         </form>
 
         <div className="auth-footer">
-          <p>Already have an account? <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
+          <p>{t('haveAccount')} <a href="#" className={darkMode ? 'auth-link-dark' : ''} onClick={(e) => {
             e.preventDefault();
             window.location.href = "/login";
-          }}>Login</a></p>
+          }}>{t('login')}</a></p>
         </div>
       </div>
     </div>

@@ -1,10 +1,12 @@
 import { useState } from "react"
 import CropListingModal from "../components/CropListingModal"
-import FarmerOffers from "./FarmerOffers"  // ✅ Add this
+import FarmerOffers from "./FarmerOffers"
+import { useLanguage } from "../LanguageContext"
 
 function Farmer({ darkMode }) {
+  const { t } = useLanguage()
   const [showListingModal, setShowListingModal] = useState(false)
-  const [activeTab, setActiveTab] = useState('listings') // 'listings' or 'offers'  // ✅ Add this
+  const [activeTab, setActiveTab] = useState('listings')
   const [myCrops, setMyCrops] = useState([
     {
       id: 1,
@@ -18,18 +20,18 @@ function Farmer({ darkMode }) {
 
   const handleAddCrop = (newCrop) => {
     setMyCrops([...myCrops, { ...newCrop, status: "active" }])
-    alert("Crop listed successfully!")
+    alert(t('cropListed'))
   }
 
   return (
     <div className="farmer-dashboard">
       <div className="dashboard-header">
-        <h1>👨‍🌾 Farmer Dashboard</h1>
+        <h1>👨‍🌾 {t('farmerDashboard')}</h1>
         <button 
           className="add-crop-btn"
           onClick={() => setShowListingModal(true)}
         >
-          + List New Crop
+          + {t('listNewCrop')}
         </button>
       </div>
 
@@ -39,13 +41,13 @@ function Farmer({ darkMode }) {
           className={`tab-btn ${activeTab === 'listings' ? 'active' : ''}`}
           onClick={() => setActiveTab('listings')}
         >
-          📋 My Listings
+          📋 {t('myListings')}
         </button>
         <button 
           className={`tab-btn ${activeTab === 'offers' ? 'active' : ''}`}
           onClick={() => setActiveTab('offers')}
         >
-          💰 Offers Received
+          💰 {t('offersReceived')}
         </button>
       </div>
 
@@ -54,28 +56,28 @@ function Farmer({ darkMode }) {
           <div className="dashboard-stats">
             <div className="stat-card">
               <span className="stat-value">{myCrops.length}</span>
-              <span className="stat-label">Total Crops</span>
+              <span className="stat-label">{t('totalCrops')}</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">
                 {myCrops.filter(c => c.status === 'active').length}
               </span>
-              <span className="stat-label">Active Listings</span>
+              <span className="stat-label">{t('activeListings')}</span>
             </div>
             <div className="stat-card">
               <span className="stat-value">2</span>
-              <span className="stat-label">Offers Received</span>
+              <span className="stat-label">{t('offersReceived')}</span>
             </div>
           </div>
 
           <div className="my-crops-section">
-            <h2>My Crop Listings</h2>
+            <h2>{t('myCrops')}</h2>
             
             {myCrops.length === 0 ? (
               <div className="empty-state">
-                <p>You haven't listed any crops yet.</p>
+                <p>{t('noCropsListed')}</p>
                 <button onClick={() => setShowListingModal(true)}>
-                  List Your First Crop
+                  {t('listFirstCrop')}
                 </button>
               </div>
             ) : (
@@ -83,11 +85,11 @@ function Farmer({ darkMode }) {
                 <table>
                   <thead>
                     <tr>
-                      <th>Crop</th>
-                      <th>Price</th>
-                      <th>Quantity</th>
-                      <th>Status</th>
-                      <th>Actions</th>
+                      <th>{t('crop')}</th>
+                      <th>{t('price')}</th>
+                      <th>{t('quantity')}</th>
+                      <th>{t('status')}</th>
+                      <th>{t('actions')}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -102,8 +104,8 @@ function Farmer({ darkMode }) {
                           </span>
                         </td>
                         <td>
-                          <button className="edit-btn">Edit</button>
-                          <button className="delete-btn">Delete</button>
+                          <button className="edit-btn">{t('edit')}</button>
+                          <button className="delete-btn">{t('delete')}</button>
                         </td>
                       </tr>
                     ))}

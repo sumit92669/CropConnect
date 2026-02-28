@@ -3,11 +3,13 @@ import CropCard from "../components/CropCard"
 import FilterBar from "../components/FilterBar"
 import CropDetailModal from "../components/CropDetailModal"
 import OfferModal from "../components/OfferModal"
-import MapView from "../components/MapView"  // ✅ Changed to MapView
+import MapView from "../components/MapView"
+import { useLanguage } from "../LanguageContext"
 
 const API_URL = 'http://localhost:5001/api';
 
 function Buyer({ darkMode }) {
+  const { t } = useLanguage()
   const [allCrops, setAllCrops] = useState([])
   const [filteredCrops, setFilteredCrops] = useState([])
   const [selectedCrop, setSelectedCrop] = useState(null)
@@ -38,7 +40,7 @@ function Buyer({ darkMode }) {
         setError(null);
       } catch (error) {
         console.error('Error fetching crops:', error);
-        setError('Failed to load crops. Please try again.');
+        setError(t('error'));
       } finally {
         setLoading(false);
       }
@@ -48,11 +50,11 @@ function Buyer({ darkMode }) {
   }, []);
 
   const categories = [
-    { id: "all", name: "All Crops", icon: "🌾" },
-    { id: "grains", name: "Grains", icon: "🌾" },
-    { id: "pulses", name: "Pulses", icon: "🌱" },
-    { id: "vegetables", name: "Vegetables", icon: "🥬" },
-    { id: "fruits", name: "Fruits", icon: "🍎" }
+    { id: "all", name: t('allCrops'), icon: "🌾" },
+    { id: "grains", name: t('grains'), icon: "🌾" },
+    { id: "pulses", name: t('pulses'), icon: "🌱" },
+    { id: "vegetables", name: t('vegetables'), icon: "🥬" },
+    { id: "fruits", name: t('fruits'), icon: "🍎" }
   ];
 
   const handleFilterChange = (filters) => {
@@ -117,19 +119,19 @@ function Buyer({ darkMode }) {
     try {
       console.log('Offer submitted:', offer);
       setMyOffers([...myOffers, { ...offer, status: 'pending' }]);
-      alert(`✅ Offer sent for ${offer.cropName}!`);
+      alert(t('offerSent', { crop: offer.cropName }));
     } catch (error) {
       console.error('Error submitting offer:', error);
-      alert('Failed to submit offer. Please try again.');
+      alert(t('error'));
     }
   };
 
   if (error) {
     return (
       <div className="error-state">
-        <h3>❌ Error</h3>
+        <h3>❌ {t('error')}</h3>
         <p>{error}</p>
-        <button onClick={() => window.location.reload()}>Retry</button>
+        <button onClick={() => window.location.reload()}>{t('retry')}</button>
       </div>
     );
   }
@@ -137,8 +139,8 @@ function Buyer({ darkMode }) {
   return (
     <div className="buyer-marketplace">
       <div className="marketplace-header">
-        <h1>🏢 Buyer Marketplace</h1>
-        <p className="subtitle">Browse {allCrops.length} fresh crops directly from farmers</p>
+        <h1>🏢 {t('buyerMarketplace')}</h1>
+        <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>
       </div>
 
       {/* Category Filter */}
@@ -160,19 +162,19 @@ function Buyer({ darkMode }) {
           className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
           onClick={() => setViewMode('grid')}
         >
-          📇 Grid View
+          📇 {t('gridView')}
         </button>
         <button 
           className={`toggle-btn ${viewMode === 'map' ? 'active' : ''}`}
           onClick={() => setViewMode('map')}
         >
-          🗺️ Map View
+          🗺️ {t('mapView')}
         </button>
       </div>
 
       {myOffers.length > 0 && (
         <div className="my-offers-summary">
-          <h3>📦 My Active Offers ({myOffers.length})</h3>
+          <h3>📦 {t('myOffers')} ({myOffers.length})</h3>
           <div className="offer-chips">
             {myOffers.map((offer, index) => (
               <div key={index} className="offer-chip">
@@ -190,19 +192,19 @@ function Buyer({ darkMode }) {
       {loading ? (
         <div className="loading-state">
           <div className="loader"></div>
-          <p>Loading crops from database...</p>
+          <p>{t('loading')}</p>
         </div>
       ) : (
         <>
           <div className="results-info">
-            <p>Showing <strong>{filteredCrops.length}</strong> of <strong>{allCrops.length}</strong> crops</p>
+            <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
           </div>
 
           {filteredCrops.length === 0 ? (
             <div className="no-results-marketplace">
               <span className="no-results-icon">🌾</span>
-              <h3>No crops found</h3>
-              <p>Try adjusting your filters or check back later</p>
+              <h3>{t('noCrops')}</h3>
+              <p>{t('adjustFilters')}</p>
             </div>
           ) : (
             viewMode === 'grid' ? (
@@ -225,9 +227,9 @@ function Buyer({ darkMode }) {
                 <div className="map-legend">
                   <div className="legend-item">
                     <span className="legend-dot green"></span>
-                    <span>Farmer locations ({filteredCrops.length} crops)</span>
+                    <span>{t('farmerLocations')} ({filteredCrops.length})</span>
                   </div>
-                  <p className="map-hint">👆 Click on markers to view crop details</p>
+                  <p className="map-hint">{t('mapHint')}</p>
                 </div>
               </div>
             )
