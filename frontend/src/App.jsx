@@ -4,13 +4,15 @@ import Farmer from "./pages/Farmer"
 import Buyer from "./pages/Buyer"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
-import Footer from "./components/Footer"  // ✅ Add this import
+import Footer from "./components/Footer"
+import { useLanguage } from "./LanguageContext"  // ✅ Add this import
 
 function App() {
   const [role, setRole] = useState(null)
   const [currentPage, setCurrentPage] = useState('home')
   const [darkMode, setDarkMode] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
+  const { t } = useLanguage()  // ✅ Add this hook
   const [crops, setCrops] = useState([
     { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" },
     { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" },
@@ -85,32 +87,32 @@ function App() {
           <div className="hero-section">
             <div className="hero-overlay"></div>
             <div className="hero-content">
-              <h1 className="hero-title">Fair & Direct Crop Marketplace</h1>
-              <p className="hero-subtitle">Connecting Farmers with NGOs & Bulk Buyers</p>
+              <h1 className="hero-title">{t('heroTitle')}</h1>  {/* ✅ Translated */}
+              <p className="hero-subtitle">{t('heroSubtitle')}</p>  {/* ✅ Translated */}
               
               <div className="hero-buttons">
                 <button className="hero-btn farmer-btn" onClick={() => setRole("farmer")}>
                   <span className="btn-icon">👨‍🌾</span>
-                  I am a Farmer
+                  {t('farmerBtn')}  {/* ✅ Translated */}
                 </button>
                 <button className="hero-btn buyer-btn" onClick={() => setRole("buyer")}>
                   <span className="btn-icon">🏢</span>
-                  I am a Buyer
+                  {t('buyerBtn')}  {/* ✅ Translated */}
                 </button>
               </div>
               
               <div className="hero-stats">
                 <div className="stat-item">
                   <span className="stat-number">10,000+</span>
-                  <span className="stat-label">Farmers</span>
+                  <span className="stat-label">{t('farmers')}</span>  {/* ✅ Translated */}
                 </div>
                 <div className="stat-item">
                   <span className="stat-number">500+</span>
-                  <span className="stat-label">Buyers</span>
+                  <span className="stat-label">{t('buyers')}</span>  {/* ✅ Translated */}
                 </div>
                 <div className="stat-item">
                   <span className="stat-number">50+</span>
-                  <span className="stat-label">Crops</span>
+                  <span className="stat-label">{t('crops')}</span>  {/* ✅ Translated */}
                 </div>
               </div>
             </div>
@@ -118,7 +120,7 @@ function App() {
 
           {searchTerm && (
             <div className="search-results-info">
-              <p>{filteredCrops.length} crops found for "{searchTerm}"</p>
+              <p>{filteredCrops.length} {t('crops').toLowerCase()} {t('foundFor')} "{searchTerm}"</p>  {/* ✅ Translated */}
             </div>
           )}
 
@@ -129,12 +131,12 @@ function App() {
                   <img src={crop.image} alt={crop.name} />
                   <h3>{crop.name}</h3>
                   <p>₹{crop.price} / {crop.unit}</p>
-                  <button>View Details</button>
+                  <button>{t('viewDetails')}</button>  {/* ✅ Translated */}
                 </div>
               ))
             ) : (
               <div className="no-results">
-                <p>No crops found. Try searching for something else!</p>
+                <p>{t('noCrops')} {t('trySearching')}</p>  {/* ✅ Translated */}
               </div>
             )}
           </div>
@@ -144,7 +146,6 @@ function App() {
       {role === "farmer" && <Farmer darkMode={darkMode} />}
       {role === "buyer" && <Buyer darkMode={darkMode} />}
 
-      {/* ✅ Footer - Always show at bottom */}
       <Footer />
     </div>
   )
