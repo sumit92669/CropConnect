@@ -3046,3 +3046,43 @@ body.dark-mode .error-state {
     gap: 10px;
   }
 }
+/* User Profile */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: 10px;
+}
+
+.user-greeting {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.logout-btn {
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 40px;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode */
+body.dark-mode .user-greeting {
+  background: #2d3a4f;
+  border-color: #475569;
+}

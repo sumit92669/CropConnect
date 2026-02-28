@@ -1,9 +1,25 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm }) {
   const [language, setLanguage] = useState('english')
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || '')
+  const [user, setUser] = useState(null)
+
+  // Check if user is logged in
+  useEffect(() => {
+    const userData = localStorage.getItem('user')
+    if (userData) {
+      setUser(JSON.parse(userData))
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+    setUser(null)
+    window.location.href = '/'
+  }
 
   const toggleLanguageDropdown = () => {
     setShowLanguageDropdown(!showLanguageDropdown)
@@ -120,14 +136,27 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
           )}
         </div>
 
-        <div className="nav-buttons">
-          <button className={`login-btn ${darkMode ? 'login-btn-dark' : ''}`} onClick={onLoginClick}>
-            {language === 'hindi' ? 'लॉगिन' : 'Login'}
-          </button>
-          <button className={`signup-btn ${darkMode ? 'signup-btn-dark' : ''}`} onClick={onSignupClick}>
-            {language === 'hindi' ? 'साइन अप' : 'Sign Up'}
-          </button>
-        </div>
+        {user ? (
+          // Logged in state
+          <div className="user-profile">
+            <span className="user-greeting">
+              👋 {user.fullName?.split(' ')[0] || 'User'}
+            </span>
+            <button className="logout-btn" onClick={handleLogout}>
+              Logout
+            </button>
+          </div>
+        ) : (
+          // Logged out state
+          <div className="nav-buttons">
+            <button className={`login-btn ${darkMode ? 'login-btn-dark' : ''}`} onClick={onLoginClick}>
+              {language === 'hindi' ? 'लॉगिन' : 'Login'}
+            </button>
+            <button className={`signup-btn ${darkMode ? 'signup-btn-dark' : ''}`} onClick={onSignupClick}>
+              {language === 'hindi' ? 'साइन अप' : 'Sign Up'}
+            </button>
+          </div>
+        )}
       </div>
     </nav>
   )
