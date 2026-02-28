@@ -3604,4 +3604,142 @@ body.dark-mode .user-greeting {
     width: 100%;
     justify-content: center;
   }
+}/* ========== GLASS POPUP STYLES (FASTER) ========== */
+
+.popup-trigger {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.glass-popup {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  transform: translateY(-8px);
+  min-width: 260px;
+  max-width: 300px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 16px;
+  padding: 16px;
+  box-shadow: 0 12px 30px rgba(22, 163, 74, 0.2),
+              0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+  transition: opacity 0.15s ease;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Ensure popup stays within footer bounds */
+.footer-links-grid {
+  overflow: visible !important;
+}
+
+.links-column {
+  overflow: visible !important;
+  position: relative;
+}
+
+.links-list {
+  overflow: visible !important;
+  position: relative;
+}
+
+.glass-popup.popup-dark {
+  background: rgba(26, 32, 44, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(74, 222, 128, 0.2);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4),
+              0 0 0 1px rgba(74, 222, 128, 0.2) inset;
+}
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(22, 163, 74, 0.2);
+  padding-bottom: 8px;
+}
+
+.popup-dark .popup-header {
+  border-bottom-color: rgba(74, 222, 128, 0.2);
+}
+
+.popup-icon {
+  font-size: 24px;
+  filter: drop-shadow(0 2px 4px rgba(22, 163, 74, 0.3));
+}
+
+.popup-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #166534;
+}
+
+.popup-dark .popup-title {
+  color: #4ade80;
+}
+
+.popup-description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #2d5a3f;
+}
+
+.popup-dark .popup-description {
+  color: #d1fae5;
+}
+
+/* No animations - instant appearance */
+.glass-popup {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .glass-popup {
+    min-width: 220px;
+    max-width: 260px;
+    padding: 14px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+  }
+  
+  .popup-icon {
+    font-size: 20px;
+  }
+  
+  .popup-title {
+    font-size: 14px;
+  }
+  
+  .popup-description {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .glass-popup {
+    min-width: 200px;
+    max-width: 240px;
+    padding: 12px;
+  }
+}
+
+/* Ensure footer container has proper overflow */
+.footer-container {
+  overflow: visible !important;
+  position: relative;
+  z-index: 1;
+}
+
+.footer {
+  overflow: visible !important;
+  position: relative;
+  z-index: 1;
 }
