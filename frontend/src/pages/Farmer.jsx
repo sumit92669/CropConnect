@@ -3,7 +3,7 @@ import CropListingModal from "../components/CropListingModal"
 import FarmerOffers from "./FarmerOffers"
 import { useLanguage } from "../LanguageContext"
 
-function Farmer({ darkMode }) {
+function Farmer({ darkMode, onBackToHome }) {
   const { t } = useLanguage()
   const [showListingModal, setShowListingModal] = useState(false)
   const [activeTab, setActiveTab] = useState('listings')
@@ -25,6 +25,14 @@ function Farmer({ darkMode }) {
 
   return (
     <div className="farmer-dashboard">
+      {/* Back Button */}
+      <div className="page-header">
+        <button className="back-button" onClick={onBackToHome}>
+          <span className="back-icon">←</span>
+          <span className="back-text">{t('backToHome')}</span>
+        </button>
+      </div>
+
       <div className="dashboard-header">
         <h1>👨‍🌾 {t('farmerDashboard')}</h1>
         <button 

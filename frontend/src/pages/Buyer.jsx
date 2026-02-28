@@ -8,7 +8,7 @@ import { useLanguage } from "../LanguageContext"
 
 const API_URL = 'http://localhost:5001/api';
 
-function Buyer({ darkMode }) {
+function Buyer({ darkMode, onBackToHome }) {
   const { t } = useLanguage()
   const [allCrops, setAllCrops] = useState([])
   const [filteredCrops, setFilteredCrops] = useState([])
@@ -138,6 +138,14 @@ function Buyer({ darkMode }) {
 
   return (
     <div className="buyer-marketplace">
+      {/* Back Button */}
+      <div className="page-header">
+        <button className="back-button" onClick={onBackToHome}>
+          <span className="back-icon">←</span>
+          <span className="back-text">{t('backToHome')}</span>
+        </button>
+      </div>
+
       <div className="marketplace-header">
         <h1>🏢 {t('buyerMarketplace')}</h1>
         <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>

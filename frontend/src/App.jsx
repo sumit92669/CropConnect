@@ -143,8 +143,8 @@ function App() {
         </>
       )}
 
-      {role === "farmer" && <Farmer darkMode={darkMode} />}
-      {role === "buyer" && <Buyer darkMode={darkMode} />}
+      {role === "farmer" && <Farmer darkMode={darkMode} onBackToHome={handleBackToHome} />}
+      {role === "buyer" && <Buyer darkMode={darkMode} onBackToHome={handleBackToHome} />}
 
       <Footer />
     </div>
