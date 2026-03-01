@@ -15,6 +15,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
+  const [preselectedCategory, setPreselectedCategory] = useState('all')
   const { t } = useLanguage()
   const [pageLoaded, setPageLoaded] = useState(false)
 
@@ -91,7 +92,7 @@ function App() {
       />
 
       {role === "farmer"    && <Farmer    darkMode={darkMode} onBackToHome={handleBackToHome} />}
-      {role === "buyer"     && <Buyer     darkMode={darkMode} onBackToHome={handleBackToHome} />}
+      {role === "buyer"     && <Buyer     darkMode={darkMode} onBackToHome={handleBackToHome} initialCategory={preselectedCategory} />}
       {role === "analytics" && <Analytics darkMode={darkMode} onBackToHome={handleBackToHome} />}
 
       {!role && (
@@ -109,7 +110,10 @@ function App() {
                   <span className="btn-icon">👨‍🌾</span>
                   {t('farmerBtn')}
                 </button>
-                <button className="hero-btn" onClick={() => setRole("buyer")}>
+                <button className="hero-btn" onClick={() => {
+                  setRole("buyer")
+                  setPreselectedCategory(activeCategory)
+                }}>
                   <span className="btn-icon">🏢</span>
                   {t('buyerBtn')}
                 </button>

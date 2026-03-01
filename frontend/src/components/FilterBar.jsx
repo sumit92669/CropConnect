@@ -1,19 +1,11 @@
-import { useState } from "react"
 import { useLanguage } from "../LanguageContext"
 
-function FilterBar({ onFilterChange, darkMode }) {
+function FilterBar({ onFilterChange, darkMode, filters }) {
   const { t } = useLanguage()
-  const [filters, setFilters] = useState({
-    sortBy: 'newest',
-    minPrice: '',
-    maxPrice: '',
-    location: ''
-  })
 
   const handleChange = (e) => {
     const { name, value } = e.target
     const newFilters = { ...filters, [name]: value }
-    setFilters(newFilters)
     onFilterChange(newFilters)
   }
 
@@ -24,7 +16,6 @@ function FilterBar({ onFilterChange, darkMode }) {
       maxPrice: '',
       location: ''
     }
-    setFilters(clearedFilters)
     onFilterChange(clearedFilters)
   }
 

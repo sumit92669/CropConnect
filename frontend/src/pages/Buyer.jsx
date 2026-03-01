@@ -5,10 +5,9 @@ import CropDetailModal from "../components/CropDetailModal"
 import OfferModal from "../components/OfferModal"
 import MapView from "../components/MapView"
 import { useLanguage } from "../LanguageContext"
+import { cropsData } from "../data/cropsData"
 
-const API_URL = 'http://localhost:5001/api';
-
-function Buyer({ darkMode, onBackToHome }) {
+function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const { t } = useLanguage()
   const [allCrops, setAllCrops] = useState([])
   const [filteredCrops, setFilteredCrops] = useState([])
@@ -18,8 +17,14 @@ function Buyer({ darkMode, onBackToHome }) {
   const [loading, setLoading] = useState(true)
   const [myOffers, setMyOffers] = useState([])
   const [viewMode, setViewMode] = useState('grid')
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory)
   const [error, setError] = useState(null)
+  const [filters, setFilters] = useState({
+    sortBy: 'newest',
+    minPrice: '',
+    maxPrice: '',
+    location: ''
+  })
 
   // Categories
   const categories = [
@@ -30,55 +35,71 @@ function Buyer({ darkMode, onBackToHome }) {
     { id: "fruits", name: t('fruits'), icon: "🍎" }
   ]
 
-  // Fetch crops from backend
+  // Load crops from cropsData
   useEffect(() => {
-    const fetchCrops = async () => {
-      try {
-        setLoading(true)
-        const response = await fetch(`${API_URL}/crops`)
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch crops')
-        }
-
-        const data = await response.json()
-        console.log('Crops fetched:', data.length)
-
-        setAllCrops(data)
-        setFilteredCrops(data)
-        setSelectedCategory('all')
-        setError(null)
-      } catch (error) {
-        console.error('Error fetching crops:', error)
-        setError(t('error'))
-      } finally {
-        setLoading(false)
+    setLoading(true)
+    try {
+      console.log('Loading crops data...')
+      setAllCrops(cropsData)
+      
+      // Apply initial category if provided
+      if (initialCategory !== 'all') {
+        const filtered = cropsData.filter(c => c.category === initialCategory)
+        setFilteredCrops(filtered)
+        console.log(`Filtered by ${initialCategory}: ${filtered.length} crops`)
+      } else {
+        setFilteredCrops(cropsData)
       }
+      
+      setError(null)
+    } catch (error) {
+      console.error('Error loading crops:', error)
+      setError(t('error'))
+    } finally {
+      setLoading(false)
     }
+  }, [initialCategory])
 
-    fetchCrops()
-  }, [])
+  // Debug: Log category counts
+  useEffect(() => {
+    if (allCrops.length > 0) {
+      console.log('Category counts:', {
+        grains: allCrops.filter(c => c.category === 'grains').length,
+        pulses: allCrops.filter(c => c.category === 'pulses').length,
+        vegetables: allCrops.filter(c => c.category === 'vegetables').length,
+        fruits: allCrops.filter(c => c.category === 'fruits').length
+      })
+    }
+  }, [allCrops])
 
-  const handleFilterChange = (filters) => {
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters)
     let filtered = [...allCrops]
 
-    if (filters.minPrice) {
-      filtered = filtered.filter(c => c.price >= parseInt(filters.minPrice))
-    }
-    if (filters.maxPrice) {
-      filtered = filtered.filter(c => c.price <= parseInt(filters.maxPrice))
-    }
-    if (filters.location) {
+    // Apply category filter FIRST
+    if (selectedCategory !== 'all') {
       filtered = filtered.filter(c => 
-        c.location?.toLowerCase().includes(filters.location.toLowerCase())
+        c.category?.toLowerCase() === selectedCategory.toLowerCase()
       )
     }
 
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(c => c.category === selectedCategory)
+    // Apply price filters
+    if (newFilters.minPrice) {
+      filtered = filtered.filter(c => c.price >= parseInt(newFilters.minPrice))
+    }
+    if (newFilters.maxPrice) {
+      filtered = filtered.filter(c => c.price <= parseInt(newFilters.maxPrice))
+    }
+    
+    // Apply location filter
+    if (newFilters.location) {
+      filtered = filtered.filter(c => 
+        c.location?.toLowerCase().includes(newFilters.location.toLowerCase())
+      )
     }
 
-    switch (filters.sortBy) {
+    // Apply sorting
+    switch (newFilters.sortBy) {
       case 'price-low':
         filtered.sort((a, b) => a.price - b.price)
         break
@@ -101,9 +122,19 @@ function Buyer({ darkMode, onBackToHome }) {
     if (category === 'all') {
       setFilteredCrops(allCrops)
     } else {
-      const filtered = allCrops.filter(c => c.category === category)
+      const filtered = allCrops.filter(c => 
+        c.category?.toLowerCase() === category.toLowerCase()
+      )
       setFilteredCrops(filtered)
     }
+    
+    // Reset filters when changing category
+    setFilters({
+      sortBy: 'newest',
+      minPrice: '',
+      maxPrice: '',
+      location: ''
+    })
   }
 
   const handleViewDetails = (crop) => {
@@ -143,10 +174,7 @@ function Buyer({ darkMode, onBackToHome }) {
     price: crop.price,
     unit: crop.unit || 'quintal',
     location: crop.location,
-    coordinates: { 
-      lat: crop.lat || 28.6139, 
-      lng: crop.lng || 77.2090 
-    }
+    coordinates: crop.coordinates || { lat: 28.6139, lng: 77.2090 }
   }))
 
   if (error) {
@@ -183,7 +211,8 @@ function Buyer({ darkMode, onBackToHome }) {
             className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
             onClick={() => handleCategoryChange(cat.id)}
           >
-            {cat.icon} {cat.name} {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
+            {cat.icon} {cat.name} 
+            {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
           </button>
         ))}
       </div>
@@ -221,7 +250,7 @@ function Buyer({ darkMode, onBackToHome }) {
       )}
 
       {/* Filter Bar */}
-      <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} />
+      <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} filters={filters} />
 
       {/* Results Info */}
       {!loading && (
