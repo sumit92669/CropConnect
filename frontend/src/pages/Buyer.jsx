@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react"
 import CropCard from "../components/CropCard"
 import FilterBar from "../components/FilterBar"
-import CropDetailModal from "../components/CropDetailModal"
-import OfferModal from "../components/OfferModal"
 import MapView from "../components/MapView"
 import { useLanguage } from "../LanguageContext"
 import { cropsData } from "../data/cropsData"
@@ -11,9 +9,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const { t } = useLanguage()
   const [allCrops, setAllCrops] = useState([])
   const [filteredCrops, setFilteredCrops] = useState([])
-  const [selectedCrop, setSelectedCrop] = useState(null)
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [showOfferModal, setShowOfferModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [myOffers, setMyOffers] = useState([])
   const [viewMode, setViewMode] = useState('grid')
@@ -117,21 +112,15 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     })
   }
 
-  const handleViewDetails = (crop) => {
-    setSelectedCrop(crop)
-    setShowDetailModal(true)
-  }
-
-  const handleMakeOffer = (crop) => {
-    setSelectedCrop(crop)
-    setShowDetailModal(false)
-    setShowOfferModal(true)
-  }
-
-  const handleSubmitOffer = (offer) => {
+  // NEW: Handle offer submission directly
+  const handleOfferSubmit = (offer) => {
+    // Add to my offers list
     setMyOffers([...myOffers, { ...offer, status: 'pending' }])
+    
+    // Show success message (can be removed if you don't want it)
     alert(`✅ Offer sent for ${offer.cropName}!`)
-    setShowOfferModal(false)
+    
+    // No modal opening here!
   }
 
   if (error) {
@@ -239,7 +228,7 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
                   <CropCard 
                     key={crop.id} 
                     crop={crop} 
-                    onViewDetails={handleViewDetails}
+                    onViewDetails={handleOfferSubmit} // Now this handles offers directly
                     darkMode={darkMode}
                   />
                 ))}
@@ -263,23 +252,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           )}
         </>
       )}
-
-      {/* Modals */}
-      <CropDetailModal
-        crop={selectedCrop}
-        isOpen={showDetailModal}
-        onClose={() => setShowDetailModal(false)}
-        onMakeOffer={handleMakeOffer}
-        darkMode={darkMode}
-      />
-
-      <OfferModal
-        crop={selectedCrop}
-        isOpen={showOfferModal}
-        onClose={() => setShowOfferModal(false)}
-        onSubmitOffer={handleSubmitOffer}
-        darkMode={darkMode}
-      />
     </div>
   )
 }
