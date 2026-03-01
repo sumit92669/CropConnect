@@ -14,14 +14,31 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const { t } = useLanguage()
   const [pageLoaded, setPageLoaded] = useState(false)
-  const [crops, setCrops] = useState([
-    { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg" },
-    { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg" },
-    { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg" },
-    { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://www.farmatma.in/wp-content/uploads/2019/05/barley-crop.jpg" },
-    { id: 5, name: "Soybean", price: 4200, unit: "Quintal", image: "https://images.pexels.com/photos/3843088/pexels-photo-3843088.jpeg" },
-    { id: 6, name: "Millet", price: 2600, unit: "Quintal", image: "https://images.pexels.com/photos/718742/pexels-photo-718742.jpeg" }
-  ])
+
+  // All 28 crops data
+  const allCrops = [
+    // Grains
+    { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg", category: "grains", farmer: "Rajesh Kumar", location: "Ludhiana, Punjab" },
+    { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg", category: "grains", farmer: "Sukhwinder Singh", location: "Amritsar, Punjab" },
+    { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg", category: "grains", farmer: "Amit Patel", location: "Varanasi, UP" },
+    { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://www.farmatma.in/wp-content/uploads/2019/05/barley-crop.jpg", category: "grains", farmer: "Harpreet Singh", location: "Hapur, UP" },
+    { id: 5, name: "Millet", price: 2600, unit: "Quintal", image: "https://images.pexels.com/photos/718742/pexels-photo-718742.jpeg", category: "grains", farmer: "Ramesh Rathod", location: "Jaipur, Rajasthan" },
+    { id: 6, name: "Soybean", price: 4200, unit: "Quintal", image: "https://images.pexels.com/photos/3843088/pexels-photo-3843088.jpeg", category: "pulses", farmer: "Priya Sharma", location: "Indore, MP" },
+    { id: 7, name: "Green Gram", price: 6500, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Vikram Yadav", location: "Jhansi, UP" },
+    { id: 8, name: "Black Gram", price: 5800, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Lakhan Singh", location: "Sagar, MP" },
+    { id: 9, name: "Chickpea", price: 5200, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Rafiq Ahmed", location: "Akola, Maharashtra" },
+    { id: 10, name: "Pigeon Pea", price: 6000, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Shyam Behari", location: "Gulbarga, Karnataka" },
+    // Vegetables
+    { id: 11, name: "Potato", price: 1200, unit: "Quintal", image: "https://images.pexels.com/photos/144248/pexels-photo-144248.jpeg", category: "vegetables", farmer: "Chhotelal Gupta", location: "Agra, UP" },
+    { id: 12, name: "Onion", price: 1800, unit: "Quintal", image: "https://images.pexels.com/photos/144248/pexels-photo-144248.jpeg", category: "vegetables", farmer: "Dnyaneshwar Patil", location: "Nashik, Maharashtra" },
+    { id: 13, name: "Tomato", price: 1500, unit: "Quintal", image: "https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg", category: "vegetables", farmer: "Krishnappa Gowda", location: "Kolar, Karnataka" },
+    // Fruits
+    { id: 14, name: "Banana", price: 2500, unit: "Quintal", image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg", category: "fruits", farmer: "Kannan Raj", location: "Thanjavur, TN" },
+    { id: 15, name: "Mango", price: 5500, unit: "Quintal", image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg", category: "fruits", farmer: "Abdul Khan", location: "Lucknow, UP" }
+  ]
+
+  // Show only 8 featured crops on home page
+  const featuredCrops = allCrops.slice(0, 8)
 
   useEffect(() => {
     setPageLoaded(true)
@@ -40,28 +57,21 @@ function App() {
     localStorage.setItem('darkMode', JSON.stringify(darkMode))
   }, [darkMode])
 
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode)
-  }
+  const toggleDarkMode = () => setDarkMode(!darkMode)
 
-  const handleLoginClick = () => {
-    setCurrentPage('login')
-  }
-
-  const handleSignupClick = () => {
-    setCurrentPage('signup')
-  }
-
+  const handleLoginClick = () => setCurrentPage('login')
+  const handleSignupClick = () => setCurrentPage('signup')
   const handleBackToHome = () => {
     setCurrentPage('home')
     setRole(null)
   }
 
+  // Handle search function
   const handleSearch = (term) => {
     setSearchTerm(term)
   }
 
-  const filteredCrops = crops.filter(crop => 
+  const filteredCrops = allCrops.filter(crop => 
     crop.name.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -86,6 +96,7 @@ function App() {
 
       {!role && (
         <div className="page-content animate-page">
+          {/* Hero Section */}
           <div className="hero-section">
             <div className="hero-overlay"></div>
             <div className="hero-content">
@@ -120,28 +131,139 @@ function App() {
             </div>
           </div>
 
-          {searchTerm && (
-            <div className="search-results-info animate-fade">
-              <p>{filteredCrops.length} {t('crops').toLowerCase()} {t('foundFor')} "{searchTerm}"</p>
-            </div>
-          )}
-
-          <div className="crop-showcase animate-grid">
-            {filteredCrops.length > 0 ? (
-              filteredCrops.map((crop, index) => (
-                <div className="crop-item animate-card" key={crop.id} style={{ animationDelay: `${index * 0.1}s` }}>
-                  <img src={crop.image} alt={crop.name} />
-                  <h3>{crop.name}</h3>
-                  <p>₹{crop.price} / {crop.unit}</p>
-                  <button>{t('viewDetails')}</button>
-                </div>
-              ))
-            ) : (
-              <div className="no-results animate-fade">
-                <p>{t('noCrops')} {t('trySearching')}</p>
-              </div>
-            )}
+          {/* Category Pills */}
+          <div className="home-categories">
+            <button className="category-pill active">All</button>
+            <button className="category-pill">🌾 Grains</button>
+            <button className="category-pill">🌱 Pulses</button>
+            <button className="category-pill">🥬 Vegetables</button>
+            <button className="category-pill">🍎 Fruits</button>
           </div>
+
+          {/* Search Results or Featured Crops */}
+          {searchTerm ? (
+            <>
+              <div className="search-results-info">
+                <p>{filteredCrops.length} crops found for "{searchTerm}"</p>
+              </div>
+              <div className="featured-crops-grid">
+                {filteredCrops.map((crop, index) => (
+                  <div className="modern-crop-card" key={crop.id}>
+                    <div className="crop-image-wrapper">
+                      <img src={crop.image} alt={crop.name} />
+                      <span className="crop-category">{crop.category}</span>
+                    </div>
+                    <div className="crop-details">
+                      <h3>{crop.name}</h3>
+                      <p className="crop-farmer">👨‍🌾 {crop.farmer}</p>
+                      <p className="crop-location">📍 {crop.location}</p>
+                      <div className="crop-price-row">
+                        <span className="crop-price">₹{crop.price}</span>
+                        <span className="crop-unit">/{crop.unit}</span>
+                      </div>
+                      <button className="view-crop-btn">View Details →</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <>
+              {/* Featured Crops Section */}
+              <div className="section-header">
+                <h2>Featured Crops</h2>
+                <p>Fresh from the farms near you</p>
+              </div>
+              <div className="featured-crops-grid">
+                {featuredCrops.map((crop, index) => (
+                  <div className="modern-crop-card" key={crop.id}>
+                    <div className="crop-image-wrapper">
+                      <img src={crop.image} alt={crop.name} />
+                      <span className="crop-category">{crop.category}</span>
+                    </div>
+                    <div className="crop-details">
+                      <h3>{crop.name}</h3>
+                      <p className="crop-farmer">👨‍🌾 {crop.farmer}</p>
+                      <p className="crop-location">📍 {crop.location}</p>
+                      <div className="crop-price-row">
+                        <span className="crop-price">₹{crop.price}</span>
+                        <span className="crop-unit">/{crop.unit}</span>
+                      </div>
+                      <button className="view-crop-btn">View Details →</button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* How It Works Section */}
+              <div className="how-it-works">
+                <div className="section-header">
+                  <h2>How CropConnect Works</h2>
+                  <p>Simple, transparent, and fair for everyone</p>
+                </div>
+                <div className="steps-grid">
+                  <div className="step-card">
+                    <div className="step-icon">📝</div>
+                    <h3>Farmers List Crops</h3>
+                    <p>Add your crops with price and quantity in minutes</p>
+                  </div>
+                  <div className="step-card">
+                    <div className="step-icon">🔍</div>
+                    <h3>Buyers Browse</h3>
+                    <p>Search and filter crops by location, price, and type</p>
+                  </div>
+                  <div className="step-card">
+                    <div className="step-icon">💬</div>
+                    <h3>Make Offers</h3>
+                    <p>Submit offers and negotiate directly with farmers</p>
+                  </div>
+                  <div className="step-card">
+                    <div className="step-icon">🤝</div>
+                    <h3>Close Deals</h3>
+                    <p>Accept offers and complete transactions smoothly</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Testimonials */}
+              <div className="testimonials-section">
+                <div className="section-header">
+                  <h2>What Farmers & Buyers Say</h2>
+                </div>
+                <div className="testimonials-grid">
+                  <div className="testimonial-card">
+                    <div className="testimonial-content">
+                      "CropConnect helped me sell my wheat directly to NGOs at 20% better price than local mandi."
+                    </div>
+                    <div className="testimonial-author">
+                      <span className="author-name">Rajesh Kumar</span>
+                      <span className="author-role">Farmer, Punjab</span>
+                    </div>
+                  </div>
+                  <div className="testimonial-card">
+                    <div className="testimonial-content">
+                      "We now source fresh vegetables for our hostel directly from farmers. No middlemen, better quality."
+                    </div>
+                    <div className="testimonial-author">
+                      <span className="author-name">Delhi University</span>
+                      <span className="author-role">Hostel Kitchen</span>
+                    </div>
+                  </div>
+                  <div className="testimonial-card">
+                    <div className="testimonial-content">
+                      "The platform is so easy to use. I found buyers for my organic millet in just 2 days!"
+                    </div>
+                    <div className="testimonial-author">
+                      <span className="author-name">Priya Sharma</span>
+                      <span className="author-role">Organic Farmer, MP</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ⚠️ CTA SECTION REMOVED - Already have buttons in hero section */}
+            </>
+          )}
         </div>
       )}
 
