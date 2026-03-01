@@ -88,7 +88,7 @@ function Footer({ darkMode }) {
           </ul>
         </div>
 
-        {/* Stay Updated */}
+        {/* Stay Updated & Social Links */}
         <div className="footer-newsletter">
           <h4 className="links-title">{t('stayUpdated')}</h4>
           <p className="newsletter-text">Get latest crop prices, offers and market trends directly in your inbox.</p>
@@ -105,6 +105,68 @@ function Footer({ darkMode }) {
               </button>
             </div>
           </form>
+
+          {/* Social Links - Circular Icons with Real Logos */}
+          <div className="social-links-container">
+            <h4 className="social-title">Follow Us</h4>
+            <div className="social-icons-grid">
+              <a 
+                href="https://cropconnect-gamma.vercel.app/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon-circle"
+                title="Vercel"
+              >
+                <img 
+                  src="https://assets.vercel.com/image/upload/front/favicon/vercel/57x57.png" 
+                  alt="Vercel"
+                  className="social-icon-img"
+                />
+              </a>
+              
+              <a 
+                href="https://github.com/sumit92669/CropConnect" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon-circle"
+                title="GitHub"
+              >
+                <img 
+                  src="https://github.githubassets.com/favicons/favicon.svg" 
+                  alt="GitHub"
+                  className="social-icon-img"
+                />
+              </a>
+              
+              <a 
+                href="https://www.instagram.com/suumiit___?igsh=aTRsbHFjb2t0MXFz" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon-circle"
+                title="Instagram"
+              >
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/2048px-Instagram_logo_2016.svg.png" 
+                  alt="Instagram"
+                  className="social-icon-img"
+                />
+              </a>
+              
+              <a 
+                href="https://www.linkedin.com/in/sumit-kumar-76abb3348/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="social-icon-circle"
+                title="LinkedIn"
+              >
+                <img 
+                  src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg" 
+                  alt="LinkedIn"
+                  className="social-icon-img"
+                />
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
