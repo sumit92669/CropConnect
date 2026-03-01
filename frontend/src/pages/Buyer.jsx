@@ -39,14 +39,11 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   useEffect(() => {
     setLoading(true)
     try {
-      console.log('Loading crops data...')
       setAllCrops(cropsData)
       
-      // Apply initial category if provided
       if (initialCategory !== 'all') {
         const filtered = cropsData.filter(c => c.category === initialCategory)
         setFilteredCrops(filtered)
-        console.log(`Filtered by ${initialCategory}: ${filtered.length} crops`)
       } else {
         setFilteredCrops(cropsData)
       }
@@ -60,30 +57,16 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     }
   }, [initialCategory])
 
-  // Debug: Log category counts
-  useEffect(() => {
-    if (allCrops.length > 0) {
-      console.log('Category counts:', {
-        grains: allCrops.filter(c => c.category === 'grains').length,
-        pulses: allCrops.filter(c => c.category === 'pulses').length,
-        vegetables: allCrops.filter(c => c.category === 'vegetables').length,
-        fruits: allCrops.filter(c => c.category === 'fruits').length
-      })
-    }
-  }, [allCrops])
-
   const handleFilterChange = (newFilters) => {
     setFilters(newFilters)
     let filtered = [...allCrops]
 
-    // Apply category filter FIRST
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(c => 
         c.category?.toLowerCase() === selectedCategory.toLowerCase()
       )
     }
 
-    // Apply price filters
     if (newFilters.minPrice) {
       filtered = filtered.filter(c => c.price >= parseInt(newFilters.minPrice))
     }
@@ -91,14 +74,12 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
       filtered = filtered.filter(c => c.price <= parseInt(newFilters.maxPrice))
     }
     
-    // Apply location filter
     if (newFilters.location) {
       filtered = filtered.filter(c => 
         c.location?.toLowerCase().includes(newFilters.location.toLowerCase())
       )
     }
 
-    // Apply sorting
     switch (newFilters.sortBy) {
       case 'price-low':
         filtered.sort((a, b) => a.price - b.price)
@@ -128,7 +109,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
       setFilteredCrops(filtered)
     }
     
-    // Reset filters when changing category
     setFilters({
       sortBy: 'newest',
       minPrice: '',
@@ -148,34 +128,11 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     setShowOfferModal(true)
   }
 
-  const handleSubmitOffer = async (offer) => {
-    try {
-      console.log('Offer submitted:', offer)
-      setMyOffers([...myOffers, { ...offer, status: 'pending' }])
-      alert(t('offerSent', { crop: offer.cropName }))
-    } catch (error) {
-      console.error('Error submitting offer:', error)
-      alert(t('error'))
-    }
+  const handleSubmitOffer = (offer) => {
+    setMyOffers([...myOffers, { ...offer, status: 'pending' }])
+    alert(`✅ Offer sent for ${offer.cropName}!`)
+    setShowOfferModal(false)
   }
-
-  const handleMarkerClick = (farmer) => {
-    const crop = allCrops.find(c => c.farmer === farmer.name)
-    if (crop) {
-      setSelectedCrop(crop)
-      setShowDetailModal(true)
-    }
-  }
-
-  // Prepare farmers data for map
-  const farmersForMap = filteredCrops.map(crop => ({
-    name: crop.farmer,
-    crop: crop.name,
-    price: crop.price,
-    unit: crop.unit || 'quintal',
-    location: crop.location,
-    coordinates: crop.coordinates || { lat: 28.6139, lng: 77.2090 }
-  }))
 
   if (error) {
     return (
@@ -278,7 +235,7 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
             /* Grid View */
             viewMode === 'grid' ? (
               <div className="crops-grid">
-                {filteredCrops.map((crop, index) => (
+                {filteredCrops.map((crop) => (
                   <CropCard 
                     key={crop.id} 
                     crop={crop} 
