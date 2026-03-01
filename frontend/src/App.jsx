@@ -6,6 +6,7 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Analytics from "./pages/Analytics"
 import Footer from "./components/Footer"
+import AIChatbot from "./components/AIChatbot"
 import { useLanguage } from "./LanguageContext"
 
 function App() {
@@ -265,6 +266,9 @@ function App() {
           )}
         </div>
       )}
+
+      {/* AI Chatbot - Floating Button */}
+      <AIChatbot />
 
       <Footer darkMode={darkMode} />
     </div>
