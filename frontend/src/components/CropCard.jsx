@@ -133,14 +133,27 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   // Handle offer form submission
   const handleSubmitOffer = (e) => {
     e.preventDefault()
-    onViewDetails({
+    
+    // Close the offer popup immediately
+    setShowOfferPopup(false)
+    
+    // Create offer object
+    const offer = {
       cropId: crop.id,
       cropName: crop.name,
-      ...offerData
-    })
+      offeredPrice: offerData.offeredPrice,
+      quantity: offerData.quantity,
+      message: offerData.message,
+      status: 'pending'
+    }
+    
+    // Call the parent function with the offer
+    if (onViewDetails) {
+      onViewDetails(offer)
+    }
+    
     // Show success message
     alert(`✅ Offer sent for ${crop.name}!`)
-    setShowOfferPopup(false)
   }
 
   // Handle offer input changes
@@ -590,7 +603,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                 </div>
               )}
 
-              {/* Action Buttons */}
+              {/* Action Buttons - Call button disabled */}
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   onClick={handleMakeOfferClick}
@@ -621,29 +634,28 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                 >
                   💰 Make Offer
                 </button>
+                
+                {/* Disabled Call Button */}
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
-                    window.open(`tel:${crop.farmerPhone || '1234567890'}`)
+                    // Disabled - no action
+                    console.log('Call button clicked (disabled)')
                   }}
                   style={{
                     flex: 1,
                     padding: '12px',
                     background: darkMode ? '#374151' : '#e5e7eb',
-                    color: darkMode ? '#fff' : '#1f2937',
+                    color: darkMode ? '#9ca3af' : '#6b7280',
                     border: 'none',
                     borderRadius: '10px',
                     fontSize: '13px',
                     fontWeight: '600',
-                    cursor: 'pointer',
+                    cursor: 'not-allowed',
+                    opacity: 0.7,
                     transition: 'all 0.2s ease'
                   }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = darkMode ? '#4b5563' : '#d1d5db'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = darkMode ? '#374151' : '#e5e7eb'
-                  }}
+                  // No hover effects
                 >
                   📞 Call
                 </button>
@@ -653,7 +665,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
         </>
       )}
 
-      {/* OFFER POPUP - Attached to card, not center modal */}
+      {/* OFFER POPUP - Attached to card */}
       {showOfferPopup && (
         <>
           <div 
