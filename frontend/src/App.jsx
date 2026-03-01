@@ -15,27 +15,63 @@ function App() {
   const { t } = useLanguage()
   const [pageLoaded, setPageLoaded] = useState(false)
 
-  // All 28 crops data
-  const allCrops = [
-    // Grains
-    { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg", category: "grains", farmer: "Rajesh Kumar", location: "Ludhiana, Punjab" },
-    { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg", category: "grains", farmer: "Sukhwinder Singh", location: "Amritsar, Punjab" },
-    { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg", category: "grains", farmer: "Amit Patel", location: "Varanasi, UP" },
-    { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://www.farmatma.in/wp-content/uploads/2019/05/barley-crop.jpg", category: "grains", farmer: "Harpreet Singh", location: "Hapur, UP" },
-    { id: 5, name: "Millet", price: 2600, unit: "Quintal", image: "https://images.pexels.com/photos/718742/pexels-photo-718742.jpeg", category: "grains", farmer: "Ramesh Rathod", location: "Jaipur, Rajasthan" },
-    { id: 6, name: "Soybean", price: 4200, unit: "Quintal", image: "https://images.pexels.com/photos/3843088/pexels-photo-3843088.jpeg", category: "pulses", farmer: "Priya Sharma", location: "Indore, MP" },
-    { id: 7, name: "Green Gram", price: 6500, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Vikram Yadav", location: "Jhansi, UP" },
-    { id: 8, name: "Black Gram", price: 5800, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Lakhan Singh", location: "Sagar, MP" },
-    { id: 9, name: "Chickpea", price: 5200, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Rafiq Ahmed", location: "Akola, Maharashtra" },
-    { id: 10, name: "Pigeon Pea", price: 6000, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Shyam Behari", location: "Gulbarga, Karnataka" },
-    // Vegetables
-    { id: 11, name: "Potato", price: 1200, unit: "Quintal", image: "https://images.pexels.com/photos/144248/pexels-photo-144248.jpeg", category: "vegetables", farmer: "Chhotelal Gupta", location: "Agra, UP" },
-    { id: 12, name: "Onion", price: 1800, unit: "Quintal", image: "https://images.pexels.com/photos/144248/pexels-photo-144248.jpeg", category: "vegetables", farmer: "Dnyaneshwar Patil", location: "Nashik, Maharashtra" },
-    { id: 13, name: "Tomato", price: 1500, unit: "Quintal", image: "https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg", category: "vegetables", farmer: "Krishnappa Gowda", location: "Kolar, Karnataka" },
-    // Fruits
-    { id: 14, name: "Banana", price: 2500, unit: "Quintal", image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg", category: "fruits", farmer: "Kannan Raj", location: "Thanjavur, TN" },
-    { id: 15, name: "Mango", price: 5500, unit: "Quintal", image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg", category: "fruits", farmer: "Abdul Khan", location: "Lucknow, UP" }
-  ]
+  // All 28 crops data - with CORRECT IMAGES
+const allCrops = [
+  // Grains
+  { id: 1, name: "Wheat", price: 2200, unit: "Quintal", image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg", category: "grains", farmer: "Rajesh Kumar", location: "Ludhiana, Punjab" },
+  { id: 2, name: "Rice", price: 3100, unit: "Quintal", image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg", category: "grains", farmer: "Sukhwinder Singh", location: "Amritsar, Punjab" },
+  { id: 3, name: "Corn", price: 1800, unit: "Quintal", image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg", category: "grains", farmer: "Amit Patel", location: "Varanasi, UP" },
+  { id: 4, name: "Barley", price: 1900, unit: "Quintal", image: "https://www.farmatma.in/wp-content/uploads/2019/05/barley-crop.jpg", category: "grains", farmer: "Harpreet Singh", location: "Hapur, UP" },
+  { 
+    id: 5, 
+    name: "Millet", 
+    price: 2600, 
+    unit: "Quintal", 
+    image: "https://img.freepik.com/premium-photo/raw-ripe-millet-crops-field-agriculture-landscape-view_656518-2279.jpg?w=2000", 
+    category: "grains", 
+    farmer: "Ramesh Rathod", 
+    location: "Jaipur, Rajasthan" 
+  },
+  { 
+    id: 6, 
+    name: "Soybean", 
+    price: 4200, 
+    unit: "Quintal", 
+    image: "https://tse1.mm.bing.net/th/id/OIP.4Cel8y5QrH8OlID0OSGMogHaE-?rs=1&pid=ImgDetMain&o=7&rm=3", 
+    category: "pulses", 
+    farmer: "Priya Sharma", 
+    location: "Indore, MP" 
+  },
+  { 
+    id: 7, 
+    name: "Green Gram", 
+    price: 6500, 
+    unit: "Quintal", 
+    image: "https://thumbs.dreamstime.com/b/green-gram-crop-field-moong-high-protein-mung-beans-plant-garden-agriculture-mong-bean-220327389.jpg", 
+    category: "pulses", 
+    farmer: "Vikram Yadav", 
+    location: "Jhansi, UP" 
+  },
+  { 
+    id: 8, 
+    name: "Black Gram", 
+    price: 5800, 
+    unit: "Quintal", 
+    image: "https://m.media-amazon.com/images/I/51pjcPf5fyL.jpg", 
+    category: "pulses", 
+    farmer: "Lakhan Singh", 
+    location: "Sagar, MP" 
+  },
+  { id: 9, name: "Chickpea", price: 5200, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Rafiq Ahmed", location: "Akola, Maharashtra" },
+  { id: 10, name: "Pigeon Pea", price: 6000, unit: "Quintal", image: "https://images.pexels.com/photos/4110252/pexels-photo-4110252.jpeg", category: "pulses", farmer: "Shyam Behari", location: "Gulbarga, Karnataka" },
+  // Vegetables
+  { id: 11, name: "Potato", price: 1200, unit: "Quintal", image: "https://images.pexels.com/photos/144248/pexels-photo-144248.jpeg", category: "vegetables", farmer: "Chhotelal Gupta", location: "Agra, UP" },
+  { id: 12, name: "Onion", price: 1800, unit: "Quintal", image: "https://images.pexels.com/photos/144248/pexels-photo-144248.jpeg", category: "vegetables", farmer: "Dnyaneshwar Patil", location: "Nashik, Maharashtra" },
+  { id: 13, name: "Tomato", price: 1500, unit: "Quintal", image: "https://images.pexels.com/photos/533280/pexels-photo-533280.jpeg", category: "vegetables", farmer: "Krishnappa Gowda", location: "Kolar, Karnataka" },
+  // Fruits
+  { id: 14, name: "Banana", price: 2500, unit: "Quintal", image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg", category: "fruits", farmer: "Kannan Raj", location: "Thanjavur, TN" },
+  { id: 15, name: "Mango", price: 5500, unit: "Quintal", image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg", category: "fruits", farmer: "Abdul Khan", location: "Lucknow, UP" }
+]
 
   // Show only 8 featured crops on home page
   const featuredCrops = allCrops.slice(0, 8)
