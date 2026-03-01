@@ -6,6 +6,7 @@ import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Footer from "./components/Footer"
 import { useLanguage } from "./LanguageContext"
+import AIChatbot from"./components/AIChatbot"
 
 function App() {
   const [role, setRole] = useState(null)
@@ -307,6 +308,7 @@ const allCrops = [
       {role === "buyer" && <Buyer darkMode={darkMode} onBackToHome={handleBackToHome} />}
 
       <Footer />
+      <AIChatbot />
     </div>
   )
 }
