@@ -5,5 +5,8 @@
     "dev": "cd frontend && npm run dev",
     "backend": "cd backend && npm run dev",
     "dev:all": "concurrently \"npm run backend\" \"npm run dev\""
+  },
+  "dependencies": {
+    "leaflet.heat": "^0.2.0"
   }
 }

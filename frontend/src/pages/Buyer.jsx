@@ -1,130 +1,127 @@
 import { useState, useEffect } from "react"
 import CropCard from "../components/CropCard"
 import FilterBar from "../components/FilterBar"
-import CropDetailModal from "../components/CropDetailModal"
-import OfferModal from "../components/OfferModal"
 import MapView from "../components/MapView"
 import { useLanguage } from "../LanguageContext"
+import { cropsData } from "../data/cropsData"
 
-const API_URL = 'http://localhost:5001/api';
-
-function Buyer({ darkMode }) {
+function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const { t } = useLanguage()
   const [allCrops, setAllCrops] = useState([])
   const [filteredCrops, setFilteredCrops] = useState([])
-  const [selectedCrop, setSelectedCrop] = useState(null)
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [showOfferModal, setShowOfferModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const [myOffers, setMyOffers] = useState([])
   const [viewMode, setViewMode] = useState('grid')
-  const [selectedCategory, setSelectedCategory] = useState('all')
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory)
   const [error, setError] = useState(null)
+  const [filters, setFilters] = useState({
+    sortBy: 'newest',
+    minPrice: '',
+    maxPrice: '',
+    location: ''
+  })
 
-  useEffect(() => {
-    const fetchCrops = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch(`${API_URL}/crops`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch crops');
-        }
-        
-        const data = await response.json();
-        console.log('Crops fetched:', data.length);
-        
-        setAllCrops(data);
-        setFilteredCrops(data);
-        setSelectedCategory('all');
-        setError(null);
-      } catch (error) {
-        console.error('Error fetching crops:', error);
-        setError(t('error'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCrops();
-  }, []);
-
+  // Categories
   const categories = [
     { id: "all", name: t('allCrops'), icon: "🌾" },
     { id: "grains", name: t('grains'), icon: "🌾" },
     { id: "pulses", name: t('pulses'), icon: "🌱" },
     { id: "vegetables", name: t('vegetables'), icon: "🥬" },
     { id: "fruits", name: t('fruits'), icon: "🍎" }
-  ];
+  ]
 
-  const handleFilterChange = (filters) => {
-    let filtered = [...allCrops];
+  // Load crops from cropsData
+  useEffect(() => {
+    setLoading(true)
+    try {
+      setAllCrops(cropsData)
+      
+      if (initialCategory !== 'all') {
+        const filtered = cropsData.filter(c => c.category === initialCategory)
+        setFilteredCrops(filtered)
+      } else {
+        setFilteredCrops(cropsData)
+      }
+      
+      setError(null)
+    } catch (error) {
+      console.error('Error loading crops:', error)
+      setError(t('error'))
+    } finally {
+      setLoading(false)
+    }
+  }, [initialCategory])
 
-    if (filters.minPrice) {
-      filtered = filtered.filter(c => c.price >= parseInt(filters.minPrice));
-    }
-    if (filters.maxPrice) {
-      filtered = filtered.filter(c => c.price <= parseInt(filters.maxPrice));
-    }
-    if (filters.location) {
-      filtered = filtered.filter(c => 
-        c.location?.toLowerCase().includes(filters.location.toLowerCase())
-      );
-    }
+  const handleFilterChange = (newFilters) => {
+    setFilters(newFilters)
+    let filtered = [...allCrops]
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(c => c.category === selectedCategory);
+      filtered = filtered.filter(c => 
+        c.category?.toLowerCase() === selectedCategory.toLowerCase()
+      )
     }
 
-    switch (filters.sortBy) {
+    if (newFilters.minPrice) {
+      filtered = filtered.filter(c => c.price >= parseInt(newFilters.minPrice))
+    }
+    if (newFilters.maxPrice) {
+      filtered = filtered.filter(c => c.price <= parseInt(newFilters.maxPrice))
+    }
+    
+    if (newFilters.location) {
+      filtered = filtered.filter(c => 
+        c.location?.toLowerCase().includes(newFilters.location.toLowerCase())
+      )
+    }
+
+    switch (newFilters.sortBy) {
       case 'price-low':
-        filtered.sort((a, b) => a.price - b.price);
-        break;
+        filtered.sort((a, b) => a.price - b.price)
+        break
       case 'price-high':
-        filtered.sort((a, b) => b.price - a.price);
-        break;
+        filtered.sort((a, b) => b.price - a.price)
+        break
       case 'name':
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-        break;
+        filtered.sort((a, b) => a.name.localeCompare(b.name))
+        break
       default:
-        break;
+        break
     }
 
-    setFilteredCrops(filtered);
-  };
+    setFilteredCrops(filtered)
+  }
 
   const handleCategoryChange = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category)
     
     if (category === 'all') {
-      setFilteredCrops(allCrops);
+      setFilteredCrops(allCrops)
     } else {
-      const filtered = allCrops.filter(c => c.category === category);
-      setFilteredCrops(filtered);
+      const filtered = allCrops.filter(c => 
+        c.category?.toLowerCase() === category.toLowerCase()
+      )
+      setFilteredCrops(filtered)
     }
-  };
+    
+    setFilters({
+      sortBy: 'newest',
+      minPrice: '',
+      maxPrice: '',
+      location: ''
+    })
+  }
 
-  const handleViewDetails = (crop) => {
-    setSelectedCrop(crop);
-    setShowDetailModal(true);
-  };
-
-  const handleMakeOffer = (crop) => {
-    setSelectedCrop(crop);
-    setShowDetailModal(false);
-    setShowOfferModal(true);
-  };
-
-  const handleSubmitOffer = async (offer) => {
-    try {
-      console.log('Offer submitted:', offer);
-      setMyOffers([...myOffers, { ...offer, status: 'pending' }]);
-      alert(t('offerSent', { crop: offer.cropName }));
-    } catch (error) {
-      console.error('Error submitting offer:', error);
-      alert(t('error'));
-    }
-  };
+  // NEW: Handle offer submission directly
+  const handleOfferSubmit = (offer) => {
+    // Add to my offers list
+    setMyOffers([...myOffers, { ...offer, status: 'pending' }])
+    
+    // Show success message (can be removed if you don't want it)
+    alert(`✅ Offer sent for ${offer.cropName}!`)
+    
+    // No modal opening here!
+  }
 
   if (error) {
     return (
@@ -133,11 +130,20 @@ function Buyer({ darkMode }) {
         <p>{error}</p>
         <button onClick={() => window.location.reload()}>{t('retry')}</button>
       </div>
-    );
+    )
   }
 
   return (
-    <div className="buyer-marketplace">
+    <div className="buyer-marketplace animate-page">
+      {/* Back Button */}
+      <div className="page-header">
+        <button className="back-button" onClick={onBackToHome}>
+          <span className="back-icon">←</span>
+          <span className="back-text">{t('backToHome')}</span>
+        </button>
+      </div>
+
+      {/* Header */}
       <div className="marketplace-header">
         <h1>🏢 {t('buyerMarketplace')}</h1>
         <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>
@@ -151,7 +157,8 @@ function Buyer({ darkMode }) {
             className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
             onClick={() => handleCategoryChange(cat.id)}
           >
-            {cat.icon} {cat.name} {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
+            {cat.icon} {cat.name} 
+            {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
           </button>
         ))}
       </div>
@@ -172,6 +179,7 @@ function Buyer({ darkMode }) {
         </button>
       </div>
 
+      {/* My Offers Summary */}
       {myOffers.length > 0 && (
         <div className="my-offers-summary">
           <h3>📦 {t('myOffers')} ({myOffers.length})</h3>
@@ -187,8 +195,17 @@ function Buyer({ darkMode }) {
         </div>
       )}
 
-      <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} />
+      {/* Filter Bar */}
+      <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} filters={filters} />
 
+      {/* Results Info */}
+      {!loading && (
+        <div className="results-info">
+          <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
+        </div>
+      )}
+
+      {/* Loading State */}
       {loading ? (
         <div className="loading-state">
           <div className="loader"></div>
@@ -196,10 +213,7 @@ function Buyer({ darkMode }) {
         </div>
       ) : (
         <>
-          <div className="results-info">
-            <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
-          </div>
-
+          {/* No Results */}
           {filteredCrops.length === 0 ? (
             <div className="no-results-marketplace">
               <span className="no-results-icon">🌾</span>
@@ -207,18 +221,20 @@ function Buyer({ darkMode }) {
               <p>{t('adjustFilters')}</p>
             </div>
           ) : (
+            /* Grid View */
             viewMode === 'grid' ? (
               <div className="crops-grid">
-                {filteredCrops.map(crop => (
+                {filteredCrops.map((crop) => (
                   <CropCard 
                     key={crop.id} 
                     crop={crop} 
-                    onViewDetails={handleViewDetails}
+                    onViewDetails={handleOfferSubmit} // Now this handles offers directly
                     darkMode={darkMode}
                   />
                 ))}
               </div>
             ) : (
+              /* Map View */
               <div className="map-view-section">
                 <MapView 
                   crops={filteredCrops}
@@ -236,24 +252,8 @@ function Buyer({ darkMode }) {
           )}
         </>
       )}
-
-      <CropDetailModal
-        crop={selectedCrop}
-        isOpen={showDetailModal}
-        onClose={() => setShowDetailModal(false)}
-        onMakeOffer={handleMakeOffer}
-        darkMode={darkMode}
-      />
-
-      <OfferModal
-        crop={selectedCrop}
-        isOpen={showOfferModal}
-        onClose={() => setShowOfferModal(false)}
-        onSubmitOffer={handleSubmitOffer}
-        darkMode={darkMode}
-      />
     </div>
-  );
+  )
 }
 
-export default Buyer;
+export default Buyer

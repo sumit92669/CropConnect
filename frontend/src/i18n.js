@@ -196,7 +196,9 @@ const translations = {
     emailPlaceholder: "Your email address",
     subscribe: "Subscribe",
     allRightsReserved: "All rights reserved.",
-    sitemap: "Sitemap"
+    sitemap: "Sitemap",
+    support: "Support",
+    followUs: "Follow Us"
   },
   
   hi: {
@@ -395,7 +397,9 @@ const translations = {
     emailPlaceholder: "आपका ईमेल पता",
     subscribe: "सदस्यता लें",
     allRightsReserved: "सर्वाधिकार सुरक्षित।",
-    sitemap: "साइटमैप"
+    sitemap: "साइटमैप",
+    support: "सहायता",
+    followUs: "हमें फॉलो करें"
   },
   
   pa: {
@@ -594,7 +598,9 @@ const translations = {
     emailPlaceholder: "ਤੁਹਾਡਾ ਈਮੇਲ ਪਤਾ",
     subscribe: "ਸਬਸਕ੍ਰਾਈਬ ਕਰੋ",
     allRightsReserved: "ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ।",
-    sitemap: "ਸਾਈਟਮੈਪ"
+    sitemap: "ਸਾਈਟਮੈਪ",
+    support: "ਸਹਾਇਤਾ",
+    followUs: "ਸਾਡਾ ਪਾਲਣ ਕਰੋ"
   }
 };
 

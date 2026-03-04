@@ -13,7 +13,7 @@ export const cropsData = [
     coordinates: { lat: 30.9010, lng: 75.8573 },
     quality: "Grade A",
     description: "High-quality winter wheat, freshly harvested",
-    image: "https://cdn.britannica.com/90/94190-050-C0BA6A58/Cereal-crops-wheat-reproduction.jpg",
+    image: "https://kj1bcdn.b-cdn.net/media/10277/how-to-grow-wheat.jpg?width=1200",
     season: "Rabi",
     organic: true
   },
@@ -29,7 +29,7 @@ export const cropsData = [
     coordinates: { lat: 31.6340, lng: 74.8723 },
     quality: "Basmati",
     description: "Premium basmati rice, long grain",
-    image: "https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg",
+    image: "https://images.squarespace-cdn.com/content/v1/62e7a92f066fa3730dcd4604/6045ca78-903c-46c4-92bb-584a34b8689f/iStock-1185860793.jpg",
     season: "Kharif",
     organic: true
   },
@@ -45,7 +45,7 @@ export const cropsData = [
     coordinates: { lat: 25.3176, lng: 82.9739 },
     quality: "Sweet Corn",
     description: "Fresh sweet corn, ideal for direct consumption",
-    image: "https://missourisouthernseed.com/wp-content/uploads/2020/02/reids-yellow-dent-corn.jpg",
+    image: "https://www.aces.edu/wp-content/uploads/2018/08/shutterstock_-Zeljko-Radojko_field-corn.jpg",
     season: "Kharif",
     organic: false
   },
@@ -61,7 +61,7 @@ export const cropsData = [
     coordinates: { lat: 28.7435, lng: 77.7628 },
     quality: "Grade B",
     description: "Good quality barley for animal feed and brewing",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/12/370420380/FD/QT/QG/17947509/barley-grain.jpg",
+    image: "https://cdn.britannica.com/31/75931-050-FED41F1F/Barley.jpg",
     season: "Rabi",
     organic: false
   },
@@ -77,7 +77,7 @@ export const cropsData = [
     coordinates: { lat: 26.9124, lng: 75.7873 },
     quality: "Organic",
     description: "Organically grown pearl millet, high in nutrients",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/5/307581470/UR/ZU/GA/17325671/bajra-millet.jpg",
+    image: "https://img.freepik.com/premium-photo/raw-ripe-millet-crops-field-agriculture-landscape-view_656518-2279.jpg?w=2000",
     season: "Kharif",
     organic: true
   },
@@ -95,7 +95,7 @@ export const cropsData = [
     coordinates: { lat: 22.7196, lng: 75.8577 },
     quality: "Premium",
     description: "High-protein soybeans for oil extraction and food",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/8/336670797/XB/QJ/SP/2337359/soybean.jpg",
+    image: "https://tse1.mm.bing.net/th/id/OIP.4Cel8y5QrH8OlID0OSGMogHaE-?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
     organic: false
   },
@@ -111,7 +111,7 @@ export const cropsData = [
     coordinates: { lat: 25.4484, lng: 78.5685 },
     quality: "Grade A",
     description: "Premium green gram, perfect for dal and sprouts",
-    image: "https://www.merikheti.com/assets/posts/moong-dal-cultivation-harvest1.jpg",
+    image: "https://thumbs.dreamstime.com/b/green-gram-crop-field-moong-high-protein-mung-beans-plant-garden-agriculture-mong-bean-220327389.jpg",
     season: "Zaid",
     organic: true
   },
@@ -127,7 +127,7 @@ export const cropsData = [
     coordinates: { lat: 23.8388, lng: 78.7378 },
     quality: "Premium",
     description: "Black gram for dal makhani and papad",
-    image: "https://www.ritirivaaj.com/cdn/shop/products/sabuturad-1.jpg?v=1610382668",
+    image: "https://m.media-amazon.com/images/I/51pjcPf5fyL.jpg",
     season: "Kharif",
     organic: false
   },
@@ -143,7 +143,7 @@ export const cropsData = [
     coordinates: { lat: 20.6986, lng: 77.0023 },
     quality: "Desi",
     description: "High-protein chickpeas for chana dal and flour",
-    image: "https://media.istockphoto.com/id/638538708/photo/woman-showing-chickpeas-in-close-up.jpg?s=612x612&w=0&k=20&c=ZAZ-5i5KuuteCEOZrrwQ3S30yh-ptUVwZ752-LG90cg=",
+    image: "https://www.shutterstock.com/image-photo/chickpea-plant-farm-green-chickpeas-600nw-2479189155.jpg",
     season: "Rabi",
     organic: true
   },
@@ -159,7 +159,7 @@ export const cropsData = [
     coordinates: { lat: 17.3297, lng: 76.8343 },
     quality: "Premium",
     description: "Yellow split pigeon pea for dal",
-    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQXPOidJgTGnyFgTZxPMbCXectf165kMo60dA&s",
+    image: "https://tse3.mm.bing.net/th/id/OIP.H7Pe667f4Bvs4Q72OtqcBQHaE6?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
     organic: false
   },
@@ -177,7 +177,7 @@ export const cropsData = [
     coordinates: { lat: 27.1767, lng: 78.0081 },
     quality: "Grade A",
     description: "Fresh potatoes, ideal for chips and cooking",
-    image: "https://api.dhanuka.com/images/2025/4/1743746746507-L3pe75W6JdqN0uoY6X0l.jpg",
+    image: "https://img.freepik.com/premium-photo/closeup-growing-potatoes-farm-field_1092689-63313.jpg?w=1380",
     season: "Rabi",
     organic: false
   },
@@ -193,7 +193,7 @@ export const cropsData = [
     coordinates: { lat: 19.9615, lng: 73.8089 },
     quality: "Red",
     description: "Premium red onions, long storage life",
-    image: "https://www.pepperhub.in/wp-content/uploads/2025/01/WhatsApp-Image-2025-01-12-at-09.57.56_8ce14086.jpg",
+    image: "https://img.khetivyapar.com/images/news/1712142861-use-fertilizer-in-onion-crops-in-this-way-and-get-a-bumper-crop-yield-onion-cultivation-onion-farming-in-india.jpg",
     season: "Rabi",
     organic: false
   },
@@ -209,7 +209,7 @@ export const cropsData = [
     coordinates: { lat: 13.1356, lng: 78.1321 },
     quality: "Hybrid",
     description: "Fresh, ripe tomatoes for cooking and salads",
-    image: "https://agrosiaa.com/uploads/userdata/blogs/21/16131047741.png",
+    image: "https://www.thespruce.com/thmb/ZsK25I6NhZJr9Y5Bxj3bGitaQL4=/5750x3827/filters:no_upscale():max_bytes(150000):strip_icc()/top-tomato-growing-tips-1402587-10-f09428178dbe4e64b88189ea97d831b8.jpg",
     season: "Zaid",
     organic: true
   },
@@ -225,7 +225,7 @@ export const cropsData = [
     coordinates: { lat: 31.9577, lng: 77.1090 },
     quality: "Premium",
     description: "Fresh, white cauliflower heads",
-    image: "https://www.apnikheti.com/upload/crops/1801idea99cauliflower-1.jpg",
+    image: "https://thumbs.dreamstime.com/z/cauliflower-field-crop-many-cauliflowers-agriculture-landscape-vegetable-farm-drawing-imitation-generative-ai-illustration-324339661.jpg?w=992",
     season: "Rabi",
     organic: true
   },
@@ -241,11 +241,10 @@ export const cropsData = [
     coordinates: { lat: 19.9615, lng: 73.8089 },
     quality: "Green",
     description: "Fresh, tight-headed cabbage",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013795/QX/GS/IT/38242261/fresh-cabbage.jpg",
+    image: "https://img.freepik.com/premium-photo/cabbage-field-cultivation-lush-green-leafy-cabbage-crop-growing-vast-agriculture-land-ideal_1014870-11037.jpg?w=996",
     season: "Rabi",
     organic: false
   },
-
   {
     id: 16,
     name: "Brinjal (Eggplant)",
@@ -258,11 +257,10 @@ export const cropsData = [
     coordinates: { lat: 14.7932, lng: 75.4027 },
     quality: "Purple Long",
     description: "Fresh, glossy brinjals for bharta and curries",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013810/GY/QP/XZ/38242261/fresh-brinjal.jpg",
+    image: "https://plantsinformation.com/wp-content/uploads/Brinjal-600x400.jpg",
     season: "Kharif",
     organic: true
   },
-
   {
     id: 17,
     name: "Okra (Bhindi)",
@@ -275,11 +273,10 @@ export const cropsData = [
     coordinates: { lat: 25.3176, lng: 82.9739 },
     quality: "Tender",
     description: "Tender okra, perfect for bhindi masala",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013807/FM/WW/RS/38242261/fresh-ladies-finger.jpg",
+    image: "https://1.bp.blogspot.com/-TjpJBMF_Vdg/X8zQQMAZ68I/AAAAAAAAAGg/j_LNH1obHxglbPD5xP5_kUmhxdN88xICgCLcBGAsYHQ/s690/1.%2BJuan%2Bmagsasaka%2Bokra%2Bproduction%2Bguide.jpg",
     season: "Kharif",
     organic: false
   },
-
   {
     id: 18,
     name: "Green Chili",
@@ -292,11 +289,10 @@ export const cropsData = [
     coordinates: { lat: 16.3067, lng: 80.4365 },
     quality: "Spicy",
     description: "Fresh, spicy green chilies",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013775/XN/QS/JR/38242261/fresh-green-chilli.jpg",
+    image: "https://tse4.mm.bing.net/th/id/OIP.nY5MTN3_ZfzoAvdGYyDN_gHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Zaid",
     organic: true
   },
-
   {
     id: 19,
     name: "Spinach (Palak)",
@@ -309,11 +305,10 @@ export const cropsData = [
     coordinates: { lat: 26.9124, lng: 75.7873 },
     quality: "Fresh",
     description: "Fresh, green spinach leaves",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013800/DD/HK/DE/38242261/fresh-spinach.jpg",
+    image: "https://kj1bcdn.b-cdn.net/media/85040/spinach_nutrition.jpg",
     season: "Rabi",
     organic: true
   },
-
   {
     id: 20,
     name: "Carrot",
@@ -326,11 +321,10 @@ export const cropsData = [
     coordinates: { lat: 11.4064, lng: 76.6932 },
     quality: "Orange",
     description: "Sweet, crunchy carrots for salad and cooking",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013785/UN/YO/RP/38242261/fresh-carrot.jpg",
+    image: "https://img.freepik.com/premium-photo/ripe-carrots-harvested-vegetable-farm-carrot-harvest-carrot-cultivation-concept_561246-1590.jpg?w=2000",
     season: "Rabi",
     organic: true
   },
-
   {
     id: 21,
     name: "Radish",
@@ -343,11 +337,10 @@ export const cropsData = [
     coordinates: { lat: 25.4358, lng: 81.8463 },
     quality: "White",
     description: "Fresh, crispy white radish",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013790/FB/JT/YN/38242261/fresh-radish.jpg",
+    image: "https://tse3.mm.bing.net/th/id/OIP.z8vNIx7GO6pK7K6mtDOFtwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Rabi",
     organic: false
   },
-
   {
     id: 22,
     name: "Pumpkin",
@@ -360,11 +353,10 @@ export const cropsData = [
     coordinates: { lat: 21.2514, lng: 81.6296 },
     quality: "Sweet",
     description: "Orange pumpkin for sabzi and sweets",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013780/HE/JT/WB/38242261/fresh-pumpkin.jpg",
+    image: "https://tse4.mm.bing.net/th/id/OIP.judpkLZqVhePKH6PoSPBDAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
     organic: true
   },
-
   {
     id: 23,
     name: "Bitter Gourd (Karela)",
@@ -377,11 +369,10 @@ export const cropsData = [
     coordinates: { lat: 25.3176, lng: 82.9739 },
     quality: "Fresh",
     description: "Fresh bitter gourd for health-conscious buyers",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013770/IC/RV/RH/38242261/fresh-bitter-gourd.jpg",
+    image: "https://cdn.shopify.com/s/files/1/0663/9613/articles/Bittergourd.webp?v=1687165171",
     season: "Kharif",
     organic: true
   },
-
   {
     id: 24,
     name: "Bottle Gourd (Lauki)",
@@ -394,7 +385,7 @@ export const cropsData = [
     coordinates: { lat: 25.5941, lng: 85.1376 },
     quality: "Tender",
     description: "Tender bottle gourd for curry and juice",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013767/HR/VA/TA/38242261/fresh-bottle-gourd.jpg",
+    image: "https://tse1.mm.bing.net/th/id/OIP.UfaU-iD55fJuLU7_VhyaUQHaFh?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
     organic: false
   },
@@ -412,7 +403,7 @@ export const cropsData = [
     coordinates: { lat: 10.7870, lng: 79.1387 },
     quality: "Robusta",
     description: "Fresh, ripe bananas",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013760/XM/FG/HT/38242261/fresh-banana.jpg",
+    image: "https://eos.com/wp-content/uploads/2024/05/banana-growing-plantation.png.webp",
     season: "All Year",
     organic: true
   },
@@ -428,7 +419,7 @@ export const cropsData = [
     coordinates: { lat: 26.8467, lng: 80.9462 },
     quality: "Dasheri",
     description: "Sweet, aromatic Dasheri mangoes",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013755/SM/HY/IT/38242261/fresh-mango.jpg",
+    image: "https://tse1.explicit.bing.net/th/id/OIP.gHjmjUFiwKtWf94dvRJpUwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Summer",
     organic: true
   },
@@ -444,7 +435,7 @@ export const cropsData = [
     coordinates: { lat: 21.1458, lng: 79.0882 },
     quality: "Nagpur",
     description: "Juicy Nagpur oranges",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013750/GH/ZU/WG/38242261/fresh-orange.jpg",
+    image: "https://floridainsider.com/wp-content/uploads/2022/02/orangecrop.png",
     season: "Winter",
     organic: true
   },
@@ -460,7 +451,7 @@ export const cropsData = [
     coordinates: { lat: 31.1048, lng: 77.1734 },
     quality: "Royal",
     description: "Crisp, sweet Himalayan apples",
-    image: "https://5.imimg.com/data5/SELLER/Default/2023/9/340013745/CL/VI/UQ/38242261/fresh-apple.jpg",
+    image: "https://tse3.mm.bing.net/th/id/OIP.sRjScPrq55-JTnURu8-3nAHaE4?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Autumn",
     organic: true
   }
