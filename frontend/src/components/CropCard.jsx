@@ -2,8 +2,8 @@ import { useLanguage } from "../LanguageContext"
 
 function CropCard({ crop, onViewDetails, darkMode }) {
   const { t } = useLanguage()
-<<<<<<< HEAD
-=======
+
+
   const [showDetailsPopup, setShowDetailsPopup] = useState(false)
   const [showOfferPopup, setShowOfferPopup] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -128,7 +128,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
       </span>
     )
   }
->>>>>>> 221a801 (feat: Disable call button functionality)
+
 
   return (
     <div className={`crop-card ${darkMode ? 'crop-card-dark' : ''}`}>
@@ -159,8 +159,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
           {t('viewDetails')}
         </button>
       </div>
-<<<<<<< HEAD
-=======
+
 
       {/* DETAILS POPUP */}
       {showDetailsPopup && !showOfferPopup && (
@@ -650,7 +649,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
           100% { background-position: 200% 0; }
         }
       `}</style>
->>>>>>> 221a801 (feat: Disable call button functionality)
+ 221a801 (feat: Disable call button functionality)
     </div>
   )
 }
