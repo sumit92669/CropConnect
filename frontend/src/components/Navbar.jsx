@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useLanguage } from "../LanguageContext"
 import SearchSuggestions from "./SearchSuggestions"
 
@@ -7,39 +7,83 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || '')
   const [showSuggestions, setShowSuggestions] = useState(false)
+  
+  const languageButtonRef = useRef(null)
+  const dropdownRef = useRef(null)
+
+  // Update local state when searchTerm prop changes
+  useEffect(() => {
+    setLocalSearchTerm(searchTerm || '')
+  }, [searchTerm])
+
+  // Listen for language change events
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      console.log('Language change event detected');
+      // Force re-render
+      setShowLanguageDropdown(prev => prev);
+    };
+    
+    window.addEventListener('languageChange', handleLanguageChange);
+    return () => window.removeEventListener('languageChange', handleLanguageChange);
+  }, []);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
+          languageButtonRef.current && !languageButtonRef.current.contains(event.target)) {
+        setShowLanguageDropdown(false);
+      }
+      
+      if (!event.target.closest('.search-wrapper')) {
+        setShowSuggestions(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const toggleLanguageDropdown = () => {
-    setShowLanguageDropdown(!showLanguageDropdown)
+    setShowLanguageDropdown(!showLanguageDropdown);
   }
 
   const handleLanguageChange = (lang) => {
-    changeLanguage(lang)
-    setShowLanguageDropdown(false)
+    console.log('Navbar: Changing language to:', lang);
+    changeLanguage(lang);
+    setShowLanguageDropdown(false);
   }
 
   const handleSearchChange = (e) => {
-    const value = e.target.value
-    setLocalSearchTerm(value)
-    onSearch(value)
-    setShowSuggestions(value.length >= 2)
+    const value = e.target.value;
+    setLocalSearchTerm(value);
+    onSearch(value);
+    setShowSuggestions(value.length >= 2);
   }
 
   const handleSearchSubmit = (e) => {
-    e.preventDefault()
-    setShowSuggestions(false)
-    // Search is already happening via onSearch
+    e.preventDefault();
+    setShowSuggestions(false);
   }
 
   const handleSuggestionClick = (suggestion) => {
-    setLocalSearchTerm(suggestion)
-    onSearch(suggestion)
-    setShowSuggestions(false)
+    setLocalSearchTerm(suggestion);
+    onSearch(suggestion);
+    setShowSuggestions(false);
   }
 
   const handleClearSearch = () => {
-    setLocalSearchTerm('')
-    onSearch('')
-    setShowSuggestions(false)
+    setLocalSearchTerm('');
+    onSearch('');
+    setShowSuggestions(false);
+  }
+
+  // Get current language display text
+  const getLanguageText = () => {
+    if (language === 'hi') return 'हिंदी';
+    if (language === 'pa') return 'ਪੰਜਾਬੀ';
+    return 'English';
   }
 
   return (
@@ -68,7 +112,7 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
         <form onSubmit={handleSearchSubmit} className="search-container">
           <input 
             type="text" 
-            placeholder={t("search") || "Search crops, farmers, locations..."} 
+            placeholder={t("searchPlaceholder")} 
             className={`search-bar ${darkMode ? 'search-bar-dark' : ''}`}
             value={localSearchTerm}
             onChange={handleSearchChange}
@@ -86,12 +130,13 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
           )}
         </form>
         
-        {/* Search Suggestions Dropdown */}
-        <SearchSuggestions
-          searchTerm={localSearchTerm}
-          onSuggestionClick={handleSuggestionClick}
-          darkMode={darkMode}
-        />
+        {showSuggestions && (
+          <SearchSuggestions
+            searchTerm={localSearchTerm}
+            onSuggestionClick={handleSuggestionClick}
+            darkMode={darkMode}
+          />
+        )}
       </div>
 
       <div className="nav-right">
@@ -109,18 +154,22 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
 
         <div className="language-selector">
           <button 
+            ref={languageButtonRef}
             className={`language-btn ${darkMode ? 'language-btn-dark' : ''}`}
             onClick={toggleLanguageDropdown}
           >
             <span className="language-icon">🌐</span>
             <span className="language-text">
-              {language === 'hi' ? 'हिंदी' : 'English'}
+              {getLanguageText()}
             </span>
             <span className="dropdown-arrow">{showLanguageDropdown ? '▲' : '▼'}</span>
           </button>
           
           {showLanguageDropdown && (
-            <div className={`language-dropdown ${darkMode ? 'language-dropdown-dark' : ''}`}>
+            <div 
+              ref={dropdownRef}
+              className={`language-dropdown ${darkMode ? 'language-dropdown-dark' : ''}`}
+            >
               <button 
                 className={`language-option ${language === 'en' ? 'active' : ''} ${darkMode ? 'language-option-dark' : ''}`}
                 onClick={() => handleLanguageChange('en')}
@@ -132,6 +181,12 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
                 onClick={() => handleLanguageChange('hi')}
               >
                 <span>🇮🇳</span> हिंदी
+              </button>
+              <button 
+                className={`language-option ${language === 'pa' ? 'active' : ''} ${darkMode ? 'language-option-dark' : ''}`}
+                onClick={() => handleLanguageChange('pa')}
+              >
+                <span>🇮🇳</span> ਪੰਜਾਬੀ
               </button>
             </div>
           )}
