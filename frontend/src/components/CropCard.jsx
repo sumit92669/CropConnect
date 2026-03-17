@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react"
 import { useLanguage } from "../LanguageContext"
+import { useCart } from "../context/CartContext"
 
 // Realistic ratings for different crops
 const cropRatings = {
@@ -67,6 +68,7 @@ const reviewCounts = {
 
 function CropCard({ crop, onViewDetails, darkMode }) {
   const { t } = useLanguage()
+  const { addToCart } = useCart()
   const [showDetailsPopup, setShowDetailsPopup] = useState(false)
   const [showOfferPopup, setShowOfferPopup] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -414,6 +416,42 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             </div>
           </div>
 
+          {/* Add to Cart Button - NEW */}
+          <button 
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(crop);
+            }}
+            style={{
+              width: '100%',
+              padding: '10px',
+              background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '13px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+              boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = '0 2px 8px rgba(245, 158, 11, 0.2)';
+            }}
+          >
+            <span>🛒</span>
+            <span>Add to Cart</span>
+          </button>
+
           {/* Quick View Button */}
           <button 
             onClick={handleCardClick}
@@ -603,7 +641,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                 </div>
               )}
 
-              {/* Action Buttons - Call button disabled */}
+              {/* Action Buttons */}
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
                   onClick={handleMakeOfferClick}
@@ -655,7 +693,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                     opacity: 0.7,
                     transition: 'all 0.2s ease'
                   }}
-                  // No hover effects
                 >
                   📞 Call
                 </button>
@@ -665,7 +702,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
         </>
       )}
 
-      {/* OFFER POPUP - Attached to card */}
+      {/* OFFER POPUP */}
       {showOfferPopup && (
         <>
           <div 

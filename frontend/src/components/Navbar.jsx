@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useLanguage } from "../LanguageContext"
 import SearchSuggestions from "./SearchSuggestions"
+import CartIcon from './CartIcon';  // ✅ Default import
 
 function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm }) {
   const { language, changeLanguage, t } = useLanguage()
@@ -140,6 +141,8 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
       </div>
 
       <div className="nav-right">
+        <CartIcon darkMode={darkMode} />
+        
         <button 
           className={`dark-mode-toggle ${darkMode ? 'dark' : ''}`}
           onClick={toggleDarkMode}
