@@ -4,6 +4,8 @@ import FilterBar from "../components/FilterBar"
 import MapView from "../components/MapView"
 import { useLanguage } from "../LanguageContext"
 import { cropsData } from "../data/cropsData"
+import { CartProvider } from "../context/CartContext"
+import CartDrawer from "../components/CartDrawer"
 
 function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const { t } = useLanguage()
@@ -112,15 +114,10 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     })
   }
 
-  // NEW: Handle offer submission directly
+  // Handle offer submission directly
   const handleOfferSubmit = (offer) => {
-    // Add to my offers list
     setMyOffers([...myOffers, { ...offer, status: 'pending' }])
-    
-    // Show success message (can be removed if you don't want it)
     alert(`✅ Offer sent for ${offer.cropName}!`)
-    
-    // No modal opening here!
   }
 
   if (error) {
@@ -134,125 +131,128 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   }
 
   return (
-    <div className="buyer-marketplace animate-page">
-      {/* Back Button */}
-      <div className="page-header">
-        <button className="back-button" onClick={onBackToHome}>
-          <span className="back-icon">←</span>
-          <span className="back-text">{t('backToHome')}</span>
-        </button>
-      </div>
-
-      {/* Header */}
-      <div className="marketplace-header">
-        <h1>🏢 {t('buyerMarketplace')}</h1>
-        <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>
-      </div>
-
-      {/* Category Filter */}
-      <div className="category-filter">
-        {categories.map(cat => (
-          <button
-            key={cat.id}
-            className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-            onClick={() => handleCategoryChange(cat.id)}
-          >
-            {cat.icon} {cat.name} 
-            {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
+    <CartProvider>
+      <div className="buyer-marketplace animate-page">
+        {/* Back Button */}
+        <div className="page-header">
+          <button className="back-button" onClick={onBackToHome}>
+            <span className="back-icon">←</span>
+            <span className="back-text">{t('backToHome')}</span>
           </button>
-        ))}
-      </div>
-
-      {/* View Toggle */}
-      <div className="view-toggle">
-        <button 
-          className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
-          onClick={() => setViewMode('grid')}
-        >
-          📇 {t('gridView')}
-        </button>
-        <button 
-          className={`toggle-btn ${viewMode === 'map' ? 'active' : ''}`}
-          onClick={() => setViewMode('map')}
-        >
-          🗺️ {t('mapView')}
-        </button>
-      </div>
-
-      {/* My Offers Summary */}
-      {myOffers.length > 0 && (
-        <div className="my-offers-summary">
-          <h3>📦 {t('myOffers')} ({myOffers.length})</h3>
-          <div className="offer-chips">
-            {myOffers.map((offer, index) => (
-              <div key={index} className="offer-chip">
-                <span>{offer.cropName}</span>
-                <span className="offer-chip-price">₹{offer.offeredPrice}</span>
-                <span className={`offer-status ${offer.status}`}>{offer.status}</span>
-              </div>
-            ))}
-          </div>
         </div>
-      )}
 
-      {/* Filter Bar */}
-      <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} filters={filters} />
-
-      {/* Results Info */}
-      {!loading && (
-        <div className="results-info">
-          <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
+        {/* Header */}
+        <div className="marketplace-header">
+          <h1>🏢 {t('buyerMarketplace')}</h1>
+          <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>
         </div>
-      )}
 
-      {/* Loading State */}
-      {loading ? (
-        <div className="loading-state">
-          <div className="loader"></div>
-          <p>{t('loading')}</p>
+        {/* Category Filter */}
+        <div className="category-filter">
+          {categories.map(cat => (
+            <button
+              key={cat.id}
+              className={`category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
+              onClick={() => handleCategoryChange(cat.id)}
+            >
+              {cat.icon} {cat.name} 
+              {cat.id !== 'all' && `(${allCrops.filter(c => c.category === cat.id).length})`}
+            </button>
+          ))}
         </div>
-      ) : (
-        <>
-          {/* No Results */}
-          {filteredCrops.length === 0 ? (
-            <div className="no-results-marketplace">
-              <span className="no-results-icon">🌾</span>
-              <h3>{t('noCrops')}</h3>
-              <p>{t('adjustFilters')}</p>
+
+        {/* View Toggle */}
+        <div className="view-toggle">
+          <button 
+            className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
+            onClick={() => setViewMode('grid')}
+          >
+            📇 {t('gridView')}
+          </button>
+          <button 
+            className={`toggle-btn ${viewMode === 'map' ? 'active' : ''}`}
+            onClick={() => setViewMode('map')}
+          >
+            🗺️ {t('mapView')}
+          </button>
+        </div>
+
+        {/* My Offers Summary */}
+        {myOffers.length > 0 && (
+          <div className="my-offers-summary">
+            <h3>📦 {t('myOffers')} ({myOffers.length})</h3>
+            <div className="offer-chips">
+              {myOffers.map((offer, index) => (
+                <div key={index} className="offer-chip">
+                  <span>{offer.cropName}</span>
+                  <span className="offer-chip-price">₹{offer.offeredPrice}</span>
+                  <span className={`offer-status ${offer.status}`}>{offer.status}</span>
+                </div>
+              ))}
             </div>
-          ) : (
-            /* Grid View */
-            viewMode === 'grid' ? (
-              <div className="crops-grid">
-                {filteredCrops.map((crop) => (
-                  <CropCard 
-                    key={crop.id} 
-                    crop={crop} 
-                    onViewDetails={handleOfferSubmit} // Now this handles offers directly
-                    darkMode={darkMode}
-                  />
-                ))}
+          </div>
+        )}
+
+        {/* Filter Bar */}
+        <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} filters={filters} />
+
+        {/* Results Info */}
+        {!loading && (
+          <div className="results-info">
+            <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
+          </div>
+        )}
+
+        {/* Loading State */}
+        {loading ? (
+          <div className="loading-state">
+            <div className="loader"></div>
+            <p>{t('loading')}</p>
+          </div>
+        ) : (
+          <>
+            {/* No Results */}
+            {filteredCrops.length === 0 ? (
+              <div className="no-results-marketplace">
+                <span className="no-results-icon">🌾</span>
+                <h3>{t('noCrops')}</h3>
+                <p>{t('adjustFilters')}</p>
               </div>
             ) : (
-              /* Map View */
-              <div className="map-view-section">
-                <MapView 
-                  crops={filteredCrops}
-                  darkMode={darkMode}
-                />
-                <div className="map-legend">
-                  <div className="legend-item">
-                    <span className="legend-dot green"></span>
-                    <span>{t('farmerLocations')} ({filteredCrops.length})</span>
-                  </div>
-                  <p className="map-hint">{t('mapHint')}</p>
+              /* Grid View */
+              viewMode === 'grid' ? (
+                <div className="crops-grid">
+                  {filteredCrops.map((crop) => (
+                    <CropCard 
+                      key={crop.id} 
+                      crop={crop} 
+                      onViewDetails={handleOfferSubmit}
+                      darkMode={darkMode}
+                    />
+                  ))}
                 </div>
-              </div>
-            )
-          )}
-        </>
-      )}
-    </div>
+              ) : (
+                /* Map View */
+                <div className="map-view-section">
+                  <MapView 
+                    crops={filteredCrops}
+                    darkMode={darkMode}
+                  />
+                  <div className="map-legend">
+                    <div className="legend-item">
+                      <span className="legend-dot green"></span>
+                      <span>{t('farmerLocations')} ({filteredCrops.length})</span>
+                    </div>
+                    <p className="map-hint">{t('mapHint')}</p>
+                  </div>
+                </div>
+              )
+            )}
+          </>
+        )}
+      </div>
+      <CartDrawer darkMode={darkMode} />
+    </CartProvider>
   )
 }
 
