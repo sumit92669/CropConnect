@@ -87,6 +87,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   const inCart = isInCart(crop.id);
   const rating = cropRatings[crop.name] || 4.5
   const reviews = reviewCounts[crop.name] || 120
+  const views = crop.views || Math.floor(Math.random() * 300) + 50; // Random views for demo
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN').format(price)
@@ -174,31 +175,20 @@ function CropCard({ crop, onViewDetails, darkMode }) {
     setShowQuoteModal(false);
   }
 
+  // IMPROVED RATING DISPLAY
   const renderStars = () => {
-    const fullStars = Math.floor(rating)
-    const hasHalfStar = rating % 1 >= 0.5
+    const fullStars = Math.floor(rating);
+    const emptyStars = 5 - fullStars;
     
     return (
-      <span style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-        {[...Array(5)].map((_, i) => {
-          if (i < fullStars) {
-            return <span key={i} style={{ color: '#fbbf24', fontSize: '14px' }}>★</span>
-          } else if (i === fullStars && hasHalfStar) {
-            return <span key={i} style={{ color: '#fbbf24', fontSize: '14px' }}>⯨</span>
-          } else {
-            return <span key={i} style={{ color: '#d1d5db', fontSize: '14px' }}>★</span>
-          }
-        })}
-        <span style={{ 
-          fontSize: '12px', 
-          marginLeft: '4px', 
-          color: darkMode ? '#9ca3af' : '#6b7280',
-          fontWeight: '500'
-        }}>
-          {rating.toFixed(1)} ({reviews})
+      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+        <span style={{ color: '#fbbf24', fontSize: '12px' }}>
+          {'★'.repeat(fullStars)}{'☆'.repeat(emptyStars)}
         </span>
-      </span>
-    )
+        <span style={{ fontSize: '11px', color: '#9ca3af' }}>({rating.toFixed(1)})</span>
+        <span style={{ fontSize: '10px', color: '#6b7280' }}>{reviews} reviews</span>
+      </div>
+    );
   }
 
   return (
@@ -258,6 +248,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
           />
           
+          {/* Organic Badge */}
           {crop.organic && (
             <div style={{
               position: 'absolute',
@@ -281,6 +272,30 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             </div>
           )}
 
+          {/* TRENDING BADGE - NEW FEATURE */}
+          {views > 200 && (
+            <div style={{
+              position: 'absolute',
+              top: '12px',
+              left: '12px',
+              background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+              color: 'white',
+              padding: '4px 10px',
+              borderRadius: '20px',
+              fontSize: '11px',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+              zIndex: 2
+            }}>
+              <span>🔥</span>
+              <span>Trending</span>
+            </div>
+          )}
+
+          {/* Farmer Badge */}
           <div style={{
             position: 'absolute',
             bottom: '12px',
@@ -303,35 +318,121 @@ function CropCard({ crop, onViewDetails, darkMode }) {
           </div>
         </div>
         
-        <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
-            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>
+        {/* Content Section */}
+        <div style={{ 
+          padding: '16px',
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '8px'
+        }}>
+          {/* Top Row: Name and Rating */}
+          <div style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'flex-start',
+            gap: '8px'
+          }}>
+            <h3 style={{ 
+              margin: 0, 
+              fontSize: '18px', 
+              fontWeight: '700',
+              color: darkMode ? '#fff' : '#111827',
+              letterSpacing: '-0.025em'
+            }}>
               {crop.name}
             </h3>
             {renderStars()}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '12px', fontWeight: '500' }}>
+          {/* Location */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '6px',
+            color: darkMode ? '#9ca3af' : '#6b7280',
+            fontSize: '12px',
+            fontWeight: '500'
+          }}>
             <span style={{ fontSize: '14px' }}>📍</span>
             <span>{crop.location?.split(',')[0] || 'Local'}</span>
-            <span style={{ background: darkMode ? '#374151' : '#f3f4f6', padding: '2px 8px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', marginLeft: '4px' }}>
+            <span style={{ 
+              background: darkMode ? '#374151' : '#f3f4f6',
+              padding: '2px 8px',
+              borderRadius: '12px',
+              fontSize: '10px',
+              fontWeight: '600',
+              marginLeft: '4px'
+            }}>
               {crop.location?.split(',')[1]?.trim() || 'India'}
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '12px', fontWeight: '500' }}>
+          {/* Farmer Name */}
+          <div style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: '6px',
+            color: darkMode ? '#9ca3af' : '#6b7280',
+            fontSize: '12px',
+            fontWeight: '500'
+          }}>
             <span style={{ fontSize: '14px' }}>👨‍🌾</span>
             <span>{crop.farmer || 'Local Farmer'}</span>
           </div>
 
-          <div style={{ marginTop: '8px', padding: '12px 0', borderTop: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`, borderBottom: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          {/* Price Section */}
+          <div style={{ 
+            marginTop: '8px',
+            padding: '12px 0',
+            borderTop: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`,
+            borderBottom: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
             <div>
-              <span style={{ fontSize: '24px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>₹{formatPrice(crop.price)}</span>
-              <span style={{ fontSize: '13px', color: darkMode ? '#9ca3af' : '#6b7280', marginLeft: '4px', fontWeight: '500' }}>/{crop.unit || 'quintal'}</span>
+              <span style={{ 
+                fontSize: '24px', 
+                fontWeight: '700',
+                color: darkMode ? '#fff' : '#111827',
+                letterSpacing: '-0.025em'
+              }}>
+                ₹{formatPrice(crop.price)}
+              </span>
+              <span style={{ 
+                fontSize: '13px', 
+                color: darkMode ? '#9ca3af' : '#6b7280',
+                marginLeft: '4px',
+                fontWeight: '500'
+              }}>
+                /{crop.unit || 'quintal'}
+              </span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: darkMode ? '#374151' : '#f3f4f6', padding: '4px 10px', borderRadius: '20px' }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: crop.quantity > 500 ? '#10b981' : crop.quantity > 200 ? '#f59e0b' : '#ef4444', display: 'inline-block' }} />
-              <span style={{ fontSize: '11px', fontWeight: '600', color: darkMode ? '#9ca3af' : '#4b5563' }}>{crop.quantity} {crop.unit}</span>
+            
+            {/* Stock Indicator */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              background: darkMode ? '#374151' : '#f3f4f6',
+              padding: '4px 10px',
+              borderRadius: '20px'
+            }}>
+              <span style={{ 
+                width: '8px', 
+                height: '8px', 
+                borderRadius: '50%',
+                background: crop.quantity > 500 ? '#10b981' : crop.quantity > 200 ? '#f59e0b' : '#ef4444',
+                display: 'inline-block'
+              }} />
+              <span style={{ 
+                fontSize: '11px', 
+                fontWeight: '600',
+                color: darkMode ? '#9ca3af' : '#4b5563'
+              }}>
+                {crop.quantity} {crop.unit}
+              </span>
             </div>
           </div>
 
@@ -475,7 +576,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
         </div>
       </div>
 
-           {/* Quote Modal - Attached */}
+      {/* Quote Modal */}
       <QuoteModal
         crop={crop}
         isOpen={showQuoteModal}
@@ -484,6 +585,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
         darkMode={darkMode}
         triggerRef={cardRef}
       />
+
       {/* DETAILS POPUP */}
       {showDetailsPopup && !showOfferPopup && (
         <>
