@@ -1,12 +1,30 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
-function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
+function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode, triggerRef }) {
+  // ALL HOOKS AT TOP
   const [quoteData, setQuoteData] = useState({
     quantity: 1,
     message: "",
     deliveryDate: "",
     phone: ""
   });
+  
+  const popupRef = useRef(null);
+
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (popupRef.current && !popupRef.current.contains(event.target) &&
+          triggerRef?.current && !triggerRef?.current.contains(event.target)) {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen, onClose, triggerRef]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,56 +47,58 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
     return new Intl.NumberFormat('en-IN').format(price);
   };
 
-  // Get today's date for min date
   const today = new Date().toISOString().split('T')[0];
-  // Get date 30 days from now
   const maxDate = new Date();
   maxDate.setDate(maxDate.getDate() + 30);
   const maxDateStr = maxDate.toISOString().split('T')[0];
 
   return (
     <>
+      {/* NO BACKDROP - Screen blur nahi hoga! */}
+      
+      {/* Attached Popup - exactly like details popup */}
       <div
+        ref={popupRef}
         style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          backdropFilter: 'blur(4px)',
-          zIndex: 1000,
-          animation: 'fadeIn 0.2s ease'
-        }}
-        onClick={onClose}
-      />
-
-      <div
-        style={{
-          position: 'fixed',
-          top: '50%',
+          position: 'absolute',
+          top: '100%',
           left: '50%',
-          transform: 'translate(-50%, -50%)',
-          width: '90%',
-          maxWidth: '450px',
+          transform: 'translateX(-50%)',
+          marginTop: '8px',
+          width: '300px',
           backgroundColor: darkMode ? '#1f2937' : '#ffffff',
-          borderRadius: '20px',
-          boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)',
-          zIndex: 1001,
-          animation: 'slideUp 0.3s ease',
+          borderRadius: '16px',
+          boxShadow: '0 20px 40px -12px rgba(0,0,0,0.3)',
+          zIndex: 1000,
+          animation: 'popUp 0.2s ease',
+          border: `1px solid ${darkMode ? '#374151' : '#e5e7eb'}`,
           overflow: 'hidden'
         }}
       >
+        {/* Arrow pointing to button - same as details popup */}
+        <div style={{
+          position: 'absolute',
+          top: '-6px',
+          left: '50%',
+          transform: 'translateX(-50%) rotate(45deg)',
+          width: '12px',
+          height: '12px',
+          backgroundColor: darkMode ? '#1f2937' : '#ffffff',
+          borderLeft: `1px solid ${darkMode ? '#374151' : '#e5e7eb'}`,
+          borderTop: `1px solid ${darkMode ? '#374151' : '#e5e7eb'}`,
+          zIndex: -1
+        }} />
+
         {/* Header */}
         <div
           style={{
-            padding: '20px',
+            padding: '12px 16px',
             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
             color: 'white'
           }}
         >
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <h3 style={{ margin: 0, fontSize: '20px', fontWeight: '700' }}>
+            <h3 style={{ margin: 0, fontSize: '15px', fontWeight: '600' }}>
               📝 Request Quote
             </h3>
             <button
@@ -86,10 +106,10 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
               style={{
                 background: 'rgba(255,255,255,0.2)',
                 border: 'none',
-                width: '32px',
-                height: '32px',
+                width: '24px',
+                height: '24px',
                 borderRadius: '50%',
-                fontSize: '18px',
+                fontSize: '12px',
                 cursor: 'pointer',
                 color: 'white'
               }}
@@ -97,31 +117,32 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
               ✕
             </button>
           </div>
-          <p style={{ margin: '8px 0 0', fontSize: '14px', opacity: 0.9 }}>
-            {crop.name} • {crop.farmer}
+          <p style={{ margin: '4px 0 0', fontSize: '11px', opacity: 0.9 }}>
+            {crop.name} • {crop.farmer?.split(' ')[0]}
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} style={{ padding: '20px' }}>
-          {/* Crop Info Card */}
+        <form onSubmit={handleSubmit} style={{ padding: '12px' }}>
+          {/* Quick Info */}
           <div
             style={{
               background: darkMode ? '#2d3a4f' : '#f3f4f6',
-              borderRadius: '12px',
-              padding: '15px',
-              marginBottom: '20px',
+              borderRadius: '10px',
+              padding: '8px',
+              marginBottom: '12px',
               display: 'flex',
-              gap: '12px'
+              gap: '10px'
             }}
           >
             <div
               style={{
-                width: '60px',
-                height: '60px',
+                width: '45px',
+                height: '45px',
                 borderRadius: '8px',
                 overflow: 'hidden',
-                background: '#e5e7eb'
+                background: '#e5e7eb',
+                flexShrink: 0
               }}
             >
               <img
@@ -131,44 +152,33 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
               />
             </div>
             <div>
-              <h4 style={{ margin: '0 0 4px', fontSize: '16px', fontWeight: '700', color: darkMode ? '#fff' : '#1f2937' }}>
+              <h4 style={{ margin: '0 0 2px', fontSize: '13px', fontWeight: '600', color: darkMode ? '#fff' : '#1f2937' }}>
                 {crop.name}
               </h4>
-              <p style={{ margin: 0, fontSize: '12px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                {crop.farmer} • {crop.location?.split(',')[0]}
-              </p>
-              <p style={{ margin: '8px 0 0', fontSize: '14px', fontWeight: '600', color: '#10b981' }}>
+              <p style={{ margin: 0, fontSize: '9px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
                 ₹{formatPrice(crop.price)}/{crop.unit}
               </p>
             </div>
           </div>
 
           {/* Quantity */}
-          <div style={{ marginBottom: '16px' }}>
-            <label
-              style={{
-                display: 'block',
-                marginBottom: '6px',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: darkMode ? '#f8fafc' : '#374151'
-              }}
-            >
+          <div style={{ marginBottom: '10px' }}>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: '10px', fontWeight: '600', color: darkMode ? '#f8fafc' : '#374151' }}>
               Quantity ({crop.unit}) *
             </label>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <button
                 type="button"
                 onClick={() => setQuoteData(prev => ({ ...prev, quantity: Math.max(1, prev.quantity - 10) }))}
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
-                  border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                  background: darkMode ? '#374151' : 'white',
-                  color: darkMode ? '#fff' : '#1f2937',
-                  cursor: 'pointer',
-                  fontSize: '18px'
+                style={{ 
+                  width: '28px', 
+                  height: '28px', 
+                  borderRadius: '6px', 
+                  border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                  background: darkMode ? '#374151' : 'white', 
+                  color: darkMode ? '#fff' : '#1f2937', 
+                  cursor: 'pointer', 
+                  fontSize: '14px'
                 }}
               >
                 −
@@ -179,51 +189,41 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
                 onChange={(e) => setQuoteData(prev => ({ ...prev, quantity: parseInt(e.target.value) || 1 }))}
                 min="1"
                 max={crop.quantity}
-                style={{
-                  width: '100px',
-                  padding: '10px',
-                  textAlign: 'center',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                  borderRadius: '8px',
-                  background: darkMode ? '#374151' : 'white',
-                  color: darkMode ? '#fff' : '#1f2937'
+                style={{ 
+                  width: '60px', 
+                  padding: '4px', 
+                  textAlign: 'center', 
+                  fontSize: '12px', 
+                  fontWeight: '600', 
+                  border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                  borderRadius: '6px', 
+                  background: darkMode ? '#374151' : 'white', 
+                  color: darkMode ? '#fff' : '#1f2937' 
                 }}
               />
               <button
                 type="button"
                 onClick={() => setQuoteData(prev => ({ ...prev, quantity: Math.min(crop.quantity, prev.quantity + 10) }))}
-                style={{
-                  width: '36px',
-                  height: '36px',
-                  borderRadius: '8px',
-                  border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                  background: darkMode ? '#374151' : 'white',
-                  color: darkMode ? '#fff' : '#1f2937',
-                  cursor: 'pointer',
-                  fontSize: '18px'
+                style={{ 
+                  width: '28px', 
+                  height: '28px', 
+                  borderRadius: '6px', 
+                  border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                  background: darkMode ? '#374151' : 'white', 
+                  color: darkMode ? '#fff' : '#1f2937', 
+                  cursor: 'pointer', 
+                  fontSize: '14px'
                 }}
               >
                 +
               </button>
-              <span style={{ fontSize: '13px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                Available: {crop.quantity} {crop.unit}
-              </span>
+              <span style={{ fontSize: '9px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Avail: {crop.quantity}</span>
             </div>
           </div>
 
           {/* Delivery Date */}
-          <div style={{ marginBottom: '16px' }}>
-            <label
-              style={{
-                display: 'block',
-                marginBottom: '6px',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: darkMode ? '#f8fafc' : '#374151'
-              }}
-            >
+          <div style={{ marginBottom: '10px' }}>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: '10px', fontWeight: '600', color: darkMode ? '#f8fafc' : '#374151' }}>
               Delivery Date *
             </label>
             <input
@@ -233,30 +233,22 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
               min={today}
               max={maxDateStr}
               required
-              style={{
-                width: '100%',
-                padding: '10px',
-                fontSize: '14px',
-                border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                borderRadius: '8px',
-                background: darkMode ? '#374151' : 'white',
-                color: darkMode ? '#fff' : '#1f2937'
+              style={{ 
+                width: '100%', 
+                padding: '6px', 
+                fontSize: '11px', 
+                border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                borderRadius: '6px', 
+                background: darkMode ? '#374151' : 'white', 
+                color: darkMode ? '#fff' : '#1f2937' 
               }}
             />
           </div>
 
           {/* Phone */}
-          <div style={{ marginBottom: '16px' }}>
-            <label
-              style={{
-                display: 'block',
-                marginBottom: '6px',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: darkMode ? '#f8fafc' : '#374151'
-              }}
-            >
-              Contact Number *
+          <div style={{ marginBottom: '10px' }}>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: '10px', fontWeight: '600', color: darkMode ? '#f8fafc' : '#374151' }}>
+              Phone *
             </label>
             <input
               type="tel"
@@ -265,121 +257,101 @@ function QuoteModal({ crop, isOpen, onClose, onSubmit, darkMode }) {
               placeholder="9876543210"
               pattern="[0-9]{10}"
               required
-              style={{
-                width: '100%',
-                padding: '10px',
-                fontSize: '14px',
-                border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                borderRadius: '8px',
-                background: darkMode ? '#374151' : 'white',
-                color: darkMode ? '#fff' : '#1f2937'
+              style={{ 
+                width: '100%', 
+                padding: '6px', 
+                fontSize: '11px', 
+                border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                borderRadius: '6px', 
+                background: darkMode ? '#374151' : 'white', 
+                color: darkMode ? '#fff' : '#1f2937' 
               }}
             />
           </div>
 
-          {/* Message */}
-          <div style={{ marginBottom: '20px' }}>
-            <label
-              style={{
-                display: 'block',
-                marginBottom: '6px',
-                fontSize: '13px',
-                fontWeight: '600',
-                color: darkMode ? '#f8fafc' : '#374151'
-              }}
-            >
-              Message to Farmer
+          {/* Message - shorter */}
+          <div style={{ marginBottom: '10px' }}>
+            <label style={{ display: 'block', marginBottom: '4px', fontSize: '10px', fontWeight: '600', color: darkMode ? '#f8fafc' : '#374151' }}>
+              Message
             </label>
             <textarea
               value={quoteData.message}
               onChange={(e) => setQuoteData(prev => ({ ...prev, message: e.target.value }))}
-              placeholder="e.g., Need for community kitchen, can arrange pickup..."
-              rows="3"
-              style={{
-                width: '100%',
-                padding: '10px',
-                fontSize: '14px',
-                border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                borderRadius: '8px',
-                background: darkMode ? '#374151' : 'white',
-                color: darkMode ? '#fff' : '#1f2937',
-                resize: 'none',
-                fontFamily: 'inherit'
+              placeholder="Quick note..."
+              rows="2"
+              style={{ 
+                width: '100%', 
+                padding: '6px', 
+                fontSize: '10px', 
+                border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                borderRadius: '6px', 
+                background: darkMode ? '#374151' : 'white', 
+                color: darkMode ? '#fff' : '#1f2937', 
+                resize: 'none'
               }}
             />
           </div>
 
-          {/* Estimated Total */}
-          <div
-            style={{
-              background: darkMode ? '#2d3a4f' : '#f3f4f6',
-              borderRadius: '12px',
-              padding: '15px',
-              marginBottom: '20px',
-              textAlign: 'center'
-            }}
-          >
-            <span style={{ fontSize: '14px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-              Estimated Total:
-            </span>
-            <span style={{ fontSize: '24px', fontWeight: '700', color: '#10b981', marginLeft: '10px' }}>
-              ₹{formatPrice(crop.price * quoteData.quantity)}
-            </span>
+          {/* Total */}
+          <div style={{ 
+            background: darkMode ? '#2d3a4f' : '#f3f4f6', 
+            borderRadius: '6px', 
+            padding: '6px', 
+            marginBottom: '10px', 
+            textAlign: 'center' 
+          }}>
+            <span style={{ fontSize: '10px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Total:</span>
+            <span style={{ fontSize: '14px', fontWeight: '700', color: '#10b981', marginLeft: '6px' }}>₹{formatPrice(crop.price * quoteData.quantity)}</span>
           </div>
 
           {/* Buttons */}
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button
-              type="button"
-              onClick={onClose}
-              style={{
-                flex: 1,
-                padding: '12px',
-                background: darkMode ? '#374151' : '#f3f4f6',
-                border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                borderRadius: '10px',
-                fontSize: '14px',
-                fontWeight: '600',
-                color: darkMode ? '#fff' : '#1f2937',
-                cursor: 'pointer'
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button 
+              type="button" 
+              onClick={onClose} 
+              style={{ 
+                flex: 1, 
+                padding: '6px', 
+                background: darkMode ? '#374151' : '#f3f4f6', 
+                border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, 
+                borderRadius: '6px', 
+                fontSize: '11px', 
+                fontWeight: '500', 
+                color: darkMode ? '#fff' : '#1f2937', 
+                cursor: 'pointer' 
               }}
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              style={{
-                flex: 2,
-                padding: '12px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                fontSize: '14px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                boxShadow: '0 4px 12px rgba(102, 126, 234, 0.3)'
+            <button 
+              type="submit" 
+              style={{ 
+                flex: 2, 
+                padding: '6px', 
+                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', 
+                color: 'white', 
+                border: 'none', 
+                borderRadius: '6px', 
+                fontSize: '11px', 
+                fontWeight: '600', 
+                cursor: 'pointer' 
               }}
             >
-              Send Quote Request
+              Send Quote
             </button>
           </div>
         </form>
       </div>
 
       <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-        @keyframes slideUp {
+        @keyframes popUp {
           from {
             opacity: 0;
-            transform: translate(-50%, -40%);
+            transform: translateX(-50%) scale(0.95) translateY(-5px);
           }
           to {
             opacity: 1;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%) scale(1) translateY(0);
           }
         }
       `}</style>

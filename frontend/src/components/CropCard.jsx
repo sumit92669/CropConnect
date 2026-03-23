@@ -475,15 +475,15 @@ function CropCard({ crop, onViewDetails, darkMode }) {
         </div>
       </div>
 
-      {/* Quote Modal */}
+           {/* Quote Modal - Attached */}
       <QuoteModal
         crop={crop}
         isOpen={showQuoteModal}
         onClose={() => setShowQuoteModal(false)}
         onSubmit={handleQuoteSubmit}
         darkMode={darkMode}
+        triggerRef={cardRef}
       />
-
       {/* DETAILS POPUP */}
       {showDetailsPopup && !showOfferPopup && (
         <>
