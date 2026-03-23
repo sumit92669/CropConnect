@@ -15,7 +15,10 @@ export const cropsData = [
     description: "High-quality winter wheat, freshly harvested",
     image: "https://kj1bcdn.b-cdn.net/media/10277/how-to-grow-wheat.jpg?width=1200",
     season: "Rabi",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 234
   },
   {
     id: 2,
@@ -31,7 +34,10 @@ export const cropsData = [
     description: "Premium basmati rice, long grain",
     image: "https://images.squarespace-cdn.com/content/v1/62e7a92f066fa3730dcd4604/6045ca78-903c-46c4-92bb-584a34b8689f/iStock-1185860793.jpg",
     season: "Kharif",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 189
   },
   {
     id: 3,
@@ -47,7 +53,10 @@ export const cropsData = [
     description: "Fresh sweet corn, ideal for direct consumption",
     image: "https://www.aces.edu/wp-content/uploads/2018/08/shutterstock_-Zeljko-Radojko_field-corn.jpg",
     season: "Kharif",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: true,
+    views: 156
   },
   {
     id: 4,
@@ -63,7 +72,10 @@ export const cropsData = [
     description: "Good quality barley for animal feed and brewing",
     image: "https://cdn.britannica.com/31/75931-050-FED41F1F/Barley.jpg",
     season: "Rabi",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 98
   },
   {
     id: 5,
@@ -79,7 +91,10 @@ export const cropsData = [
     description: "Organically grown pearl millet, high in nutrients",
     image: "https://img.freepik.com/premium-photo/raw-ripe-millet-crops-field-agriculture-landscape-view_656518-2279.jpg?w=2000",
     season: "Kharif",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 112
   },
 
   // 🌱 PULSES & LEGUMES
@@ -97,7 +112,10 @@ export const cropsData = [
     description: "High-protein soybeans for oil extraction and food",
     image: "https://tse1.mm.bing.net/th/id/OIP.4Cel8y5QrH8OlID0OSGMogHaE-?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 134
   },
   {
     id: 7,
@@ -113,7 +131,10 @@ export const cropsData = [
     description: "Premium green gram, perfect for dal and sprouts",
     image: "https://thumbs.dreamstime.com/b/green-gram-crop-field-moong-high-protein-mung-beans-plant-garden-agriculture-mong-bean-220327389.jpg",
     season: "Zaid",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: true,
+    views: 87
   },
   {
     id: 8,
@@ -129,7 +150,10 @@ export const cropsData = [
     description: "Black gram for dal makhani and papad",
     image: "https://m.media-amazon.com/images/I/51pjcPf5fyL.jpg",
     season: "Kharif",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 76
   },
   {
     id: 9,
@@ -145,7 +169,10 @@ export const cropsData = [
     description: "High-protein chickpeas for chana dal and flour",
     image: "https://www.shutterstock.com/image-photo/chickpea-plant-farm-green-chickpeas-600nw-2479189155.jpg",
     season: "Rabi",
-    organic: true
+    organic: true,
+    isNew: true,
+    fastDelivery: false,
+    views: 145
   },
   {
     id: 10,
@@ -161,7 +188,10 @@ export const cropsData = [
     description: "Yellow split pigeon pea for dal",
     image: "https://tse3.mm.bing.net/th/id/OIP.H7Pe667f4Bvs4Q72OtqcBQHaE6?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 69
   },
 
   // 🥬 VEGETABLES
@@ -179,7 +209,10 @@ export const cropsData = [
     description: "Fresh potatoes, ideal for chips and cooking",
     image: "https://img.freepik.com/premium-photo/closeup-growing-potatoes-farm-field_1092689-63313.jpg?w=1380",
     season: "Rabi",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 312
   },
   {
     id: 12,
@@ -195,7 +228,10 @@ export const cropsData = [
     description: "Premium red onions, long storage life",
     image: "https://img.khetivyapar.com/images/news/1712142861-use-fertilizer-in-onion-crops-in-this-way-and-get-a-bumper-crop-yield-onion-cultivation-onion-farming-in-india.jpg",
     season: "Rabi",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 278
   },
   {
     id: 13,
@@ -211,7 +247,10 @@ export const cropsData = [
     description: "Fresh, ripe tomatoes for cooking and salads",
     image: "https://www.thespruce.com/thmb/ZsK25I6NhZJr9Y5Bxj3bGitaQL4=/5750x3827/filters:no_upscale():max_bytes(150000):strip_icc()/top-tomato-growing-tips-1402587-10-f09428178dbe4e64b88189ea97d831b8.jpg",
     season: "Zaid",
-    organic: true
+    organic: true,
+    isNew: true,
+    fastDelivery: true,
+    views: 298
   },
   {
     id: 14,
@@ -227,7 +266,10 @@ export const cropsData = [
     description: "Fresh, white cauliflower heads",
     image: "https://thumbs.dreamstime.com/z/cauliflower-field-crop-many-cauliflowers-agriculture-landscape-vegetable-farm-drawing-imitation-generative-ai-illustration-324339661.jpg?w=992",
     season: "Rabi",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 134
   },
   {
     id: 15,
@@ -243,7 +285,10 @@ export const cropsData = [
     description: "Fresh, tight-headed cabbage",
     image: "https://img.freepik.com/premium-photo/cabbage-field-cultivation-lush-green-leafy-cabbage-crop-growing-vast-agriculture-land-ideal_1014870-11037.jpg?w=996",
     season: "Rabi",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 112
   },
   {
     id: 16,
@@ -259,7 +304,10 @@ export const cropsData = [
     description: "Fresh, glossy brinjals for bharta and curries",
     image: "https://plantsinformation.com/wp-content/uploads/Brinjal-600x400.jpg",
     season: "Kharif",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 98
   },
   {
     id: 17,
@@ -275,7 +323,10 @@ export const cropsData = [
     description: "Tender okra, perfect for bhindi masala",
     image: "https://1.bp.blogspot.com/-TjpJBMF_Vdg/X8zQQMAZ68I/AAAAAAAAAGg/j_LNH1obHxglbPD5xP5_kUmhxdN88xICgCLcBGAsYHQ/s690/1.%2BJuan%2Bmagsasaka%2Bokra%2Bproduction%2Bguide.jpg",
     season: "Kharif",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: true,
+    views: 87
   },
   {
     id: 18,
@@ -291,7 +342,10 @@ export const cropsData = [
     description: "Fresh, spicy green chilies",
     image: "https://tse4.mm.bing.net/th/id/OIP.nY5MTN3_ZfzoAvdGYyDN_gHaFj?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Zaid",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 156
   },
   {
     id: 19,
@@ -307,7 +361,10 @@ export const cropsData = [
     description: "Fresh, green spinach leaves",
     image: "https://kj1bcdn.b-cdn.net/media/85040/spinach_nutrition.jpg",
     season: "Rabi",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 134
   },
   {
     id: 20,
@@ -323,7 +380,10 @@ export const cropsData = [
     description: "Sweet, crunchy carrots for salad and cooking",
     image: "https://img.freepik.com/premium-photo/ripe-carrots-harvested-vegetable-farm-carrot-harvest-carrot-cultivation-concept_561246-1590.jpg?w=2000",
     season: "Rabi",
-    organic: true
+    organic: true,
+    isNew: true,
+    fastDelivery: false,
+    views: 167
   },
   {
     id: 21,
@@ -339,7 +399,10 @@ export const cropsData = [
     description: "Fresh, crispy white radish",
     image: "https://tse3.mm.bing.net/th/id/OIP.z8vNIx7GO6pK7K6mtDOFtwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Rabi",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 78
   },
   {
     id: 22,
@@ -355,7 +418,10 @@ export const cropsData = [
     description: "Orange pumpkin for sabzi and sweets",
     image: "https://tse4.mm.bing.net/th/id/OIP.judpkLZqVhePKH6PoSPBDAHaEK?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 92
   },
   {
     id: 23,
@@ -371,7 +437,10 @@ export const cropsData = [
     description: "Fresh bitter gourd for health-conscious buyers",
     image: "https://cdn.shopify.com/s/files/1/0663/9613/articles/Bittergourd.webp?v=1687165171",
     season: "Kharif",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 67
   },
   {
     id: 24,
@@ -387,7 +456,10 @@ export const cropsData = [
     description: "Tender bottle gourd for curry and juice",
     image: "https://tse1.mm.bing.net/th/id/OIP.UfaU-iD55fJuLU7_VhyaUQHaFh?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Kharif",
-    organic: false
+    organic: false,
+    isNew: false,
+    fastDelivery: false,
+    views: 71
   },
 
   // 🍎 FRUITS
@@ -405,7 +477,10 @@ export const cropsData = [
     description: "Fresh, ripe bananas",
     image: "https://eos.com/wp-content/uploads/2024/05/banana-growing-plantation.png.webp",
     season: "All Year",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: false,
+    views: 245
   },
   {
     id: 26,
@@ -421,7 +496,10 @@ export const cropsData = [
     description: "Sweet, aromatic Dasheri mangoes",
     image: "https://tse1.explicit.bing.net/th/id/OIP.gHjmjUFiwKtWf94dvRJpUwAAAA?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Summer",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: true,
+    views: 312
   },
   {
     id: 27,
@@ -437,7 +515,10 @@ export const cropsData = [
     description: "Juicy Nagpur oranges",
     image: "https://floridainsider.com/wp-content/uploads/2022/02/orangecrop.png",
     season: "Winter",
-    organic: true
+    organic: true,
+    isNew: true,
+    fastDelivery: false,
+    views: 287
   },
   {
     id: 28,
@@ -453,7 +534,32 @@ export const cropsData = [
     description: "Crisp, sweet Himalayan apples",
     image: "https://tse3.mm.bing.net/th/id/OIP.sRjScPrq55-JTnURu8-3nAHaE4?rs=1&pid=ImgDetMain&o=7&rm=3",
     season: "Autumn",
-    organic: true
+    organic: true,
+    isNew: false,
+    fastDelivery: true,
+    views: 298
+  },
+
+  // 🌟 DEMO CROP WITH ALL BADGES (For Testing)
+  {
+    id: 29,
+    name: "Premium Organic Mango",
+    category: "fruits",
+    price: 4500,
+    oldPrice: 5500,        // Shows 18% off (Price Drop badge)
+    quantity: 150,
+    unit: "quintal",
+    farmer: "Organic Farmer",
+    location: "Ratnagiri, Maharashtra",
+    coordinates: { lat: 17.0, lng: 73.3 },
+    quality: "Premium Organic",
+    description: "Hand-picked organic mangoes from Ratnagiri. Naturally ripened, no chemicals.",
+    image: "https://images.pexels.com/photos/61127/pexels-photo-61127.jpeg",
+    season: "Summer",
+    organic: true,
+    isNew: true,           // Shows ✨ NEW badge
+    fastDelivery: true,    // Shows ⚡ Fast Delivery badge
+    views: 350             // Shows 🔥 Trending badge (since >200)
   }
 ]
 
