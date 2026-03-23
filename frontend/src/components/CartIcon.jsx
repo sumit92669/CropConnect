@@ -1,13 +1,19 @@
 import { useCart } from '../context/CartContext';
 
 function CartIcon({ darkMode }) {
+  console.log("🔥 CartIcon COMPONENT IS RENDERING!"); // Debug
+  
   const { getTotalItems, toggleCart } = useCart();
   const itemCount = getTotalItems();
 
+  console.log("🛒 Cart items count:", itemCount);
+
   return (
     <button 
-      onClick={toggleCart}
-      className="cart-icon-btn"
+      onClick={() => {
+        console.log("🖱️ CART BUTTON CLICKED!"); // Debug
+        toggleCart();
+      }}
       style={{
         position: 'relative',
         background: 'none',
@@ -20,16 +26,7 @@ function CartIcon({ darkMode }) {
         display: 'flex',
         alignItems: 'center',
         gap: '6px',
-        fontSize: '16px',
-        transition: 'all 0.3s ease'
-      }}
-      onMouseEnter={(e) => {
-        e.target.style.backgroundColor = darkMode ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.3)';
-        e.target.style.transform = 'translateY(-2px)';
-      }}
-      onMouseLeave={(e) => {
-        e.target.style.backgroundColor = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.2)';
-        e.target.style.transform = 'translateY(0)';
+        fontSize: '16px'
       }}
     >
       <span style={{ fontSize: '20px' }}>🛒</span>
@@ -47,9 +44,7 @@ function CartIcon({ darkMode }) {
           fontSize: '12px',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          fontWeight: 'bold',
-          boxShadow: '0 2px 5px rgba(0,0,0,0.2)'
+          justifyContent: 'center'
         }}>
           {itemCount}
         </span>
@@ -58,4 +53,4 @@ function CartIcon({ darkMode }) {
   );
 }
 
-export default CartIcon;  // ✅ YEH LINE IMPORTANT HAI!
+export default CartIcon;

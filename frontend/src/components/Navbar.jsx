@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react"
 import { useLanguage } from "../LanguageContext"
 import SearchSuggestions from "./SearchSuggestions"
-import CartIcon from './CartIcon';  // ✅ Default import
+import CartIcon from './CartIcon'
 
 function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm }) {
   const { language, changeLanguage, t } = useLanguage()
@@ -12,16 +12,13 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
   const languageButtonRef = useRef(null)
   const dropdownRef = useRef(null)
 
-  // Update local state when searchTerm prop changes
   useEffect(() => {
     setLocalSearchTerm(searchTerm || '')
   }, [searchTerm])
 
-  // Listen for language change events
   useEffect(() => {
     const handleLanguageChange = () => {
       console.log('Language change event detected');
-      // Force re-render
       setShowLanguageDropdown(prev => prev);
     };
     
@@ -29,7 +26,6 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
     return () => window.removeEventListener('languageChange', handleLanguageChange);
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
@@ -80,7 +76,6 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
     setShowSuggestions(false);
   }
 
-  // Get current language display text
   const getLanguageText = () => {
     if (language === 'hi') return 'हिंदी';
     if (language === 'pa') return 'ਪੰਜਾਬੀ';
@@ -141,6 +136,7 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
       </div>
 
       <div className="nav-right">
+        {/* ✅ CART ICON - ADDED WITH VISIBLE STYLING */}
         <CartIcon darkMode={darkMode} />
         
         <button 

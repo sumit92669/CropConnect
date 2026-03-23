@@ -184,7 +184,14 @@ function CartDrawer({ darkMode }) {
                         color: '#ef4444',
                         cursor: 'pointer',
                         fontSize: '14px',
-                        padding: '0 5px'
+                        padding: '0 5px',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.transform = 'scale(1.2)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.transform = 'scale(1)';
                       }}
                     >
                       ✕
@@ -218,7 +225,14 @@ function CartDrawer({ darkMode }) {
                         fontSize: '16px',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = darkMode ? '#4b5563' : '#e5e7eb';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = darkMode ? '#2d3a4f' : 'white';
                       }}
                     >
                       −
@@ -227,7 +241,9 @@ function CartDrawer({ darkMode }) {
                     <span style={{
                       fontSize: '14px',
                       fontWeight: '600',
-                      color: darkMode ? '#fff' : '#1f2937'
+                      color: darkMode ? '#fff' : '#1f2937',
+                      minWidth: '30px',
+                      textAlign: 'center'
                     }}>
                       {item.quantity}
                     </span>
@@ -245,7 +261,14 @@ function CartDrawer({ darkMode }) {
                         fontSize: '16px',
                         display: 'flex',
                         alignItems: 'center',
-                        justifyContent: 'center'
+                        justifyContent: 'center',
+                        transition: 'all 0.2s'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.background = darkMode ? '#4b5563' : '#e5e7eb';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.background = darkMode ? '#2d3a4f' : 'white';
                       }}
                     >
                       +
@@ -307,7 +330,7 @@ function CartDrawer({ darkMode }) {
                   e.target.style.background = darkMode ? '#374151' : '#f3f4f6';
                 }}
               >
-                Clear
+                Clear Cart
               </button>
               
               <button
@@ -352,12 +375,8 @@ function CartDrawer({ darkMode }) {
 
       <style>{`
         @keyframes slideIn {
-          from {
-            transform: translateX(100%);
-          }
-          to {
-            transform: translateX(0);
-          }
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
         }
         @keyframes fadeIn {
           from { opacity: 0; }

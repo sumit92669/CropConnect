@@ -20,6 +20,7 @@ export const CartProvider = ({ children }) => {
     if (savedCart) {
       try {
         setCartItems(JSON.parse(savedCart));
+        console.log("📦 Cart loaded from localStorage:", JSON.parse(savedCart));
       } catch (error) {
         console.error('Error loading cart:', error);
       }
@@ -29,15 +30,25 @@ export const CartProvider = ({ children }) => {
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
+    console.log("📦 Cart saved to localStorage:", cartItems);
   }, [cartItems]);
+
+  // Check if item is in cart
+  const isInCart = (cropId) => {
+    const exists = cartItems.some(item => item.id === cropId);
+    return exists;
+  };
 
   // Add item to cart
   const addToCart = (crop, quantity = 1) => {
+    console.log("🛒 addToCart called with:", crop.name, "quantity:", quantity);
+    
     setCartItems(prevItems => {
       // Check if item already exists in cart
       const existingItem = prevItems.find(item => item.id === crop.id);
       
       if (existingItem) {
+        console.log("📦 Updating existing item:", crop.name, "old quantity:", existingItem.quantity);
         // Update quantity if exists
         return prevItems.map(item =>
           item.id === crop.id
@@ -45,6 +56,7 @@ export const CartProvider = ({ children }) => {
             : item
         );
       } else {
+        console.log("📦 Adding NEW item:", crop.name);
         // Add new item
         return [...prevItems, {
           id: crop.id,
@@ -59,18 +71,22 @@ export const CartProvider = ({ children }) => {
       }
     });
     
-    // Show success message
     alert(`✅ ${crop.name} added to cart!`);
   };
 
   // Remove item from cart
   const removeFromCart = (itemId) => {
+    console.log("🗑️ removeFromCart called for itemId:", itemId);
     setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
   };
 
   // Update item quantity
   const updateQuantity = (itemId, newQuantity) => {
-    if (newQuantity < 1) return;
+    console.log("🔄 updateQuantity called for itemId:", itemId, "new quantity:", newQuantity);
+    if (newQuantity < 1) {
+      removeFromCart(itemId);
+      return;
+    }
     
     setCartItems(prevItems =>
       prevItems.map(item =>
@@ -81,27 +97,33 @@ export const CartProvider = ({ children }) => {
 
   // Clear cart
   const clearCart = () => {
+    console.log("🧹 clearCart called");
     setCartItems([]);
   };
 
   // Get total items count
   const getTotalItems = () => {
-    return cartItems.reduce((total, item) => total + item.quantity, 0);
+    const total = cartItems.reduce((total, item) => total + item.quantity, 0);
+    console.log("📊 getTotalItems:", total);
+    return total;
   };
 
   // Get total price
   const getTotalPrice = () => {
-    return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    const total = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return total;
   };
 
   // Toggle cart drawer
   const toggleCart = () => {
+    console.log("🚪 toggleCart called, current isCartOpen:", isCartOpen);
     setIsCartOpen(prev => !prev);
   };
 
   const value = {
     cartItems,
     isCartOpen,
+    isInCart,
     addToCart,
     removeFromCart,
     updateQuantity,
