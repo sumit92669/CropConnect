@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react"
 import { useLanguage } from "../LanguageContext"
 import { useCart } from "../context/CartContext"
+import QuoteModal from "./QuoteModal"
 
 // Realistic ratings for different crops
 const cropRatings = {
@@ -71,6 +72,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   const { addToCart, removeFromCart, isInCart } = useCart()
   const [showDetailsPopup, setShowDetailsPopup] = useState(false)
   const [showOfferPopup, setShowOfferPopup] = useState(false)
+  const [showQuoteModal, setShowQuoteModal] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
   const [offerData, setOfferData] = useState({
     offeredPrice: crop?.price || '',
@@ -82,19 +84,14 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   const detailsPopupRef = useRef(null)
   const offerPopupRef = useRef(null)
 
-  // Check if crop is in cart
   const inCart = isInCart(crop.id);
-
-  // Get rating for this crop
   const rating = cropRatings[crop.name] || 4.5
   const reviews = reviewCounts[crop.name] || 120
 
-  // Format price in Indian format
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN').format(price)
   }
 
-  // Close popups when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (detailsPopupRef.current && !detailsPopupRef.current.contains(event.target) &&
@@ -112,14 +109,12 @@ function CropCard({ crop, onViewDetails, darkMode }) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  // Toggle details popup when card is clicked
   const handleCardClick = (e) => {
     e.stopPropagation()
     setShowOfferPopup(false)
     setShowDetailsPopup(!showDetailsPopup)
   }
 
-  // Handle make offer button in details popup
   const handleMakeOfferClick = (e) => {
     e.stopPropagation()
     setShowDetailsPopup(false)
@@ -131,7 +126,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
     })
   }
 
-  // Handle offer form submission
   const handleSubmitOffer = (e) => {
     e.preventDefault()
     setShowOfferPopup(false)
@@ -152,7 +146,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
     alert(`✅ Offer sent for ${crop.name}!`)
   }
 
-  // Handle offer input changes
   const handleOfferChange = (field, value) => {
     setOfferData(prev => ({
       ...prev,
@@ -160,19 +153,27 @@ function CropCard({ crop, onViewDetails, darkMode }) {
     }))
   }
 
-  // Handle Add to Cart
   const handleAddToCart = (e) => {
     e.stopPropagation();
     addToCart(crop);
   }
 
-  // Handle Remove from Cart
   const handleRemoveFromCart = (e) => {
     e.stopPropagation();
     removeFromCart(crop.id);
   }
 
-  // Render stars based on rating
+  const handleQuoteRequest = (e) => {
+    e.stopPropagation();
+    setShowQuoteModal(true);
+  }
+
+  const handleQuoteSubmit = (quote) => {
+    console.log("Quote submitted:", quote);
+    alert(`📝 Quote request sent to ${quote.farmerName} for ${quote.quantity} ${crop.unit} of ${quote.cropName}!`);
+    setShowQuoteModal(false);
+  }
+
   const renderStars = () => {
     const fullStars = Math.floor(rating)
     const hasHalfStar = rating % 1 >= 0.5
@@ -257,7 +258,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
           />
           
-          {/* Organic Badge */}
           {crop.organic && (
             <div style={{
               position: 'absolute',
@@ -281,7 +281,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             </div>
           )}
 
-          {/* Farmer Badge */}
           <div style={{
             position: 'absolute',
             bottom: '12px',
@@ -304,125 +303,72 @@ function CropCard({ crop, onViewDetails, darkMode }) {
           </div>
         </div>
         
-        {/* Content Section */}
-        <div style={{ 
-          padding: '16px',
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '8px'
-        }}>
-          {/* Top Row: Name and Rating */}
-          <div style={{ 
-            display: 'flex', 
-            justifyContent: 'space-between', 
-            alignItems: 'flex-start',
-            gap: '8px'
-          }}>
-            <h3 style={{ 
-              margin: 0, 
-              fontSize: '18px', 
-              fontWeight: '700',
-              color: darkMode ? '#fff' : '#111827',
-              letterSpacing: '-0.025em'
-            }}>
+        <div style={{ padding: '16px', flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px' }}>
+            <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>
               {crop.name}
             </h3>
             {renderStars()}
           </div>
 
-          {/* Location */}
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '6px',
-            color: darkMode ? '#9ca3af' : '#6b7280',
-            fontSize: '12px',
-            fontWeight: '500'
-          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '12px', fontWeight: '500' }}>
             <span style={{ fontSize: '14px' }}>📍</span>
             <span>{crop.location?.split(',')[0] || 'Local'}</span>
-            <span style={{ 
-              background: darkMode ? '#374151' : '#f3f4f6',
-              padding: '2px 8px',
-              borderRadius: '12px',
-              fontSize: '10px',
-              fontWeight: '600',
-              marginLeft: '4px'
-            }}>
+            <span style={{ background: darkMode ? '#374151' : '#f3f4f6', padding: '2px 8px', borderRadius: '12px', fontSize: '10px', fontWeight: '600', marginLeft: '4px' }}>
               {crop.location?.split(',')[1]?.trim() || 'India'}
             </span>
           </div>
 
-          {/* Farmer Name */}
-          <div style={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: '6px',
-            color: darkMode ? '#9ca3af' : '#6b7280',
-            fontSize: '12px',
-            fontWeight: '500'
-          }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: darkMode ? '#9ca3af' : '#6b7280', fontSize: '12px', fontWeight: '500' }}>
             <span style={{ fontSize: '14px' }}>👨‍🌾</span>
             <span>{crop.farmer || 'Local Farmer'}</span>
           </div>
 
-          {/* Price Section */}
-          <div style={{ 
-            marginTop: '8px',
-            padding: '12px 0',
-            borderTop: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`,
-            borderBottom: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`,
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center'
-          }}>
+          <div style={{ marginTop: '8px', padding: '12px 0', borderTop: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`, borderBottom: `1px solid ${darkMode ? '#374151' : '#f0f0f0'}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <span style={{ 
-                fontSize: '24px', 
-                fontWeight: '700',
-                color: darkMode ? '#fff' : '#111827',
-                letterSpacing: '-0.025em'
-              }}>
-                ₹{formatPrice(crop.price)}
-              </span>
-              <span style={{ 
-                fontSize: '13px', 
-                color: darkMode ? '#9ca3af' : '#6b7280',
-                marginLeft: '4px',
-                fontWeight: '500'
-              }}>
-                /{crop.unit || 'quintal'}
-              </span>
+              <span style={{ fontSize: '24px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>₹{formatPrice(crop.price)}</span>
+              <span style={{ fontSize: '13px', color: darkMode ? '#9ca3af' : '#6b7280', marginLeft: '4px', fontWeight: '500' }}>/{crop.unit || 'quintal'}</span>
             </div>
-            
-            {/* Stock Indicator */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              background: darkMode ? '#374151' : '#f3f4f6',
-              padding: '4px 10px',
-              borderRadius: '20px'
-            }}>
-              <span style={{ 
-                width: '8px', 
-                height: '8px', 
-                borderRadius: '50%',
-                background: crop.quantity > 500 ? '#10b981' : crop.quantity > 200 ? '#f59e0b' : '#ef4444',
-                display: 'inline-block'
-              }} />
-              <span style={{ 
-                fontSize: '11px', 
-                fontWeight: '600',
-                color: darkMode ? '#9ca3af' : '#4b5563'
-              }}>
-                {crop.quantity} {crop.unit}
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', background: darkMode ? '#374151' : '#f3f4f6', padding: '4px 10px', borderRadius: '20px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: crop.quantity > 500 ? '#10b981' : crop.quantity > 200 ? '#f59e0b' : '#ef4444', display: 'inline-block' }} />
+              <span style={{ fontSize: '11px', fontWeight: '600', color: darkMode ? '#9ca3af' : '#4b5563' }}>{crop.quantity} {crop.unit}</span>
             </div>
           </div>
 
-          {/* Add to Cart / Remove Button - TOGGLES BASED ON CART STATE */}
+          {/* Quote Request Button */}
+          <button 
+            onClick={handleQuoteRequest}
+            style={{
+              width: '100%',
+              padding: '10px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              border: 'none',
+              borderRadius: '10px',
+              fontSize: '13px',
+              fontWeight: '600',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '6px',
+              transition: 'all 0.2s ease',
+              marginBottom: '8px'
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.transform = 'translateY(-2px)';
+              e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.transform = 'translateY(0)';
+              e.target.style.boxShadow = 'none';
+            }}
+          >
+            <span>📝</span>
+            <span>Request Quote</span>
+          </button>
+
+          {/* Add to Cart / Remove Button */}
           {inCart ? (
             <button 
               onClick={handleRemoveFromCart}
@@ -441,7 +387,8 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                 justifyContent: 'center',
                 gap: '6px',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)'
+                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)',
+                marginBottom: '8px'
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
@@ -475,7 +422,8 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                 justifyContent: 'center',
                 gap: '6px',
                 transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)'
+                boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)',
+                marginBottom: '8px'
               }}
               onMouseEnter={(e) => {
                 e.target.style.transform = 'translateY(-2px)';
@@ -527,6 +475,15 @@ function CropCard({ crop, onViewDetails, darkMode }) {
         </div>
       </div>
 
+      {/* Quote Modal */}
+      <QuoteModal
+        crop={crop}
+        isOpen={showQuoteModal}
+        onClose={() => setShowQuoteModal(false)}
+        onSubmit={handleQuoteSubmit}
+        darkMode={darkMode}
+      />
+
       {/* DETAILS POPUP */}
       {showDetailsPopup && !showOfferPopup && (
         <>
@@ -560,7 +517,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
               overflow: 'hidden'
             }}
           >
-            {/* Arrow */}
             <div style={{
               position: 'absolute',
               top: '-6px',
@@ -574,164 +530,52 @@ function CropCard({ crop, onViewDetails, darkMode }) {
               zIndex: -1
             }} />
 
-            {/* Popup Content */}
             <div style={{ padding: '16px' }}>
-              {/* Quick Stats */}
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '10px',
-                marginBottom: '16px'
-              }}>
-                <div style={{
-                  padding: '12px',
-                  background: darkMode ? '#374151' : '#f9fafb',
-                  borderRadius: '12px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '20px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>
-                    {crop.quantity}
-                  </div>
-                  <div style={{ fontSize: '11px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                    Available Stock
-                  </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
+                <div style={{ padding: '12px', background: darkMode ? '#374151' : '#f9fafb', borderRadius: '12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '20px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>{crop.quantity}</div>
+                  <div style={{ fontSize: '11px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Available Stock</div>
                 </div>
-                <div style={{
-                  padding: '12px',
-                  background: darkMode ? '#374151' : '#f9fafb',
-                  borderRadius: '12px',
-                  textAlign: 'center'
-                }}>
-                  <div style={{ fontSize: '20px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>
-                    {crop.quality || 'A'}
-                  </div>
-                  <div style={{ fontSize: '11px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                    Quality Grade
-                  </div>
+                <div style={{ padding: '12px', background: darkMode ? '#374151' : '#f9fafb', borderRadius: '12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '20px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>{crop.quality || 'A'}</div>
+                  <div style={{ fontSize: '11px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Quality Grade</div>
                 </div>
               </div>
 
-              {/* Additional Info */}
-              <div style={{
-                background: darkMode ? '#374151' : '#f9fafb',
-                borderRadius: '12px',
-                padding: '12px',
-                marginBottom: '16px'
-              }}>
+              <div style={{ background: darkMode ? '#374151' : '#f9fafb', borderRadius: '12px', padding: '12px', marginBottom: '16px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <span style={{ fontSize: '12px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Season</span>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: darkMode ? '#fff' : '#111827' }}>
-                    {crop.season || 'All Year'}
-                  </span>
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: darkMode ? '#fff' : '#111827' }}>{crop.season || 'All Year'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                   <span style={{ fontSize: '12px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Harvested</span>
-                  <span style={{ fontSize: '13px', fontWeight: '600', color: darkMode ? '#fff' : '#111827' }}>
-                    {new Date().getMonth() < 6 ? 'Recent' : 'Fresh'}
-                  </span>
+                  <span style={{ fontSize: '13px', fontWeight: '600', color: darkMode ? '#fff' : '#111827' }}>{new Date().getMonth() < 6 ? 'Recent' : 'Fresh'}</span>
                 </div>
               </div>
 
-              {/* Market Price */}
-              <div style={{
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                borderRadius: '12px',
-                padding: '12px',
-                marginBottom: '16px',
-                color: 'white'
-              }}>
+              <div style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', borderRadius: '12px', padding: '12px', marginBottom: '16px', color: 'white' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: '13px', opacity: '0.9' }}>Market Price</span>
                   <span style={{ fontSize: '20px', fontWeight: '700' }}>₹{formatPrice(Math.round(crop.price * 1.15))}</span>
                 </div>
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginTop: '8px',
-                  padding: '6px 8px',
-                  background: 'rgba(255,255,255,0.15)',
-                  borderRadius: '8px',
-                  fontSize: '12px'
-                }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '8px', padding: '6px 8px', background: 'rgba(255,255,255,0.15)', borderRadius: '8px', fontSize: '12px' }}>
                   <span>You Save</span>
                   <span style={{ fontWeight: '600' }}>15% (₹{formatPrice(Math.round(crop.price * 0.15))})</span>
                 </div>
               </div>
 
-              {/* Description */}
               {crop.description && (
-                <div style={{
-                  padding: '12px',
-                  background: darkMode ? '#374151' : '#f9fafb',
-                  borderRadius: '12px',
-                  marginBottom: '16px'
-                }}>
-                  <div style={{ fontSize: '12px', fontWeight: '600', marginBottom: '4px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                    📝 Description
-                  </div>
-                  <p style={{
-                    fontSize: '13px',
-                    lineHeight: '1.5',
-                    color: darkMode ? '#fff' : '#111827',
-                    margin: 0
-                  }}>
-                    {crop.description}
-                  </p>
+                <div style={{ padding: '12px', background: darkMode ? '#374151' : '#f9fafb', borderRadius: '12px', marginBottom: '16px' }}>
+                  <div style={{ fontSize: '12px', fontWeight: '600', marginBottom: '4px', color: darkMode ? '#9ca3af' : '#6b7280' }}>📝 Description</div>
+                  <p style={{ fontSize: '13px', lineHeight: '1.5', color: darkMode ? '#fff' : '#111827', margin: 0 }}>{crop.description}</p>
                 </div>
               )}
 
-              {/* Action Buttons */}
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                  onClick={handleMakeOfferClick}
-                  style={{
-                    flex: 2,
-                    padding: '12px',
-                    background: 'linear-gradient(135deg, #4CAF50, #45a049)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '10px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '6px',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-2px)'
-                    e.target.style.boxShadow = '0 4px 12px rgba(76, 175, 80, 0.3)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                >
+                <button onClick={handleMakeOfferClick} style={{ flex: 2, padding: '12px', background: 'linear-gradient(135deg, #4CAF50, #45a049)', color: 'white', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '600', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
                   💰 Make Offer
                 </button>
-                
-                {/* Disabled Call Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    console.log('Call button clicked (disabled)')
-                  }}
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    background: darkMode ? '#374151' : '#e5e7eb',
-                    color: darkMode ? '#9ca3af' : '#6b7280',
-                    border: 'none',
-                    borderRadius: '10px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    cursor: 'not-allowed',
-                    opacity: 0.7,
-                    transition: 'all 0.2s ease'
-                  }}
-                >
+                <button onClick={(e) => { e.stopPropagation(); console.log('Call button clicked (disabled)') }} style={{ flex: 1, padding: '12px', background: darkMode ? '#374151' : '#e5e7eb', color: darkMode ? '#9ca3af' : '#6b7280', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '600', cursor: 'not-allowed', opacity: 0.7 }}>
                   📞 Call
                 </button>
               </div>
@@ -773,7 +617,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
               overflow: 'hidden'
             }}
           >
-            {/* Arrow */}
             <div style={{
               position: 'absolute',
               top: '-6px',
@@ -787,210 +630,40 @@ function CropCard({ crop, onViewDetails, darkMode }) {
               zIndex: -1
             }} />
 
-            {/* Header */}
-            <div style={{
-              padding: '16px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              color: 'white'
-            }}>
-              <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>
-                💰 Make Offer
-              </h3>
-              <p style={{ margin: 0, fontSize: '13px', opacity: 0.9 }}>
-                {crop.name} • {crop.farmer?.split(' ')[0] || 'Farmer'}
-              </p>
+            <div style={{ padding: '16px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+              <h3 style={{ margin: '0 0 4px 0', fontSize: '18px', fontWeight: '600' }}>💰 Make Offer</h3>
+              <p style={{ margin: 0, fontSize: '13px', opacity: 0.9 }}>{crop.name} • {crop.farmer?.split(' ')[0] || 'Farmer'}</p>
             </div>
 
-            {/* Offer Form */}
             <form onSubmit={handleSubmitOffer} style={{ padding: '16px' }}>
-              {/* Price Input */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '6px',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  color: darkMode ? '#9ca3af' : '#4b5563'
-                }}>
-                  Your Offer (₹) *
-                </label>
-                <input
-                  type="number"
-                  value={offerData.offeredPrice}
-                  onChange={(e) => handleOfferChange('offeredPrice', parseInt(e.target.value))}
-                  min="1"
-                  max={crop.price * 2}
-                  required
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    fontSize: '15px',
-                    border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                    borderRadius: '10px',
-                    backgroundColor: darkMode ? '#374151' : '#f9fafb',
-                    color: darkMode ? '#fff' : '#111827',
-                    outline: 'none',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#667eea'
-                    e.target.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = darkMode ? '#4b5563' : '#e5e7eb'
-                    e.target.style.boxShadow = 'none'
-                  }}
-                />
-                <div style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  marginTop: '4px',
-                  fontSize: '11px'
-                }}>
-                  <span style={{ color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                    Listed: ₹{formatPrice(crop.price)}
-                  </span>
-                  {offerData.offeredPrice < crop.price && (
-                    <span style={{ color: '#10b981' }}>
-                      Save ₹{formatPrice(crop.price - offerData.offeredPrice)}
-                    </span>
-                  )}
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: darkMode ? '#9ca3af' : '#4b5563' }}>Your Offer (₹) *</label>
+                <input type="number" value={offerData.offeredPrice} onChange={(e) => handleOfferChange('offeredPrice', parseInt(e.target.value))} min="1" max={crop.price * 2} required style={{ width: '100%', padding: '10px 12px', fontSize: '15px', border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, borderRadius: '10px', backgroundColor: darkMode ? '#374151' : '#f9fafb', color: darkMode ? '#fff' : '#111827' }} />
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px', fontSize: '11px' }}>
+                  <span style={{ color: darkMode ? '#9ca3af' : '#6b7280' }}>Listed: ₹{formatPrice(crop.price)}</span>
+                  {offerData.offeredPrice < crop.price && <span style={{ color: '#10b981' }}>Save ₹{formatPrice(crop.price - offerData.offeredPrice)}</span>}
                 </div>
               </div>
 
-              {/* Quantity */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '6px',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  color: darkMode ? '#9ca3af' : '#4b5563'
-                }}>
-                  Quantity ({crop.unit}) *
-                </label>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <input
-                    type="number"
-                    value={offerData.quantity}
-                    onChange={(e) => handleOfferChange('quantity', parseInt(e.target.value))}
-                    min="1"
-                    max={crop.quantity}
-                    required
-                    style={{
-                      flex: 1,
-                      padding: '10px 12px',
-                      fontSize: '14px',
-                      border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                      borderRadius: '10px',
-                      backgroundColor: darkMode ? '#374151' : '#f9fafb',
-                      color: darkMode ? '#fff' : '#111827',
-                      textAlign: 'center'
-                    }}
-                  />
-                </div>
-                <div style={{ marginTop: '4px', fontSize: '11px', color: darkMode ? '#9ca3af' : '#6b7280' }}>
-                  Available: {crop.quantity} {crop.unit}
-                </div>
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: darkMode ? '#9ca3af' : '#4b5563' }}>Quantity ({crop.unit}) *</label>
+                <input type="number" value={offerData.quantity} onChange={(e) => handleOfferChange('quantity', parseInt(e.target.value))} min="1" max={crop.quantity} required style={{ width: '100%', padding: '10px 12px', fontSize: '14px', border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, borderRadius: '10px', backgroundColor: darkMode ? '#374151' : '#f9fafb', color: darkMode ? '#fff' : '#111827' }} />
+                <div style={{ marginTop: '4px', fontSize: '11px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Available: {crop.quantity} {crop.unit}</div>
               </div>
 
-              {/* Message */}
               <div style={{ marginBottom: '20px' }}>
-                <label style={{
-                  display: 'block',
-                  marginBottom: '6px',
-                  fontSize: '12px',
-                  fontWeight: '600',
-                  color: darkMode ? '#9ca3af' : '#4b5563'
-                }}>
-                  Message to Farmer
-                </label>
-                <textarea
-                  value={offerData.message}
-                  onChange={(e) => handleOfferChange('message', e.target.value)}
-                  placeholder="e.g., I need this for community kitchen. Can pick up immediately."
-                  rows="3"
-                  style={{
-                    width: '100%',
-                    padding: '10px 12px',
-                    fontSize: '12px',
-                    border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                    borderRadius: '10px',
-                    backgroundColor: darkMode ? '#374151' : '#f9fafb',
-                    color: darkMode ? '#fff' : '#111827',
-                    resize: 'none',
-                    outline: 'none',
-                    fontFamily: 'inherit'
-                  }}
-                />
+                <label style={{ display: 'block', marginBottom: '6px', fontSize: '12px', fontWeight: '600', color: darkMode ? '#9ca3af' : '#4b5563' }}>Message to Farmer</label>
+                <textarea value={offerData.message} onChange={(e) => handleOfferChange('message', e.target.value)} placeholder="e.g., I need this for community kitchen. Can pick up immediately." rows="3" style={{ width: '100%', padding: '10px 12px', fontSize: '12px', border: `2px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, borderRadius: '10px', backgroundColor: darkMode ? '#374151' : '#f9fafb', color: darkMode ? '#fff' : '#111827', resize: 'none' }} />
               </div>
 
-              {/* Total */}
-              <div style={{
-                background: darkMode ? '#374151' : '#f3f4f6',
-                borderRadius: '10px',
-                padding: '12px',
-                marginBottom: '16px',
-                textAlign: 'center'
-              }}>
+              <div style={{ background: darkMode ? '#374151' : '#f3f4f6', borderRadius: '10px', padding: '12px', marginBottom: '16px', textAlign: 'center' }}>
                 <span style={{ fontSize: '13px', color: darkMode ? '#9ca3af' : '#6b7280' }}>Total Value: </span>
-                <span style={{ fontSize: '20px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>
-                  ₹{formatPrice(offerData.offeredPrice * offerData.quantity)}
-                </span>
+                <span style={{ fontSize: '20px', fontWeight: '700', color: darkMode ? '#fff' : '#111827' }}>₹{formatPrice(offerData.offeredPrice * offerData.quantity)}</span>
               </div>
 
-              {/* Buttons */}
               <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => setShowOfferPopup(false)}
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    background: darkMode ? '#374151' : '#f3f4f6',
-                    border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`,
-                    borderRadius: '10px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    color: darkMode ? '#fff' : '#1f2937',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.background = darkMode ? '#4b5563' : '#e5e7eb'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.background = darkMode ? '#374151' : '#f3f4f6'
-                  }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  style={{
-                    flex: 2,
-                    padding: '12px',
-                    background: 'linear-gradient(135deg, #4CAF50, #45a049)',
-                    border: 'none',
-                    borderRadius: '10px',
-                    fontSize: '13px',
-                    fontWeight: '600',
-                    color: 'white',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    boxShadow: '0 4px 12px rgba(76, 175, 80, 0.3)'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.target.style.transform = 'translateY(-2px)'
-                    e.target.style.boxShadow = '0 6px 16px rgba(76, 175, 80, 0.4)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.target.style.transform = 'translateY(0)'
-                    e.target.style.boxShadow = '0 4px 12px rgba(76, 175, 80, 0.3)'
-                  }}
-                >
-                  Send Offer
-                </button>
+                <button type="button" onClick={() => setShowOfferPopup(false)} style={{ flex: 1, padding: '12px', background: darkMode ? '#374151' : '#f3f4f6', border: `1px solid ${darkMode ? '#4b5563' : '#e5e7eb'}`, borderRadius: '10px', fontSize: '13px', fontWeight: '600', color: darkMode ? '#fff' : '#1f2937', cursor: 'pointer' }}>Cancel</button>
+                <button type="submit" style={{ flex: 2, padding: '12px', background: 'linear-gradient(135deg, #4CAF50, #45a049)', border: 'none', borderRadius: '10px', fontSize: '13px', fontWeight: '600', color: 'white', cursor: 'pointer', boxShadow: '0 4px 12px rgba(76, 175, 80, 0.3)' }}>Send Offer</button>
               </div>
             </form>
           </div>

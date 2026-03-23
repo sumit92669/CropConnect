@@ -5,7 +5,7 @@ import MapView from "../components/MapView"
 import { useLanguage } from "../LanguageContext"
 import { cropsData } from "../data/cropsData"
 import { CartProvider } from "../context/CartContext"
-import CartDrawer from "../components/CartDrawer"
+import FlyoutCart from "../components/FlyoutCart"
 
 function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const { t } = useLanguage()
@@ -13,6 +13,7 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const [filteredCrops, setFilteredCrops] = useState([])
   const [loading, setLoading] = useState(true)
   const [myOffers, setMyOffers] = useState([])
+  const [myQuotes, setMyQuotes] = useState([])
   const [viewMode, setViewMode] = useState('grid')
   const [selectedCategory, setSelectedCategory] = useState(initialCategory)
   const [error, setError] = useState(null)
@@ -23,7 +24,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     location: ''
   })
 
-  // Categories
   const categories = [
     { id: "all", name: t('allCrops'), icon: "🌾" },
     { id: "grains", name: t('grains'), icon: "🌾" },
@@ -32,7 +32,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     { id: "fruits", name: t('fruits'), icon: "🍎" }
   ]
 
-  // Load crops from cropsData
   useEffect(() => {
     setLoading(true)
     try {
@@ -114,10 +113,14 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
     })
   }
 
-  // Handle offer submission directly
   const handleOfferSubmit = (offer) => {
     setMyOffers([...myOffers, { ...offer, status: 'pending' }])
     alert(`✅ Offer sent for ${offer.cropName}!`)
+  }
+
+  const handleQuoteSubmit = (quote) => {
+    setMyQuotes([...myQuotes, { ...quote, status: 'pending', date: new Date().toLocaleDateString() }])
+    alert(`📝 Quote request sent to ${quote.farmerName}!`)
   }
 
   if (error) {
@@ -133,7 +136,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   return (
     <CartProvider>
       <div className="buyer-marketplace animate-page">
-        {/* Back Button */}
         <div className="page-header">
           <button className="back-button" onClick={onBackToHome}>
             <span className="back-icon">←</span>
@@ -141,13 +143,11 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           </button>
         </div>
 
-        {/* Header */}
         <div className="marketplace-header">
           <h1>🏢 {t('buyerMarketplace')}</h1>
           <p className="subtitle">{t('browseCrops', { count: allCrops.length })}</p>
         </div>
 
-        {/* Category Filter */}
         <div className="category-filter">
           {categories.map(cat => (
             <button
@@ -161,7 +161,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           ))}
         </div>
 
-        {/* View Toggle */}
         <div className="view-toggle">
           <button 
             className={`toggle-btn ${viewMode === 'grid' ? 'active' : ''}`}
@@ -177,10 +176,9 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           </button>
         </div>
 
-        {/* My Offers Summary */}
         {myOffers.length > 0 && (
           <div className="my-offers-summary">
-            <h3>📦 {t('myOffers')} ({myOffers.length})</h3>
+            <h3>💰 {t('myOffers')} ({myOffers.length})</h3>
             <div className="offer-chips">
               {myOffers.map((offer, index) => (
                 <div key={index} className="offer-chip">
@@ -193,17 +191,29 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           </div>
         )}
 
-        {/* Filter Bar */}
+        {myQuotes.length > 0 && (
+          <div className="my-offers-summary">
+            <h3>📝 Quote Requests ({myQuotes.length})</h3>
+            <div className="offer-chips">
+              {myQuotes.map((quote, index) => (
+                <div key={index} className="offer-chip">
+                  <span>{quote.cropName}</span>
+                  <span className="offer-chip-price">{quote.quantity} {quote.unit}</span>
+                  <span className={`offer-status ${quote.status}`}>{quote.status}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <FilterBar onFilterChange={handleFilterChange} darkMode={darkMode} filters={filters} />
 
-        {/* Results Info */}
         {!loading && (
           <div className="results-info">
             <p>{t('showing', { filtered: filteredCrops.length, total: allCrops.length })}</p>
           </div>
         )}
 
-        {/* Loading State */}
         {loading ? (
           <div className="loading-state">
             <div className="loader"></div>
@@ -211,7 +221,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           </div>
         ) : (
           <>
-            {/* No Results */}
             {filteredCrops.length === 0 ? (
               <div className="no-results-marketplace">
                 <span className="no-results-icon">🌾</span>
@@ -219,7 +228,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
                 <p>{t('adjustFilters')}</p>
               </div>
             ) : (
-              /* Grid View */
               viewMode === 'grid' ? (
                 <div className="crops-grid">
                   {filteredCrops.map((crop) => (
@@ -232,7 +240,6 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
                   ))}
                 </div>
               ) : (
-                /* Map View */
                 <div className="map-view-section">
                   <MapView 
                     crops={filteredCrops}
@@ -251,7 +258,8 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
           </>
         )}
       </div>
-      <CartDrawer darkMode={darkMode} />
+      
+      <FlyoutCart darkMode={darkMode} />
     </CartProvider>
   )
 }
