@@ -68,7 +68,7 @@ const reviewCounts = {
 
 function CropCard({ crop, onViewDetails, darkMode }) {
   const { t } = useLanguage()
-  const { addToCart } = useCart()
+  const { addToCart, removeFromCart, isInCart } = useCart()
   const [showDetailsPopup, setShowDetailsPopup] = useState(false)
   const [showOfferPopup, setShowOfferPopup] = useState(false)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -82,6 +82,9 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   const detailsPopupRef = useRef(null)
   const offerPopupRef = useRef(null)
 
+  // Check if crop is in cart
+  const inCart = isInCart(crop.id);
+
   // Get rating for this crop
   const rating = cropRatings[crop.name] || 4.5
   const reviews = reviewCounts[crop.name] || 120
@@ -94,13 +97,11 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   // Close popups when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Close details popup if clicked outside
       if (detailsPopupRef.current && !detailsPopupRef.current.contains(event.target) &&
           cardRef.current && !cardRef.current.contains(event.target)) {
         setShowDetailsPopup(false)
       }
       
-      // Close offer popup if clicked outside
       if (offerPopupRef.current && !offerPopupRef.current.contains(event.target) &&
           cardRef.current && !cardRef.current.contains(event.target)) {
         setShowOfferPopup(false)
@@ -114,7 +115,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   // Toggle details popup when card is clicked
   const handleCardClick = (e) => {
     e.stopPropagation()
-    // Close offer popup if open, toggle details popup
     setShowOfferPopup(false)
     setShowDetailsPopup(!showDetailsPopup)
   }
@@ -124,7 +124,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
     e.stopPropagation()
     setShowDetailsPopup(false)
     setShowOfferPopup(true)
-    // Reset offer data with current crop values
     setOfferData({
       offeredPrice: crop.price,
       quantity: Math.min(100, crop.quantity || 100),
@@ -135,11 +134,8 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   // Handle offer form submission
   const handleSubmitOffer = (e) => {
     e.preventDefault()
-    
-    // Close the offer popup immediately
     setShowOfferPopup(false)
     
-    // Create offer object
     const offer = {
       cropId: crop.id,
       cropName: crop.name,
@@ -149,12 +145,10 @@ function CropCard({ crop, onViewDetails, darkMode }) {
       status: 'pending'
     }
     
-    // Call the parent function with the offer
     if (onViewDetails) {
       onViewDetails(offer)
     }
     
-    // Show success message
     alert(`✅ Offer sent for ${crop.name}!`)
   }
 
@@ -164,6 +158,18 @@ function CropCard({ crop, onViewDetails, darkMode }) {
       ...prev,
       [field]: value
     }))
+  }
+
+  // Handle Add to Cart
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    addToCart(crop);
+  }
+
+  // Handle Remove from Cart
+  const handleRemoveFromCart = (e) => {
+    e.stopPropagation();
+    removeFromCart(crop.id);
   }
 
   // Render stars based on rating
@@ -416,41 +422,74 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             </div>
           </div>
 
-          {/* Add to Cart Button - NEW */}
-          <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(crop);
-            }}
-            style={{
-              width: '100%',
-              padding: '10px',
-              background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '10px',
-              fontSize: '13px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '6px',
-              transition: 'all 0.2s ease',
-              boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)'
-            }}
-            onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
-            }}
-            onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = '0 2px 8px rgba(245, 158, 11, 0.2)';
-            }}
-          >
-            <span>🛒</span>
-            <span>Add to Cart</span>
-          </button>
+          {/* Add to Cart / Remove Button - TOGGLES BASED ON CART STATE */}
+          {inCart ? (
+            <button 
+              onClick={handleRemoveFromCart}
+              style={{
+                width: '100%',
+                padding: '10px',
+                background: '#ef4444',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.background = '#dc2626';
+                e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.background = '#ef4444';
+                e.target.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.2)';
+              }}
+            >
+              <span>🗑️</span>
+              <span>Remove from Cart</span>
+            </button>
+          ) : (
+            <button 
+              onClick={handleAddToCart}
+              style={{
+                width: '100%',
+                padding: '10px',
+                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '13px',
+                fontWeight: '600',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                transition: 'all 0.2s ease',
+                boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = '0 2px 8px rgba(245, 158, 11, 0.2)';
+              }}
+            >
+              <span>🛒</span>
+              <span>Add to Cart</span>
+            </button>
+          )}
 
           {/* Quick View Button */}
           <button 
@@ -677,7 +716,6 @@ function CropCard({ crop, onViewDetails, darkMode }) {
                 <button
                   onClick={(e) => {
                     e.stopPropagation()
-                    // Disabled - no action
                     console.log('Call button clicked (disabled)')
                   }}
                   style={{
