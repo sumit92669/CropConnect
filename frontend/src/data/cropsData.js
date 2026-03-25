@@ -560,7 +560,26 @@ export const cropsData = [
     isNew: true,           // Shows ✨ NEW badge
     fastDelivery: true,    // Shows ⚡ Fast Delivery badge
     views: 350             // Shows 🔥 Trending badge (since >200)
-  }
+  }, 
+  {
+  id: 30,
+  name: "Fresh Strawberry",
+  category: "fruits",
+  price: 8500,
+  quantity: 50,
+  unit: "quintal",
+  farmer: "Ramesh Patil",
+  location: "Mahabaleshwar, Maharashtra",
+  coordinates: { lat: 17.92, lng: 73.66 },
+  quality: "Premium",
+  description: "Fresh, juicy strawberries directly from Mahabaleshwar farms",
+  image: "https://images.pexels.com/photos/46174/strawberries-berries-fruit-freshness-46174.jpeg",
+  season: "Winter",
+  organic: true,
+  isNew: true,
+  fastDelivery: true,
+  views: 45
+}
 ]
 
 // Get unique categories

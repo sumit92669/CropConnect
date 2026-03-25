@@ -8087,4 +8087,126 @@ body.dark-mode .stat-number-3d {
   .cart-icon-btn span:last-child {
     display: none !important;
   }
+}/* ========== AI CHATBOT ANIMATIONS ========== */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dots {
+  0%, 20% { content: '.'; }
+  40% { content: '..'; }
+  60%, 100% { content: '...'; }
+}
+
+/* Chatbot quick questions hover effect */
+.chat-quick-btn {
+  transition: all 0.2s ease;
+}
+
+.chat-quick-btn:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #667eea20, #764ba220);
+}/* ========== FIX NAVBAR RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .nav-right {
+    gap: 8px !important;
+  }
+  
+  .nav-right button,
+  .nav-right .cart-icon-btn,
+  .nav-right .dark-mode-toggle,
+  .nav-right .language-btn,
+  .nav-right .login-btn,
+  .nav-right .signup-btn {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+  
+  .nav-right button span:last-child {
+    display: inline-block !important;
+  }
+  
+  .language-btn .language-text {
+    display: none !important;
+  }
+  
+  .dark-mode-toggle .toggle-text {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column !important;
+    padding: 10px !important;
+    gap: 10px !important;
+  }
+  
+  .search-wrapper {
+    width: 100% !important;
+    order: 3 !important;
+  }
+  
+  .nav-right {
+    width: 100% !important;
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  
+  .nav-right button {
+    padding: 6px 12px !important;
+    font-size: 12px !important;
+  }
+  
+  .nav-right button span:last-child {
+    display: inline-block !important;
+  }
+  
+  .logo-text {
+    font-size: 18px !important;
+  }
+}
+
+/* ========== FOOTER FIX - Keep Quick Stats on top ========== */
+@media (max-width: 1024px) {
+  .footer-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  .footer-quick-stats {
+    order: -1 !important;
+    margin-bottom: 20px;
+  }
+  
+  .footer-links-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-links-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .stats-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  
+  .stat-card-mini {
+    padding: 10px !important;
+  }
 }

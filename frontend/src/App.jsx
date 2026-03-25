@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import Navbar from "./components/Navbar"
 import Farmer from "./pages/Farmer"
 import Buyer from "./pages/Buyer"
@@ -17,6 +18,7 @@ function App() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
   const [preselectedCategory, setPreselectedCategory] = useState('all')
+  const [showChatbot, setShowChatbot] = useState(false)
   const { t } = useLanguage()
   const [pageLoaded, setPageLoaded] = useState(false)
 
@@ -77,6 +79,7 @@ function App() {
     setActiveCategory(category)
     setSearchTerm('')
   }
+  const toggleChatbot = () => setShowChatbot(!showChatbot)
 
   if (currentPage === 'login')  return <Login  onBackToHome={handleBackToHome} darkMode={darkMode} />
   if (currentPage === 'signup') return <Signup onBackToHome={handleBackToHome} darkMode={darkMode} />
@@ -91,6 +94,7 @@ function App() {
           toggleDarkMode={toggleDarkMode}
           onSearch={handleSearch}
           searchTerm={searchTerm}
+          onChatbotClick={toggleChatbot}
         />
 
         {role === "farmer"    && <Farmer    darkMode={darkMode} onBackToHome={handleBackToHome} />}
@@ -273,11 +277,18 @@ function App() {
           </div>
         )}
 
-        {/* AI Chatbot - Floating Button */}
-        <AIChatbot />
-
         <Footer darkMode={darkMode} />
       </div>
+
+      {/* AI Chatbot - Rendered via Portal at document root */}
+      {createPortal(
+        <AIChatbot 
+          isOpen={showChatbot} 
+          setIsOpen={setShowChatbot} 
+          darkMode={darkMode} 
+        />,
+        document.body
+      )}
     </CartProvider>
   )
 }

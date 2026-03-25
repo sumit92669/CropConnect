@@ -3,7 +3,7 @@ import { useLanguage } from "../LanguageContext"
 import SearchSuggestions from "./SearchSuggestions"
 import CartIcon from './CartIcon'
 
-function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm }) {
+function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm, onChatbotClick }) {
   const { language, changeLanguage, t } = useLanguage()
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || '')
@@ -136,7 +136,35 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
       </div>
 
       <div className="nav-right">
-        {/* ✅ CART ICON - ADDED WITH VISIBLE STYLING */}
+        {/* Ask AI Button */}
+        <button 
+          onClick={onChatbotClick}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+            padding: '8px 16px',
+            borderRadius: '40px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            border: 'none',
+            color: 'white',
+            cursor: 'pointer',
+            fontWeight: '500',
+            transition: 'all 0.3s ease'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = 'none';
+          }}
+        >
+          <span style={{ fontSize: '18px' }}>🤖</span>
+          <span>Ask AI</span>
+        </button>
+        
         <CartIcon darkMode={darkMode} />
         
         <button 

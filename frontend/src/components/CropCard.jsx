@@ -87,7 +87,12 @@ function CropCard({ crop, onViewDetails, darkMode }) {
   const inCart = isInCart(crop.id);
   const rating = cropRatings[crop.name] || 4.5
   const reviews = reviewCounts[crop.name] || 120
-  const views = crop.views || Math.floor(Math.random() * 300) + 50; // Random views for demo
+  const views = crop.views || Math.floor(Math.random() * 300) + 50;
+  
+  // Calculate price drop percentage if oldPrice exists
+  const priceDropPercent = crop.oldPrice && crop.oldPrice > crop.price 
+    ? Math.round((1 - crop.price / crop.oldPrice) * 100) 
+    : 0;
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN').format(price)
@@ -248,7 +253,115 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
           />
           
-          {/* Organic Badge */}
+          {/* ========== ALL BADGES ========== */}
+          
+          {/* TOP LEFT BADGES - Stacked */}
+          <div style={{ position: 'absolute', top: '12px', left: '12px', zIndex: 2, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            
+            {/* NEW CROP BADGE */}
+            {crop.isNew && (
+              <div style={{
+                background: '#10b981',
+                color: 'white',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+              }}>
+                <span>✨</span>
+                <span>New</span>
+              </div>
+            )}
+            
+            {/* PRICE DROP BADGE */}
+            {priceDropPercent > 0 && (
+              <div style={{
+                background: '#ef4444',
+                color: 'white',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+              }}>
+                <span>📉</span>
+                <span>-{priceDropPercent}%</span>
+              </div>
+            )}
+            
+            {/* TRENDING BADGE */}
+            {views > 200 && (
+              <div style={{
+                background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
+                color: 'white',
+                padding: '4px 10px',
+                borderRadius: '20px',
+                fontSize: '11px',
+                fontWeight: '600',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+              }}>
+                <span>🔥</span>
+                <span>Trending</span>
+              </div>
+            )}
+          </div>
+
+          {/* SOLD OUT OVERLAY */}
+          {crop.quantity === 0 && (
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              background: 'rgba(0,0,0,0.85)',
+              color: 'white',
+              padding: '8px 16px',
+              borderRadius: '30px',
+              fontSize: '14px',
+              fontWeight: '700',
+              zIndex: 3,
+              backdropFilter: 'blur(4px)',
+              whiteSpace: 'nowrap',
+              letterSpacing: '1px'
+            }}>
+              SOLD OUT
+            </div>
+          )}
+
+          {/* FAST DELIVERY BADGE - Bottom Right */}
+          {crop.fastDelivery && (
+            <div style={{
+              position: 'absolute',
+              bottom: '12px',
+              right: '12px',
+              background: '#3b82f6',
+              color: 'white',
+              padding: '4px 10px',
+              borderRadius: '20px',
+              fontSize: '10px',
+              fontWeight: '600',
+              zIndex: 2,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+            }}>
+              <span>⚡</span>
+              <span>Fast Delivery</span>
+            </div>
+          )}
+
+          {/* Organic Badge - Top Right */}
           {crop.organic && (
             <div style={{
               position: 'absolute',
@@ -272,30 +385,7 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             </div>
           )}
 
-          {/* TRENDING BADGE - NEW FEATURE */}
-          {views > 200 && (
-            <div style={{
-              position: 'absolute',
-              top: '12px',
-              left: '12px',
-              background: 'linear-gradient(135deg, #f59e0b, #ef4444)',
-              color: 'white',
-              padding: '4px 10px',
-              borderRadius: '20px',
-              fontSize: '11px',
-              fontWeight: '600',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-              zIndex: 2
-            }}>
-              <span>🔥</span>
-              <span>Trending</span>
-            </div>
-          )}
-
-          {/* Farmer Badge */}
+          {/* Farmer Badge - Bottom Left */}
           <div style={{
             position: 'absolute',
             bottom: '12px',
@@ -392,6 +482,17 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             alignItems: 'center'
           }}>
             <div>
+              {/* Original Price with Strike-through if discounted */}
+              {priceDropPercent > 0 && (
+                <span style={{
+                  fontSize: '14px',
+                  color: '#9ca3af',
+                  textDecoration: 'line-through',
+                  marginRight: '8px'
+                }}>
+                  ₹{formatPrice(crop.oldPrice)}
+                </span>
+              )}
               <span style={{ 
                 fontSize: '24px', 
                 fontWeight: '700',
@@ -411,58 +512,112 @@ function CropCard({ crop, onViewDetails, darkMode }) {
             </div>
             
             {/* Stock Indicator */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              background: darkMode ? '#374151' : '#f3f4f6',
-              padding: '4px 10px',
-              borderRadius: '20px'
-            }}>
-              <span style={{ 
-                width: '8px', 
-                height: '8px', 
-                borderRadius: '50%',
-                background: crop.quantity > 500 ? '#10b981' : crop.quantity > 200 ? '#f59e0b' : '#ef4444',
-                display: 'inline-block'
-              }} />
-              <span style={{ 
-                fontSize: '11px', 
-                fontWeight: '600',
-                color: darkMode ? '#9ca3af' : '#4b5563'
+            {crop.quantity > 0 ? (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: darkMode ? '#374151' : '#f3f4f6',
+                padding: '4px 10px',
+                borderRadius: '20px'
               }}>
-                {crop.quantity} {crop.unit}
-              </span>
-            </div>
+                <span style={{ 
+                  width: '8px', 
+                  height: '8px', 
+                  borderRadius: '50%',
+                  background: crop.quantity > 500 ? '#10b981' : crop.quantity > 200 ? '#f59e0b' : '#ef4444',
+                  display: 'inline-block'
+                }} />
+                <span style={{ 
+                  fontSize: '11px', 
+                  fontWeight: '600',
+                  color: darkMode ? '#9ca3af' : '#4b5563'
+                }}>
+                  {crop.quantity} {crop.unit}
+                </span>
+              </div>
+            ) : (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                background: '#fee2e2',
+                padding: '4px 10px',
+                borderRadius: '20px'
+              }}>
+                <span style={{ 
+                  width: '8px', 
+                  height: '8px', 
+                  borderRadius: '50%',
+                  background: '#ef4444',
+                  display: 'inline-block'
+                }} />
+                <span style={{ 
+                  fontSize: '11px', 
+                  fontWeight: '600',
+                  color: '#dc2626'
+                }}>
+                  Out of Stock
+                </span>
+              </div>
+            )}
           </div>
-
+{/* Limited Stock Badge */}
+{crop.quantity < 50 && crop.quantity > 0 && (
+  <div style={{
+    position: 'absolute',
+    top: '12px',
+    left: '12px',
+    background: '#ef4444',
+    color: 'white',
+    padding: '4px 10px',
+    borderRadius: '20px',
+    fontSize: '11px',
+    fontWeight: '600',
+    zIndex: 2,
+    display: 'flex',
+    alignItems: 'center',
+    gap: '4px'
+  }}>
+    <span>⚠️</span>
+    <span>Limited Stock</span>
+  </div>
+)}
           {/* Quote Request Button */}
           <button 
             onClick={handleQuoteRequest}
+            disabled={crop.quantity === 0}
             style={{
               width: '100%',
               padding: '10px',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: crop.quantity === 0 
+                ? '#9ca3af' 
+                : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
               color: 'white',
               border: 'none',
               borderRadius: '10px',
               fontSize: '13px',
               fontWeight: '600',
-              cursor: 'pointer',
+              cursor: crop.quantity === 0 ? 'not-allowed' : 'pointer',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
               transition: 'all 0.2s ease',
-              marginBottom: '8px'
+              marginBottom: '8px',
+              opacity: crop.quantity === 0 ? 0.6 : 1
             }}
             onMouseEnter={(e) => {
-              e.target.style.transform = 'translateY(-2px)';
-              e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+              if (crop.quantity > 0) {
+                e.target.style.transform = 'translateY(-2px)';
+                e.target.style.boxShadow = '0 4px 12px rgba(102, 126, 234, 0.3)';
+              }
             }}
             onMouseLeave={(e) => {
-              e.target.style.transform = 'translateY(0)';
-              e.target.style.boxShadow = 'none';
+              if (crop.quantity > 0) {
+                e.target.style.transform = 'translateY(0)';
+                e.target.style.boxShadow = 'none';
+              }
             }}
           >
             <span>📝</span>
@@ -470,74 +625,76 @@ function CropCard({ crop, onViewDetails, darkMode }) {
           </button>
 
           {/* Add to Cart / Remove Button */}
-          {inCart ? (
-            <button 
-              onClick={handleRemoveFromCart}
-              style={{
-                width: '100%',
-                padding: '10px',
-                background: '#ef4444',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                fontSize: '13px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)',
-                marginBottom: '8px'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.background = '#dc2626';
-                e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.background = '#ef4444';
-                e.target.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.2)';
-              }}
-            >
-              <span>🗑️</span>
-              <span>Remove from Cart</span>
-            </button>
-          ) : (
-            <button 
-              onClick={handleAddToCart}
-              style={{
-                width: '100%',
-                padding: '10px',
-                background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '10px',
-                fontSize: '13px',
-                fontWeight: '600',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                transition: 'all 0.2s ease',
-                boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)',
-                marginBottom: '8px'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-2px)';
-                e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.boxShadow = '0 2px 8px rgba(245, 158, 11, 0.2)';
-              }}
-            >
-              <span>🛒</span>
-              <span>Add to Cart</span>
-            </button>
+          {crop.quantity > 0 && (
+            inCart ? (
+              <button 
+                onClick={handleRemoveFromCart}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  background: '#ef4444',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '10px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(239, 68, 68, 0.2)',
+                  marginBottom: '8px'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.background = '#dc2626';
+                  e.target.style.boxShadow = '0 4px 12px rgba(239, 68, 68, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.background = '#ef4444';
+                  e.target.style.boxShadow = '0 2px 8px rgba(239, 68, 68, 0.2)';
+                }}
+              >
+                <span>🗑️</span>
+                <span>Remove from Cart</span>
+              </button>
+            ) : (
+              <button 
+                onClick={handleAddToCart}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '10px',
+                  fontSize: '13px',
+                  fontWeight: '600',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                  transition: 'all 0.2s ease',
+                  boxShadow: '0 2px 8px rgba(245, 158, 11, 0.2)',
+                  marginBottom: '8px'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)';
+                  e.target.style.boxShadow = '0 4px 12px rgba(245, 158, 11, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)';
+                  e.target.style.boxShadow = '0 2px 8px rgba(245, 158, 11, 0.2)';
+                }}
+              >
+                <span>🛒</span>
+                <span>Add to Cart</span>
+              </button>
+            )
           )}
 
           {/* Quick View Button */}
