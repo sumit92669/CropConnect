@@ -5,7 +5,7 @@ import MapView from "../components/MapView"
 import { useLanguage } from "../LanguageContext"
 import { cropsData } from "../data/cropsData"
 import { CartProvider } from "../context/CartContext"
-import FlyoutCart from "../components/FlyoutCart"
+import CartDrawer from "../components/CartDrawer"
 
 function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const { t } = useLanguage()
@@ -259,7 +259,7 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
         )}
       </div>
       
-      <FlyoutCart darkMode={darkMode} />
+      <CartDrawer darkMode={darkMode} />
     </CartProvider>
   )
 }

@@ -5,6 +5,7 @@ import Buyer from "./pages/Buyer"
 import Login from "./pages/Login"
 import Signup from "./pages/Signup"
 import Analytics from "./pages/Analytics"
+import Cart from "./pages/Cart"
 import Footer from "./components/Footer"
 import AIChatbot from "./components/AIChatbot"
 import { useLanguage } from "./LanguageContext"
@@ -72,6 +73,7 @@ function App() {
   const handleLoginClick = () => setCurrentPage('login')
   const handleSignupClick = () => setCurrentPage('signup')
   const handleBackToHome = () => { setCurrentPage('home'); setRole(null) }
+  const handleCartClick = () => setCurrentPage('cart')
   const handleSearch = (term) => setSearchTerm(term)
   const handleCategoryClick = (category) => {
     setActiveCategory(category)
@@ -80,6 +82,13 @@ function App() {
 
   if (currentPage === 'login')  return <Login  onBackToHome={handleBackToHome} darkMode={darkMode} />
   if (currentPage === 'signup') return <Signup onBackToHome={handleBackToHome} darkMode={darkMode} />
+  if (currentPage === 'cart') {
+    return (
+      <CartProvider>
+        <Cart darkMode={darkMode} onBackToHome={handleBackToHome} />
+      </CartProvider>
+    )
+  }
 
   return (
     <CartProvider>
@@ -91,6 +100,7 @@ function App() {
           toggleDarkMode={toggleDarkMode}
           onSearch={handleSearch}
           searchTerm={searchTerm}
+          onCartClick={handleCartClick}
         />
 
         {role === "farmer"    && <Farmer    darkMode={darkMode} onBackToHome={handleBackToHome} />}
