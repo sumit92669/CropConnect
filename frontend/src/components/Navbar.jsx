@@ -3,7 +3,7 @@ import { useLanguage } from "../LanguageContext"
 import SearchSuggestions from "./SearchSuggestions"
 import CartIcon from './CartIcon'
 
-function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm }) {
+function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearch, searchTerm, onCartClick }) {
   const { language, changeLanguage, t } = useLanguage()
   const [showLanguageDropdown, setShowLanguageDropdown] = useState(false)
   const [localSearchTerm, setLocalSearchTerm] = useState(searchTerm || '')
@@ -136,10 +136,10 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
       </div>
 
       <div className="nav-right">
-        {/* ✅ Cart Icon */}
-        <CartIcon darkMode={darkMode} />
+        {/* Cart Icon */}
+        <CartIcon darkMode={darkMode} onCartClick={onCartClick} />
         
-        {/* ✅ Dark Mode Toggle */}
+        {/* Dark Mode Toggle */}
         <button 
           className={`dark-mode-toggle ${darkMode ? 'dark' : ''}`}
           onClick={toggleDarkMode}
@@ -152,7 +152,7 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
           </span>
         </button>
 
-        {/* ✅ Language Selector */}
+        {/* Language Selector */}
         <div className="language-selector">
           <button 
             ref={languageButtonRef}
@@ -193,7 +193,7 @@ function Navbar({ onLoginClick, onSignupClick, darkMode, toggleDarkMode, onSearc
           )}
         </div>
 
-        {/* ✅ Login & Signup Buttons */}
+        {/* Login & Signup Buttons */}
         <div className="nav-buttons">
           <button className={`login-btn ${darkMode ? 'login-btn-dark' : ''}`} onClick={onLoginClick}>
             {t("login")}
