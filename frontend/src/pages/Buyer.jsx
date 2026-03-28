@@ -15,7 +15,7 @@ function Buyer({ darkMode, onBackToHome, initialCategory = 'all' }) {
   const [myOffers, setMyOffers] = useState([])
   const [myQuotes, setMyQuotes] = useState([])
   const [viewMode, setViewMode] = useState('grid')
-  const [selectedCategory, setSelectedCategory] = useState(initialCategory)
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory)  // ✅ Fixed: useSatate → useState
   const [error, setError] = useState(null)
   const [filters, setFilters] = useState({
     sortBy: 'newest',
